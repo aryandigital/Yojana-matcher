@@ -1,13 +1,14 @@
 // app/layout.tsx
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-const geist = Geist({
+const jakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-geist",
+  variable: "--font-jakarta",
   display: "swap", // Prevents FOIT; eliminates font-related CLS
   preload: true,
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const SITE_URL =
@@ -133,7 +134,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-IN" className={geist.variable}>
+    <html lang="en-IN" className={jakartaSans.variable}>
       <head>
         {/* JSON-LD structured data injected server-side */}
         <script
