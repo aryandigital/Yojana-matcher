@@ -1,6 +1,7 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 const jakartaSans = Plus_Jakarta_Sans({
@@ -147,6 +148,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 min-h-screen">
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );
