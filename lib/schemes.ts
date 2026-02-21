@@ -172,17 +172,23 @@ export function matchSchemes(profile: UserProfile): Scheme[] {
   const userCategory = (profile.category || "").toLowerCase();
   const userGender = (profile.gender || "").toLowerCase();
 
+  // Exact-word gender matcher — prevents "male" substring-matching inside "female"
+  function genderMatches(userGnd: string, allowed: string[]): boolean {
+    const words = userGnd.split(/\s+/);
+    return allowed.some((g) => userGnd === g || words.includes(g));
+  }
+
   return schemes.filter((scheme) => {
     const r = scheme.eligibilityRules;
 
-    // Age checks
+    // Age
     if (r.minAge !== undefined && profile.age < r.minAge) return false;
     if (r.maxAge !== undefined && profile.age > r.maxAge) return false;
 
-    // Income check
+    // Income
     if (r.maxIncomeLPA !== undefined && profile.income_lpa > r.maxIncomeLPA) return false;
 
-    // Education floor check
+    // Education floor
     if (r.minEducation !== undefined) {
       const required = EDUCATION_RANK[r.minEducation] ?? 0;
       if (userEduRank < required) return false;
@@ -191,21 +197,19 @@ export function matchSchemes(profile: UserProfile): Scheme[] {
     // Stand-Up India: SC/ST *or* Female (OR logic)
     if (scheme.id === "standup-india") {
       const categoryMatch = r.categories?.some((c) => userCategory.includes(c));
-      const genderMatch = r.genders?.some((g) => userGender.includes(g) || g.includes(userGender));
+      const genderMatch = r.genders ? genderMatches(userGender, r.genders) : false;
       if (!categoryMatch && !genderMatch) return false;
       return true;
     }
 
-    // Category check (AND logic for other schemes)
+    // Category (AND logic for all other schemes)
     if (r.categories && r.categories.length > 0) {
-      const match = r.categories.some((c) => userCategory.includes(c));
-      if (!match) return false;
+      if (!r.categories.some((c) => userCategory.includes(c))) return false;
     }
 
-    // Gender check
+    // Gender — exact word match prevents "male" ⊂ "female" false positive
     if (r.genders && r.genders.length > 0) {
-      const match = r.genders.some((g) => userGender.includes(g) || g.includes(userGender));
-      if (!match) return false;
+      if (!genderMatches(userGender, r.genders)) return false;
     }
 
     return true;

@@ -33,10 +33,6 @@ const nextConfig: NextConfig = {
     ];
   },
 
-  // Enable experimental features for better perf
-  experimental: {
-    optimizeCss: true,
-  },
 };
 
 export default nextConfig;

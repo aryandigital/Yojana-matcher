@@ -142,23 +142,26 @@ export default function YojanaForm() {
       setLoading(true);
       setResult(null);
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 25000);
+
       try {
         const res = await fetch("/api/match", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userText: query }),
-          // Abort if no response in 25 seconds
-          signal: AbortSignal.timeout(25_000),
+          signal: controller.signal,
         });
-
+        clearTimeout(timeoutId);
         const data: ApiResponse = await res.json();
         setResult(data);
       } catch (err: unknown) {
-        const isTimeout =
-          err instanceof DOMException && err.name === "TimeoutError";
+        clearTimeout(timeoutId);
+        const isAbort =
+          err instanceof DOMException && err.name === "AbortError";
         setResult({
-          error: isTimeout
-            ? "Request timed out. Please try again."
+          error: isAbort
+            ? "Request timed out (25s). Please try again."
             : "Network error. Please check your connection and try again.",
         });
       } finally {

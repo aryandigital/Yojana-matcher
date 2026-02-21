@@ -56,8 +56,10 @@ export async function POST(req: NextRequest) {
       model: "gemini-2.5-flash",
       systemInstruction: SYSTEM_PROMPT,
       generationConfig: {
-        temperature: 0.1,       // Low temp for deterministic extraction
-        maxOutputTokens: 256,   // Profile JSON is tiny — keep context window lean
+        temperature: 0.1,         // Low temp = deterministic extraction
+        maxOutputTokens: 256,     // Profile JSON is tiny
+        // Forces the model to return valid JSON — eliminates parse failures
+        // Correct field name in @google/generative-ai SDK
         responseMimeType: "application/json",
       },
     });
