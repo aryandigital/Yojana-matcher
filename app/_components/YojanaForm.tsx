@@ -360,10 +360,10 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
     const incBand = INCOME_BANDS.find(b => b.value === finalData.income_lpa);
     const empOpt  = EMPLOYMENT_OPTIONS.find(e => e.value === finalData.employment);
     const userText = [
-      `I am a ${ageBand?.label.en ?? finalData.age+" yrs old"} ${finalData.gender},`,
+      `I am a ${ageBand?.label.en ?? (finalData.age+" yrs old")} ${finalData.gender},`,
       `${finalData.category} category,`,
-      `employment: ${empOpt?.label.en ?? finalData.employment || "not specified"},`,
-      `income ${incBand?.label.en ?? finalData.income_lpa+" LPA"},`,
+      `employment: ${empOpt?.label.en ?? (finalData.employment || "not specified")},`,
+      `income ${incBand?.label.en ?? (finalData.income_lpa+" LPA")},`,
       `education: ${finalData.education},`,
       `from ${finalData.state}.`,
       `My main goal is ${finalData.purpose}.`,
