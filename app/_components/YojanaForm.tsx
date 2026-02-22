@@ -449,6 +449,10 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
   const [result, setResult] = useState<ApiResponse | null>(null);
   const [apiError, setApiError] = useState("");
   const [activeFilter, setActiveFilter] = useState<SchemeCategory | "All">("All");
+  const [copied, setCopied] = useState(false);
+  const [shareCount, setShareCount] = useState(0);
+  const [showHeroBadge, setShowHeroBadge] = useState(false);
+  const SHARE_GOAL = 5;
 
   const totalSteps = STEPS.length;
   const stepName = STEPS[step] as Step;
@@ -527,10 +531,6 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
     const profile = result.profile!;
     const shareText = buildShareText(allSchemes, lang);
     const waUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-    const [copied, setCopied] = useState(false);
-    const [shareCount, setShareCount] = useState(0);
-    const [showHeroBadge, setShowHeroBadge] = useState(false);
-    const SHARE_GOAL = 5;
 
     const handleCopyLink = async () => {
       try {
