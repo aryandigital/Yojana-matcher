@@ -2,10 +2,10 @@
 
 import { useState, useCallback } from "react";
 import {
-  Search, Loader2, ExternalLink, AlertCircle, CheckCircle2,
-  ChevronRight, ChevronLeft, User, IndianRupee, MapPin,
+  Search, Loader2, ExternalLink, AlertCircle,
+  ChevronLeft, User, IndianRupee, MapPin,
   GraduationCap, Users, RefreshCw, Sparkles, Share2,
-  PhoneCall, ChevronDown, TrendingUp, Star, Briefcase,
+  PhoneCall, ChevronDown, TrendingUp, Star, Briefcase, Copy, CheckCircle2,
 } from "lucide-react";
 import type { Scheme, UserProfile, SchemeCategory } from "@/lib/schemes";
 import { getMatchScore } from "@/lib/schemes";
@@ -63,15 +63,64 @@ const GENDERS = [
   { label:{ en:"Other",  hi:"अन्य" },  emoji:"🧑", value:"other"  },
 ];
 
+// Employment options with visual illustration gradients
 const EMPLOYMENT_OPTIONS = [
-  { value:"government",   emoji:"🏛️", label:{ en:"Government Employee",       hi:"सरकारी कर्मचारी" },   desc:{ en:"Central/State govt job",      hi:"केंद्र/राज्य सरकार नौकरी" } },
-  { value:"private",      emoji:"🏢", label:{ en:"Private Sector Employee",    hi:"प्राइवेट कर्मचारी" }, desc:{ en:"Company / corporate job",     hi:"कंपनी / कॉर्पोरेट नौकरी" } },
-  { value:"self_employed",emoji:"🏪", label:{ en:"Self-Employed / Business",   hi:"स्व-रोजगार / व्यापार" },desc:{ en:"Own shop/business/profession",hi:"खुद का काम/व्यापार" } },
-  { value:"gig",          emoji:"🛵", label:{ en:"Gig / Freelance Worker",     hi:"गिग / फ्रीलांस" },     desc:{ en:"Ola, Uber, Swiggy, Upwork…", hi:"Ola, Uber, Swiggy, Upwork…" } },
-  { value:"farmer",       emoji:"🌾", label:{ en:"Farmer / Agricultural Worker",hi:"किसान / कृषि मजदूर" }, desc:{ en:"Own or leased farmland",      hi:"खुद की या पट्टे की जमीन" } },
-  { value:"daily_wage",   emoji:"🪚", label:{ en:"Daily Wage / Construction",  hi:"दिहाड़ी / निर्माण" },   desc:{ en:"Labour, helper, mason…",      hi:"मजदूर, सहायक, राजमिस्त्री…" } },
-  { value:"student",      emoji:"📚", label:{ en:"Student",                    hi:"छात्र" },               desc:{ en:"School / college / university",hi:"स्कूल/कॉलेज/यूनिवर्सिटी" } },
-  { value:"unemployed",   emoji:"🔍", label:{ en:"Unemployed / Homemaker",     hi:"बेरोजगार / गृहिणी" },   desc:{ en:"Looking for work or at home", hi:"काम की तलाश में या घर पर" } },
+  {
+    value:"government", emoji:"🏛️",
+    gradient:"from-blue-600 to-indigo-600",
+    badge:{ en:"⚠️ Some schemes excluded", hi:"⚠️ कुछ योजनाएं लागू नहीं" },
+    label:{ en:"Government Employee",       hi:"सरकारी कर्मचारी" },
+    desc:{ en:"Central/State govt job",      hi:"केंद्र/राज्य सरकार नौकरी" },
+  },
+  {
+    value:"private", emoji:"🏢",
+    gradient:"from-slate-600 to-gray-700",
+    badge:{ en:"✅ Most schemes apply", hi:"✅ अधिकांश योजनाएं लागू" },
+    label:{ en:"Private Sector Employee",    hi:"प्राइवेट कर्मचारी" },
+    desc:{ en:"Company / corporate job",     hi:"कंपनी / कॉर्पोरेट नौकरी" },
+  },
+  {
+    value:"self_employed", emoji:"🏪",
+    gradient:"from-orange-500 to-amber-500",
+    badge:{ en:"✅ Business loans & subsidies", hi:"✅ बिज़नेस लोन और सब्सिडी" },
+    label:{ en:"Self-Employed / Business",   hi:"स्व-रोजगार / व्यापार" },
+    desc:{ en:"Own shop/business/profession",hi:"खुद का काम/व्यापार" },
+  },
+  {
+    value:"gig", emoji:"🛵",
+    gradient:"from-teal-500 to-cyan-500",
+    badge:{ en:"✅ e-SHRAM + gig benefits", hi:"✅ e-श्रम + गिग लाभ" },
+    label:{ en:"Gig / Freelance Worker",     hi:"गिग / फ्रीलांस" },
+    desc:{ en:"Ola, Uber, Swiggy, Upwork…", hi:"Ola, Uber, Swiggy, Upwork…" },
+  },
+  {
+    value:"farmer", emoji:"🌾",
+    gradient:"from-green-500 to-lime-500",
+    badge:{ en:"✅ PM-KISAN + crop cover", hi:"✅ PM-किसान + फसल बीमा" },
+    label:{ en:"Farmer / Agricultural Worker",hi:"किसान / कृषि मजदूर" },
+    desc:{ en:"Own or leased farmland",      hi:"खुद की या पट्टे की जमीन" },
+  },
+  {
+    value:"daily_wage", emoji:"🪚",
+    gradient:"from-yellow-500 to-orange-400",
+    badge:{ en:"✅ e-SHRAM + APY eligible", hi:"✅ e-श्रम + APY पात्र" },
+    label:{ en:"Daily Wage / Construction",  hi:"दिहाड़ी / निर्माण" },
+    desc:{ en:"Labour, helper, mason…",      hi:"मजदूर, सहायक, राजमिस्त्री…" },
+  },
+  {
+    value:"student", emoji:"📚",
+    gradient:"from-purple-500 to-violet-500",
+    badge:{ en:"✅ Scholarships & training", hi:"✅ छात्रवृत्ति और प्रशिक्षण" },
+    label:{ en:"Student",                    hi:"छात्र" },
+    desc:{ en:"School / college / university",hi:"स्कूल/कॉलेज/यूनिवर्सिटी" },
+  },
+  {
+    value:"unemployed", emoji:"🔍",
+    gradient:"from-rose-500 to-pink-500",
+    badge:{ en:"✅ Skill training & loans", hi:"✅ कौशल प्रशिक्षण और लोन" },
+    label:{ en:"Unemployed / Homemaker",     hi:"बेरोजगार / गृहिणी" },
+    desc:{ en:"Looking for work or at home", hi:"काम की तलाश में या घर पर" },
+  },
 ];
 
 const CATEGORIES = [
@@ -162,6 +211,37 @@ function OptionCard({ emoji, label, desc, selected, onClick }: {
       </div>
       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${selected ? "border-green-500 bg-green-500" : "border-gray-200"}`}>
         {selected && <span className="w-2.5 h-2.5 bg-white rounded-full block" />}
+      </div>
+    </button>
+  );
+}
+
+// Employment card with visual illustration header
+function EmploymentCard({
+  option, selected, onClick, lang,
+}: {
+  option: typeof EMPLOYMENT_OPTIONS[0]; selected: boolean; onClick: () => void; lang: Lang;
+}) {
+  return (
+    <button type="button" onClick={onClick}
+      className={`w-full text-left rounded-2xl border-2 overflow-hidden transition-all duration-150 active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-green-400
+        ${selected ? "border-green-500 shadow-md shadow-green-100" : "border-gray-100 hover:border-green-200"}`}>
+      {/* Illustration header */}
+      <div className={`relative bg-gradient-to-br ${option.gradient} flex items-center gap-3 px-4 py-3 overflow-hidden`}>
+        <div className="absolute -top-3 -right-3 w-16 h-16 bg-white/10 rounded-full" />
+        <div className="absolute -bottom-4 -left-2 w-12 h-12 bg-white/10 rounded-full" />
+        <span className="text-3xl relative z-10" role="img">{option.emoji}</span>
+        <p className="text-white font-black text-sm relative z-10">{option.label[lang]}</p>
+        {selected && (
+          <span className="ml-auto bg-white/30 rounded-full p-0.5 relative z-10">
+            <CheckCircle2 className="w-4 h-4 text-white" />
+          </span>
+        )}
+      </div>
+      {/* Body */}
+      <div className={`px-4 py-2.5 flex items-center justify-between gap-2 ${selected ? "bg-green-50" : "bg-white"}`}>
+        <p className="text-[11px] text-gray-500">{option.desc[lang]}</p>
+        <span className="text-[10px] font-bold text-gray-400 whitespace-nowrap">{option.badge[lang]}</span>
       </div>
     </button>
   );
@@ -418,6 +498,22 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
     const profile    = result.profile!;
     const shareText  = buildShareText(allSchemes, lang);
     const waUrl      = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+    // Instagram stories doesn't have a direct deep link — we use navigator.share for native sharing
+    const [copied, setCopied] = useState(false);
+    const handleCopyLink = async () => {
+      try {
+        await navigator.clipboard.writeText("https://yojana-matcher.vercel.app");
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch {}
+    };
+    const handleNativeShare = async () => {
+      const text = shareText;
+      if (navigator.share) {
+        try { await navigator.share({ title: "Yojana Matcher", text, url: "https://yojana-matcher.vercel.app" }); }
+        catch {}
+      } else { window.open(waUrl, "_blank"); }
+    };
 
     const filtered = activeFilter === "All"
       ? allSchemes
@@ -428,32 +524,44 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
     return (
       <div className="animate-fadeIn">
 
-        {/* ── STORY SHARE BANNER — very visible ── */}
+        {/* ── ONE-TAP STORY SHARE BANNER — very visible ── */}
         <div className="relative mb-5 rounded-2xl overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-emerald-500" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.15),transparent)]" />
-          <div className="relative px-4 py-4 flex items-center justify-between gap-3">
-            <div>
-              <p className="text-white font-black text-sm">
-                {allSchemes.length} {tx("matched",lang)} 🎉
-              </p>
-              <p className="text-green-100 text-[11px]">{tx("matchedSub",lang)}</p>
+          <div className="absolute inset-0 bg-gradient-to-br from-green-600 via-emerald-500 to-teal-500" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.18),transparent)]" />
+          <div className="relative px-4 py-4">
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <div>
+                <p className="text-white font-black text-base">
+                  {allSchemes.length} {tx("matched",lang)} 🎉
+                </p>
+                <p className="text-green-100 text-[11px]">{tx("matchedSub",lang)}</p>
+              </div>
             </div>
-            <div className="flex gap-2 flex-shrink-0">
-              {/* WhatsApp Story */}
+            {/* Share row — 3 big prominent buttons */}
+            <div className="grid grid-cols-3 gap-2">
+              {/* WhatsApp */}
               <a href={waUrl} target="_blank" rel="noopener noreferrer"
-                className="flex flex-col items-center gap-1 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-xl px-3 py-2 transition-colors text-white"
+                className="flex flex-col items-center gap-1.5 bg-[#25D366] hover:bg-[#20bc5a] rounded-xl py-2.5 transition-colors text-white"
                 style={{ minHeight:"auto", minWidth:"auto" }}>
-                <Share2 className="w-4 h-4" />
-                <span className="text-[10px] font-bold">Share</span>
+                <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <span className="text-[10px] font-black">WhatsApp</span>
               </a>
-              {/* WhatsApp message */}
-              <a href={waUrl} target="_blank" rel="noopener noreferrer"
-                className="flex flex-col items-center gap-1 bg-[#25D366] hover:bg-[#20bc5a] rounded-xl px-3 py-2 transition-colors text-white"
+              {/* Story / Native share */}
+              <button type="button" onClick={handleNativeShare}
+                className="flex flex-col items-center gap-1.5 bg-gradient-to-br from-pink-500 via-rose-500 to-orange-400 hover:opacity-90 rounded-xl py-2.5 transition-all text-white"
                 style={{ minHeight:"auto", minWidth:"auto" }}>
-                <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                <span className="text-[10px] font-bold">WhatsApp</span>
-              </a>
+                <Share2 className="w-5 h-5" />
+                <span className="text-[10px] font-black">{lang==="hi"?"स्टोरी शेयर":"Share Story"}</span>
+              </button>
+              {/* Copy link */}
+              <button type="button" onClick={handleCopyLink}
+                className={`flex flex-col items-center gap-1.5 rounded-xl py-2.5 transition-all text-white ${
+                  copied ? "bg-green-400" : "bg-white/20 hover:bg-white/30 backdrop-blur-sm"
+                }`}
+                style={{ minHeight:"auto", minWidth:"auto" }}>
+                {copied ? <CheckCircle2 className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                <span className="text-[10px] font-black">{copied ? (lang==="hi"?"कॉपी हो गया!":"Copied!") : (lang==="hi"?"लिंक कॉपी":"Copy Link")}</span>
+              </button>
             </div>
           </div>
         </div>
@@ -521,17 +629,30 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
           ))}
         </div>
 
-        {/* ── Action row: CSC + Aadhaar ── */}
-        <div className="grid grid-cols-2 gap-3 mb-4">
+        {/* ── Action row: CSC + Aadhaar — prominent cards ── */}
+        <div className="space-y-2.5 mb-4">
           <a href="https://locator.csccloud.in/" target="_blank" rel="noopener noreferrer"
-            className="flex flex-col items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl py-3.5 transition-colors text-center">
-            <PhoneCall className="w-5 h-5" />
-            <span className="text-[11px] font-bold leading-tight">{tx("cscLink",lang)}</span>
+            className="flex items-center gap-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl px-4 py-3.5 transition-colors group">
+            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+              <PhoneCall className="w-5 h-5" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-black">{tx("cscLink",lang)}</p>
+              <p className="text-[11px] text-blue-200">{lang==="hi"?"आपके घर के पास सरकारी सेवा केंद्र":"Government service center near your home"}</p>
+            </div>
+            <ExternalLink className="w-4 h-4 text-blue-300 group-hover:translate-x-0.5 transition-transform" />
           </a>
           <a href="https://appointments.uidai.gov.in/easearch.aspx" target="_blank" rel="noopener noreferrer"
-            className="flex flex-col items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl py-3.5 transition-colors text-center">
-            <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-            <span className="text-[11px] font-bold leading-tight">{tx("aadhaarLink",lang)}</span>
+            className="flex items-center gap-3.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-2xl px-4 py-3.5 transition-colors group">
+            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+              {/* Aadhaar fingerprint icon */}
+              <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M2 12C2 6.48 6.48 2 12 2s10 4.48 10 10-4.48 10-10 10S2 17.52 2 12zm9-4.5c1.93 0 3.5 1.57 3.5 3.5 0 1.31-.73 2.46-1.8 3.07C12.45 14.49 12 15 12 16v.5h2V16c0-.28.15-.56.42-.74A5.5 5.5 0 0017 11c0-2.76-2.24-5-5-5s-5 2.24-5 5h2c0-1.93 1.57-3.5 3.5-3.5zM11 18h2v2h-2v-2z"/></svg>
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-black">{tx("aadhaarLink",lang)}</p>
+              <p className="text-[11px] text-orange-100">{lang==="hi"?"नजदीकी आधार नामांकन/अपडेट केंद्र खोजें":"Find nearest Aadhaar enrollment & update center"}</p>
+            </div>
+            <ExternalLink className="w-4 h-4 text-orange-200 group-hover:translate-x-0.5 transition-transform" />
           </a>
         </div>
 
@@ -641,11 +762,15 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
               selected={data.gender === g.value} onClick={() => pick({ gender:g.value })} />
           ))}
 
-          {/* EMPLOYMENT */}
-          {stepName === "employment" && EMPLOYMENT_OPTIONS.map(e => (
-            <OptionCard key={e.value} emoji={e.emoji} label={e.label[lang]} desc={e.desc[lang]}
-              selected={data.employment === e.value} onClick={() => pick({ employment:e.value })} />
-          ))}
+          {/* EMPLOYMENT — with visual illustration cards */}
+          {stepName === "employment" && (
+            <div className="space-y-2">
+              {EMPLOYMENT_OPTIONS.map(e => (
+                <EmploymentCard key={e.value} option={e} lang={lang}
+                  selected={data.employment === e.value} onClick={() => pick({ employment:e.value })} />
+              ))}
+            </div>
+          )}
 
           {/* CATEGORY */}
           {stepName === "category" && CATEGORIES.map(c => (
