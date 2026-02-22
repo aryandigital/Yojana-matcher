@@ -9,18 +9,12 @@
     scroll-behavior: smooth;
     text-size-adjust: 100%;
   }
-  body { min-height: 100dvh; background-color: #f8faf8; }
+  body { min-height: 100dvh; background-color: #f7faf8; }
 
-  button, a, [role="button"] {
-    min-height: 48px;
-    min-width: 48px;
-  }
+  button, a, [role="button"] { min-height: 48px; min-width: 48px; }
 
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      transition-duration: 0.01ms !important;
-    }
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   }
 }
 
@@ -42,4 +36,8 @@
     0%   { background-position: 200% 0; }
     100% { background-position: -200% 0; }
   }
+
+  /* Hide scrollbar but keep scroll — for category filter tabs */
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 }
