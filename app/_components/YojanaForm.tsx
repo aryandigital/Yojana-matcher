@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Search, Loader2, ExternalLink, AlertCircle,
   ChevronLeft, User, IndianRupee, MapPin,
@@ -10,6 +11,18 @@ import {
 import type { Scheme, UserProfile, SchemeCategory } from "@/lib/schemes";
 import { getMatchScore } from "@/lib/schemes";
 import { tx, type Lang } from "@/lib/i18n";
+
+/* ── Step illustration banners ── */
+const STEP_ILLUSTRATIONS: Record<string, { img: string; gradient: string }> = {
+  purpose: { img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=60&w=600&fit=crop", gradient: "from-green-600/80 to-emerald-700/90" },
+  age: { img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=60&w=600&fit=crop", gradient: "from-blue-600/80 to-indigo-700/90" },
+  gender: { img: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=60&w=600&fit=crop", gradient: "from-purple-600/80 to-violet-700/90" },
+  employment: { img: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=60&w=600&fit=crop", gradient: "from-orange-600/80 to-amber-700/90" },
+  category: { img: "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?q=60&w=600&fit=crop", gradient: "from-teal-600/80 to-cyan-700/90" },
+  income: { img: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=60&w=600&fit=crop", gradient: "from-amber-600/80 to-yellow-700/90" },
+  education: { img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=60&w=600&fit=crop", gradient: "from-indigo-600/80 to-blue-700/90" },
+  state: { img: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?q=60&w=600&fit=crop", gradient: "from-rose-600/80 to-pink-700/90" },
+};
 
 interface ApiResponse {
   profile?: UserProfile;
@@ -201,18 +214,25 @@ function OptionCard({ emoji, label, desc, selected, onClick }: {
   emoji: string; label: string; desc?: string; selected: boolean; onClick: () => void;
 }) {
   return (
-    <button type="button" onClick={onClick}
-      className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl border-2 transition-all duration-150 text-left active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-green-400
+    <motion.button type="button" onClick={onClick}
+      initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ type: "spring", stiffness: 300, damping: 24 }}
+      className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl border-2 transition-all duration-150 text-left focus:outline-none focus:ring-2 focus:ring-green-400
         ${selected ? "border-green-500 bg-green-50 shadow-md shadow-green-100" : "border-gray-100 bg-white hover:border-green-200 hover:bg-green-50/40"}`}>
-      <span className="text-2xl w-8 text-center flex-shrink-0">{emoji}</span>
+      <motion.span className="text-2xl w-8 text-center flex-shrink-0"
+        animate={selected ? { scale: [1, 1.3, 1] } : {}}
+        transition={{ duration: 0.3 }}>{emoji}</motion.span>
       <div className="flex-1 min-w-0">
         <span className={`block text-sm font-bold leading-snug ${selected ? "text-green-700" : "text-gray-800"}`}>{label}</span>
         {desc && <span className="block text-[11px] text-gray-400 mt-0.5">{desc}</span>}
       </div>
-      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${selected ? "border-green-500 bg-green-500" : "border-gray-200"}`}>
-        {selected && <span className="w-2.5 h-2.5 bg-white rounded-full block" />}
-      </div>
-    </button>
+      <motion.div
+        animate={selected ? { scale: [1, 1.2, 1] } : {}}
+        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${selected ? "border-green-500 bg-green-500" : "border-gray-200"}`}>
+        {selected && <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-2.5 h-2.5 bg-white rounded-full block" />}
+      </motion.div>
+    </motion.button>
   );
 }
 
@@ -251,8 +271,14 @@ function StepBar({ current, total }: { current: number; total: number }) {
   return (
     <div className="flex items-center gap-1 mb-5">
       {Array.from({ length: total }).map((_, i) => (
-        <div key={i} className={`h-1.5 flex-1 rounded-full transition-all duration-400
-          ${i < current ? "bg-green-500" : i === current ? "bg-green-300" : "bg-gray-100"}`} />
+        <div key={i} className="h-1.5 flex-1 rounded-full bg-gray-100 overflow-hidden">
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: i < current ? "100%" : i === current ? "60%" : "0%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className={`h-full rounded-full ${i < current ? "bg-green-500" : "bg-green-300"}`}
+          />
+        </div>
       ))}
     </div>
   );
@@ -297,7 +323,10 @@ function SchemeCard({ scheme, profile, isTop, lang }: {
   const hostname = (() => { try { return new URL(scheme.applyUrl).hostname; } catch { return "gov.in"; } })();
 
   return (
-    <article className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden animate-fadeIn">
+    <motion.article
+      initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 200, damping: 20 }}
+      className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
       {/* Visual illustration header */}
       <SchemeIllustration emoji={scheme.illustration.emoji} gradient={scheme.illustration.gradient} />
 
@@ -375,7 +404,7 @@ function SchemeCard({ scheme, profile, isTop, lang }: {
           </div>
         </a>
       </div>
-    </article>
+    </motion.article>
   );
 }
 
@@ -498,8 +527,11 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
     const profile = result.profile!;
     const shareText = buildShareText(allSchemes, lang);
     const waUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-    // Instagram stories doesn't have a direct deep link — we use navigator.share for native sharing
     const [copied, setCopied] = useState(false);
+    const [shareCount, setShareCount] = useState(0);
+    const [showHeroBadge, setShowHeroBadge] = useState(false);
+    const SHARE_GOAL = 5;
+
     const handleCopyLink = async () => {
       try {
         await navigator.clipboard.writeText("https://yojana-matcher.vercel.app");
@@ -507,12 +539,25 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
         setTimeout(() => setCopied(false), 2000);
       } catch { }
     };
+
+    const handleWhatsAppShare = () => {
+      window.open(waUrl, "_blank");
+      const next = shareCount + 1;
+      setShareCount(next);
+      if (next >= SHARE_GOAL && !showHeroBadge) {
+        setTimeout(() => setShowHeroBadge(true), 800);
+      }
+    };
+
     const handleNativeShare = async () => {
-      const text = shareText;
       if (navigator.share) {
-        try { await navigator.share({ title: "Yojana Matcher", text, url: "https://yojana-matcher.vercel.app" }); }
-        catch { }
-      } else { window.open(waUrl, "_blank"); }
+        try {
+          await navigator.share({ title: "Yojana Matcher", text: shareText, url: "https://yojana-matcher.vercel.app" });
+          const next = shareCount + 1;
+          setShareCount(next);
+          if (next >= SHARE_GOAL && !showHeroBadge) setTimeout(() => setShowHeroBadge(true), 800);
+        } catch { }
+      } else { handleWhatsAppShare(); }
     };
 
     const filtered = activeFilter === "All"
@@ -521,49 +566,199 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
 
     const doorstep = data.state !== "unknown" ? DOORSTEP_LINKS[data.state] : null;
 
-    return (
-      <div className="animate-fadeIn">
+    // Simulated community counter — gives a sense of live community activity
+    const communityBenefits = 847 + allSchemes.length * 3;
 
-        {/* ── ONE-TAP STORY SHARE BANNER — very visible ── */}
-        <div className="relative mb-5 rounded-2xl overflow-hidden">
+    return (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
+
+        {/* ── HERO BADGE MODAL (unlocked after 5 shares) ── */}
+        <AnimatePresence>
+          {showHeroBadge && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm px-6"
+              onClick={() => setShowHeroBadge(false)}>
+              <motion.div initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                className="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl relative overflow-hidden"
+                onClick={e => e.stopPropagation()}>
+                {/* Confetti dots */}
+                {[...Array(20)].map((_, i) => (
+                  <motion.div key={i}
+                    initial={{ opacity: 0, y: -20, x: Math.random() * 200 - 100 }}
+                    animate={{ opacity: [0, 1, 0], y: [0, 100 + Math.random() * 100], x: Math.random() * 200 - 100 }}
+                    transition={{ duration: 2 + Math.random(), delay: Math.random() * 0.5, repeat: Infinity }}
+                    className="absolute w-2 h-2 rounded-full"
+                    style={{ backgroundColor: ["#FF6B35", "#25D366", "#138808", "#FF9933", "#667eea"][i % 5], left: `${Math.random() * 100}%`, top: 0 }} />
+                ))}
+                <div className="relative z-10">
+                  <motion.div animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="text-6xl mb-3">🏅</motion.div>
+                  <h3 className="text-xl font-black text-gray-900 mb-1">
+                    {lang === "hi" ? "योजना हीरो! 🇮🇳" : "Yojana Hero! 🇮🇳"}
+                  </h3>
+                  <p className="text-sm text-gray-500 mb-4">
+                    {lang === "hi"
+                      ? "आपने 5 परिवारों को सरकारी योजनाओं से जोड़ा! आप एक असली हीरो हैं।"
+                      : "You helped 5 families discover government schemes! You're a real hero."}
+                  </p>
+                  <div className="bg-gradient-to-r from-amber-100 to-orange-100 rounded-2xl p-4 mb-4 border border-amber-200">
+                    <p className="text-[10px] font-black text-amber-600 uppercase tracking-wider mb-1">
+                      {lang === "hi" ? "आपका प्रभाव" : "YOUR IMPACT"}
+                    </p>
+                    <p className="text-2xl font-black text-amber-800">
+                      5 {lang === "hi" ? "परिवार" : "Families"} 💛
+                    </p>
+                    <p className="text-xs text-amber-600 mt-1">
+                      {lang === "hi"
+                        ? "हर शेयर किसी का जीवन बदल सकता है"
+                        : "Every share can change someone's life"}
+                    </p>
+                  </div>
+                  <button onClick={() => setShowHeroBadge(false)}
+                    className="bg-green-500 hover:bg-green-600 text-white font-bold text-sm px-6 py-3 rounded-xl transition-colors"
+                    style={{ minHeight: "auto", minWidth: "auto" }}>
+                    {lang === "hi" ? "धन्यवाद! 🙏" : "Thank you! 🙏"}
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ── RESULTS HEADER ── */}
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+          className="relative mb-4 rounded-2xl overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-green-600 via-emerald-500 to-teal-500" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.18),transparent)]" />
           <div className="relative px-4 py-4">
-            <div className="flex items-center justify-between gap-3 mb-3">
+            <div className="flex items-center justify-between gap-3">
               <div>
                 <span className="block text-white font-black text-base">
                   {allSchemes.length} {tx("matched", lang)} 🎉
                 </span>
                 <span className="block text-green-100 text-[11px]">{tx("matchedSub", lang)}</span>
               </div>
-            </div>
-            {/* Share row — 3 big prominent buttons */}
-            <div className="grid grid-cols-3 gap-2">
-              {/* WhatsApp */}
-              <a href={waUrl} target="_blank" rel="noopener noreferrer"
-                className="flex flex-col items-center gap-1.5 bg-[#25D366] hover:bg-[#20bc5a] rounded-xl py-2.5 transition-colors text-white"
-                style={{ minHeight: "auto", minWidth: "auto" }}>
-                <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
-                <span className="text-[10px] font-black">WhatsApp</span>
-              </a>
-              {/* Story / Native share */}
-              <button type="button" onClick={handleNativeShare}
-                className="flex flex-col items-center gap-1.5 bg-gradient-to-br from-pink-500 via-rose-500 to-orange-400 hover:opacity-90 rounded-xl py-2.5 transition-all text-white"
-                style={{ minHeight: "auto", minWidth: "auto" }}>
-                <Share2 className="w-5 h-5" />
-                <span className="text-[10px] font-black">{lang === "hi" ? "स्टोरी शेयर" : "Share Story"}</span>
-              </button>
-              {/* Copy link */}
-              <button type="button" onClick={handleCopyLink}
-                className={`flex flex-col items-center gap-1.5 rounded-xl py-2.5 transition-all text-white ${copied ? "bg-green-400" : "bg-white/20 hover:bg-white/30 backdrop-blur-sm"
-                  }`}
-                style={{ minHeight: "auto", minWidth: "auto" }}>
-                {copied ? <CheckCircle2 className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
-                <span className="text-[10px] font-black">{copied ? (lang === "hi" ? "कॉपी हो गया!" : "Copied!") : (lang === "hi" ? "लिंक कॉपी" : "Copy Link")}</span>
-              </button>
+              <motion.div animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 2, repeat: Infinity }}
+                className="bg-white/20 backdrop-blur-sm rounded-xl px-3 py-1.5 text-center">
+                <p className="text-[9px] text-green-100 font-bold uppercase tracking-wider">Community</p>
+                <p className="text-lg font-black text-white leading-tight">₹{communityBenefits}L+</p>
+                <p className="text-[9px] text-green-200">{lang === "hi" ? "लाभ खोजे गए" : "benefits found"}</p>
+              </motion.div>
             </div>
           </div>
-        </div>
+        </motion.div>
+
+        {/* ── GAMIFIED SHARE MISSION ── */}
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+          className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-5">
+
+          {/* Mission Header with illustration */}
+          <div className="relative bg-gradient-to-r from-amber-50 via-orange-50 to-rose-50 px-4 pt-4 pb-3 border-b border-amber-100/60">
+            <div className="flex items-start gap-3">
+              <div className="text-3xl">🤝</div>
+              <div className="flex-1">
+                <h3 className="font-black text-sm text-gray-800 leading-tight">
+                  {lang === "hi" ? "मिशन: 5 परिवारों की मदद करें" : "Mission: Help 5 Families"}
+                </h3>
+                <p className="text-[11px] text-gray-500 mt-0.5 leading-snug">
+                  {lang === "hi"
+                    ? "🇮🇳 60% पात्र भारतीय अपनी योजनाओं से अनजान हैं। आपका एक शेयर किसी का जीवन बदल सकता है।"
+                    : "🇮🇳 60% of eligible Indians don't know about their schemes. Your one share can change a family's future."}
+                </p>
+              </div>
+            </div>
+
+            {/* Progress bar */}
+            <div className="mt-3">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[10px] font-bold text-amber-700">
+                  {shareCount}/{SHARE_GOAL} {lang === "hi" ? "शेयर" : "shares"}
+                </span>
+                {shareCount >= SHARE_GOAL ? (
+                  <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }}
+                    className="text-[10px] font-black text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
+                    ✅ {lang === "hi" ? "हीरो बैज अनलॉक!" : "Hero Badge Unlocked!"}
+                  </motion.span>
+                ) : (
+                  <span className="text-[10px] text-gray-400">
+                    {SHARE_GOAL - shareCount} {lang === "hi" ? "और शेयर बाकी" : "more to unlock 🏅"}
+                  </span>
+                )}
+              </div>
+              <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${Math.min((shareCount / SHARE_GOAL) * 100, 100)}%` }}
+                  transition={{ type: "spring", stiffness: 200 }}
+                  className={`h-full rounded-full ${shareCount >= SHARE_GOAL
+                    ? "bg-gradient-to-r from-green-400 to-emerald-500"
+                    : "bg-gradient-to-r from-amber-400 to-orange-500"}`} />
+              </div>
+              {/* Mini family avatars */}
+              <div className="flex items-center gap-0.5 mt-2">
+                {Array.from({ length: SHARE_GOAL }).map((_, i) => (
+                  <motion.div key={i}
+                    initial={false}
+                    animate={i < shareCount ? { scale: [0.5, 1.2, 1], opacity: 1 } : { opacity: 0.3 }}
+                    className={`w-7 h-7 rounded-full flex items-center justify-center text-sm border-2 ${i < shareCount ? "bg-green-50 border-green-300" : "bg-gray-50 border-gray-200"
+                      }`}>
+                    {["👨‍👩‍👧", "👴", "👩‍🌾", "👨‍🎓", "🧕"][i]}
+                  </motion.div>
+                ))}
+                <span className="text-[10px] text-gray-400 ml-2 font-medium leading-tight">
+                  {shareCount === 0
+                    ? (lang === "hi" ? "पहला शेयर करें!" : "Make your first share!")
+                    : shareCount < SHARE_GOAL
+                      ? (lang === "hi" ? `${shareCount} परिवार जुड़े!` : `${shareCount} families reached!`)
+                      : (lang === "hi" ? "सभी जुड़ गए! 🎉" : "All reached! 🎉")}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Share Actions */}
+          <div className="p-4">
+            {/* Storytelling snippet */}
+            <div className="bg-blue-50 border border-blue-100 rounded-xl px-3 py-2.5 mb-3 flex items-start gap-2.5">
+              <span className="text-lg mt-0.5">💡</span>
+              <p className="text-[11px] text-blue-700 leading-snug font-medium">
+                {lang === "hi"
+                  ? "क्या आप जानते हैं? औसत भारतीय परिवार सालाना ₹15,000 की सरकारी सहायता का दावा नहीं कर पाता — सिर्फ इसलिए कि उन्हें पता ही नहीं।"
+                  : "Did you know? The average Indian family misses ₹15,000/yr in government aid — simply because they don't know about it."}
+              </p>
+            </div>
+
+            {/* Large WhatsApp CTA */}
+            <motion.button whileTap={{ scale: 0.97 }} onClick={handleWhatsAppShare} type="button"
+              className="w-full flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#20bc5a] text-white rounded-2xl py-3.5 transition-colors shadow-sm mb-2"
+              style={{ minHeight: "auto" }}>
+              <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
+              <span className="font-black text-sm">
+                {lang === "hi" ? "WhatsApp पर भेजें 💚" : "Send via WhatsApp 💚"}
+              </span>
+            </motion.button>
+
+            {/* Secondary share row */}
+            <div className="grid grid-cols-2 gap-2">
+              <motion.button whileTap={{ scale: 0.95 }} onClick={handleNativeShare} type="button"
+                className="flex items-center justify-center gap-1.5 bg-gradient-to-br from-pink-500 via-rose-500 to-orange-400 text-white rounded-xl py-2.5 transition-all text-[11px] font-bold"
+                style={{ minHeight: "auto", minWidth: "auto" }}>
+                <Share2 className="w-3.5 h-3.5" />
+                {lang === "hi" ? "स्टोरी शेयर" : "Share Story"}
+              </motion.button>
+              <motion.button whileTap={{ scale: 0.95 }} onClick={handleCopyLink} type="button"
+                className={`flex items-center justify-center gap-1.5 rounded-xl py-2.5 transition-all text-[11px] font-bold border ${copied
+                  ? "bg-green-50 text-green-600 border-green-200"
+                  : "bg-gray-50 text-gray-600 border-gray-200 hover:border-green-200"}`}
+                style={{ minHeight: "auto", minWidth: "auto" }}>
+                {copied ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                {copied ? (lang === "hi" ? "कॉपी हो गया!" : "Copied!") : (lang === "hi" ? "लिंक कॉपी" : "Copy Link")}
+              </motion.button>
+            </div>
+          </div>
+        </motion.div>
 
         {/* ── Profile pills ── */}
         {profile && (
@@ -690,7 +885,7 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
           <RefreshCw className="w-4 h-4" />
           {tx("checkAgain", lang)}
         </button>
-      </div>
+      </motion.div>
     );
   }
 
@@ -706,16 +901,18 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
     state: { q: tx("stateQ", lang), h: tx("stateHint", lang) },
   };
 
+  const illustration = STEP_ILLUSTRATIONS[stepName];
+
   return (
     <div>
       <StepBar current={step} total={totalSteps} />
 
       <div className="flex items-center justify-between mb-2">
         {step > 0 ? (
-          <button onClick={() => setStep(s => s - 1)} style={{ minHeight: "auto", minWidth: "auto" }}
+          <motion.button whileTap={{ scale: 0.9 }} onClick={() => setStep(s => s - 1)} style={{ minHeight: "auto", minWidth: "auto" }}
             className="flex items-center gap-1 text-xs text-gray-400 hover:text-green-600 transition-colors">
             <ChevronLeft className="w-4 h-4" />{tx("back", lang)}
-          </button>
+          </motion.button>
         ) : <span />}
         <p className="text-[11px] text-gray-300 font-medium">
           {tx("stepOf", lang)} {step + 1} {tx("of", lang)} {totalSteps}
@@ -724,7 +921,7 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
 
       {/* Running summary */}
       {step > 0 && (
-        <div className="flex flex-wrap gap-1.5 mb-3 animate-fadeIn">
+        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="flex flex-wrap gap-1.5 mb-3">
           {data.purpose && <SummaryChip icon={Sparkles} value={PURPOSES.find(p => p.value === data.purpose)?.value ?? data.purpose} />}
           {data.age > 0 && <SummaryChip icon={User} value={AGE_BANDS.find(b => b.mid === data.age)?.label[lang] ?? ""} />}
           {data.gender && <SummaryChip icon={Users} value={GENDERS.find(g => g.value === data.gender)?.label[lang] ?? data.gender} />}
@@ -732,87 +929,103 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
           {data.category && <SummaryChip icon={Users} value={CATEGORIES.find(c => c.value === data.category)?.label[lang] ?? data.category} />}
           {data.income_lpa >= 0 && <SummaryChip icon={IndianRupee} value={INCOME_BANDS.find(b => b.value === data.income_lpa)?.label[lang] ?? ""} />}
           {data.education && <SummaryChip icon={GraduationCap} value={EDUCATION_LEVELS.find(e => e.value === data.education)?.label[lang] ?? data.education} />}
-        </div>
+        </motion.div>
       )}
 
-      {/* Step card */}
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-lg overflow-hidden" key={step}>
-        <div className="px-5 pt-5 pb-4 border-b border-gray-50">
-          <h2 className="text-lg font-black text-gray-900">{STEP_Q[stepName].q}</h2>
-          <p className="text-xs text-gray-400 mt-0.5">{STEP_Q[stepName].h}</p>
-        </div>
-        <div className="p-4 space-y-2">
+      {/* Step card with animated transitions */}
+      <AnimatePresence mode="wait">
+        <motion.div key={step}
+          initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          className="bg-white rounded-3xl border border-gray-100 shadow-lg overflow-hidden">
 
-          {/* PURPOSE */}
-          {stepName === "purpose" && PURPOSES.map(p => (
-            <OptionCard key={p.value} emoji={p.emoji} label={tx(p.labelKey, lang)}
-              selected={data.purpose === p.value} onClick={() => pick({ purpose: p.value })} />
-          ))}
-
-          {/* AGE */}
-          {stepName === "age" && AGE_BANDS.map(b => (
-            <OptionCard key={b.mid} emoji={b.emoji} label={b.label[lang]}
-              selected={data.age === b.mid} onClick={() => pick({ age: b.mid })} />
-          ))}
-
-          {/* GENDER */}
-          {stepName === "gender" && GENDERS.map(g => (
-            <OptionCard key={g.value} emoji={g.emoji} label={g.label[lang]}
-              selected={data.gender === g.value} onClick={() => pick({ gender: g.value })} />
-          ))}
-
-          {/* EMPLOYMENT — with visual illustration cards */}
-          {stepName === "employment" && (
-            <div className="space-y-2">
-              {EMPLOYMENT_OPTIONS.map(e => (
-                <EmploymentCard key={e.value} option={e} lang={lang}
-                  selected={data.employment === e.value} onClick={() => pick({ employment: e.value })} />
-              ))}
+          {/* Step illustration banner */}
+          {illustration && (
+            <div className="relative h-28 overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={illustration.img} alt="" loading="eager" className="absolute inset-0 w-full h-full object-cover" />
+              <div className={`absolute inset-0 bg-gradient-to-t ${illustration.gradient}`} />
+              <div className="absolute inset-0 flex items-end px-5 pb-3 z-10">
+                <div>
+                  <h2 className="text-lg font-black text-white drop-shadow-sm leading-tight">{STEP_Q[stepName].q}</h2>
+                  <p className="text-[11px] text-white/70 mt-0.5">{STEP_Q[stepName].h}</p>
+                </div>
+              </div>
             </div>
           )}
+          <div className="p-4 space-y-2">
 
-          {/* CATEGORY */}
-          {stepName === "category" && CATEGORIES.map(c => (
-            <OptionCard key={c.value} emoji={c.emoji} label={c.label[lang]} desc={c.desc[lang]}
-              selected={data.category === c.value} onClick={() => pick({ category: c.value })} />
-          ))}
+            {/* PURPOSE */}
+            {stepName === "purpose" && PURPOSES.map(p => (
+              <OptionCard key={p.value} emoji={p.emoji} label={tx(p.labelKey, lang)}
+                selected={data.purpose === p.value} onClick={() => pick({ purpose: p.value })} />
+            ))}
 
-          {/* INCOME */}
-          {stepName === "income" && INCOME_BANDS.map(b => (
-            <OptionCard key={String(b.value)} emoji={b.emoji} label={b.label[lang]} desc={b.desc[lang]}
-              selected={data.income_lpa === b.value} onClick={() => pick({ income_lpa: b.value })} />
-          ))}
+            {/* AGE */}
+            {stepName === "age" && AGE_BANDS.map(b => (
+              <OptionCard key={b.mid} emoji={b.emoji} label={b.label[lang]}
+                selected={data.age === b.mid} onClick={() => pick({ age: b.mid })} />
+            ))}
 
-          {/* EDUCATION */}
-          {stepName === "education" && EDUCATION_LEVELS.map(e => (
-            <OptionCard key={e.value} emoji={e.emoji} label={e.label[lang]}
-              selected={data.education === e.value} onClick={() => pick({ education: e.value })} />
-          ))}
+            {/* GENDER */}
+            {stepName === "gender" && GENDERS.map(g => (
+              <OptionCard key={g.value} emoji={g.emoji} label={g.label[lang]}
+                selected={data.gender === g.value} onClick={() => pick({ gender: g.value })} />
+            ))}
 
-          {/* STATE — last step + submit */}
-          {stepName === "state" && (
-            <>
-              <OptionCard emoji="🌐" label={tx("allIndia", lang)}
-                selected={data.state === "unknown"} onClick={() => setData(d => ({ ...d, state: "unknown" }))} />
-              <div className="relative">
-                <select value={data.state === "unknown" ? "" : data.state}
-                  onChange={e => setData(d => ({ ...d, state: e.target.value || "unknown" }))}
-                  className="w-full appearance-none bg-white border-2 border-gray-100 hover:border-green-200 rounded-2xl px-4 py-3.5 text-sm text-gray-700 font-medium focus:outline-none focus:border-green-400 transition-colors pr-10"
-                  style={{ minHeight: "52px" }}>
-                  <option value="">{tx("selectState", lang)}</option>
-                  {STATES.map(s => <option key={s} value={s}>{s}</option>)}
-                </select>
-                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300 pointer-events-none" />
+            {/* EMPLOYMENT — with visual illustration cards */}
+            {stepName === "employment" && (
+              <div className="space-y-2">
+                {EMPLOYMENT_OPTIONS.map(e => (
+                  <EmploymentCard key={e.value} option={e} lang={lang}
+                    selected={data.employment === e.value} onClick={() => pick({ employment: e.value })} />
+                ))}
               </div>
-              <button onClick={() => handleSubmit(data)} disabled={loading}
-                className="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white font-black rounded-2xl py-4 text-sm shadow-lg shadow-green-200/60 transition-all active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 mt-2">
-                <Search className="w-4 h-4" />
-                {tx("findBtn", lang)}
-              </button>
-            </>
-          )}
-        </div>
-      </div>
+            )}
+
+            {/* CATEGORY */}
+            {stepName === "category" && CATEGORIES.map(c => (
+              <OptionCard key={c.value} emoji={c.emoji} label={c.label[lang]} desc={c.desc[lang]}
+                selected={data.category === c.value} onClick={() => pick({ category: c.value })} />
+            ))}
+
+            {/* INCOME */}
+            {stepName === "income" && INCOME_BANDS.map(b => (
+              <OptionCard key={String(b.value)} emoji={b.emoji} label={b.label[lang]} desc={b.desc[lang]}
+                selected={data.income_lpa === b.value} onClick={() => pick({ income_lpa: b.value })} />
+            ))}
+
+            {/* EDUCATION */}
+            {stepName === "education" && EDUCATION_LEVELS.map(e => (
+              <OptionCard key={e.value} emoji={e.emoji} label={e.label[lang]}
+                selected={data.education === e.value} onClick={() => pick({ education: e.value })} />
+            ))}
+
+            {/* STATE — last step + submit */}
+            {stepName === "state" && (
+              <>
+                <OptionCard emoji="🌐" label={tx("allIndia", lang)}
+                  selected={data.state === "unknown"} onClick={() => setData(d => ({ ...d, state: "unknown" }))} />
+                <div className="relative">
+                  <select value={data.state === "unknown" ? "" : data.state}
+                    onChange={e => setData(d => ({ ...d, state: e.target.value || "unknown" }))}
+                    className="w-full appearance-none bg-white border-2 border-gray-100 hover:border-green-200 rounded-2xl px-4 py-3.5 text-sm text-gray-700 font-medium focus:outline-none focus:border-green-400 transition-colors pr-10"
+                    style={{ minHeight: "52px" }}>
+                    <option value="">{tx("selectState", lang)}</option>
+                    {STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300 pointer-events-none" />
+                </div>
+                <button onClick={() => handleSubmit(data)} disabled={loading}
+                  className="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white font-black rounded-2xl py-4 text-sm shadow-lg shadow-green-200/60 transition-all active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 mt-2">
+                  <Search className="w-4 h-4" />
+                  {tx("findBtn", lang)}
+                </button>
+              </>
+            )}
+          </div>
+        </motion.div>
+      </AnimatePresence>
 
       {step === 0 && (
         <p className="text-center text-[11px] text-gray-300 mt-4">

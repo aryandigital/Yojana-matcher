@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
+import YojanaForm from "./YojanaForm";
 import {
-    Search,
     ChevronRight,
     ChevronDown,
     Briefcase,
@@ -14,329 +14,345 @@ import {
     Wrench,
     SunMedium,
     Droplet,
-    ArrowRight,
     Share2,
+    ExternalLink,
+    Sparkles,
+    ArrowDown,
 } from "lucide-react";
-import Image from "next/image";
 
-// Reusable translation wrapper (simplified for this demo)
+/* ─── Translation helper ─── */
 const tx = (key: string, lang: "en" | "hi") => {
-    const translations: Record<string, Record<"en" | "hi", string>> = {
-        shareStatus: { en: "Share on Status", hi: "स्टेटस पर शेयर करें" },
+    const t: Record<string, Record<"en" | "hi", string>> = {
+        shareStatus: { en: "Share on Status", hi: "स्टेटस शेयर" },
         findYojana: { en: "Find Your", hi: "अपनी खोजें" },
         yojana: { en: "Yojana", hi: "योजना" },
         subtitle: {
-            en: "Secure and match with government schemes you qualify for.",
-            hi: "सुरक्षित रहें और उन सरकारी योजनाओं से जुड़ें जिनके आप योग्य हैं।",
+            en: "Match instantly with 100+ government schemes, insurance & investments you qualify for.",
+            hi: "100+ सरकारी योजनाओं, बीमा और निवेश से तुरंत मैच करें।",
         },
-        searchPlaceholder: { en: "Search for schemes...", hi: "योजनाएं खोजें..." },
+        startMatching: { en: "Start Matching →", hi: "मैचिंग शुरू करें →" },
         lookingFor: { en: "What are you looking for?", hi: "आप क्या खोज रहे हैं?" },
         govInitiatives: { en: "Government Initiatives", hi: "सरकारी पहल" },
         schemesWeCover: { en: "Schemes We Cover", hi: "योजनाएं जो हम कवर करते हैं" },
         faq: { en: "Frequently Asked Questions", hi: "अक्सर पूछे जाने वाले प्रश्न" },
+        viewAll: { en: "View All Schemes ↗", hi: "सभी योजनाएं देखें ↗" },
+        tapToExplore: { en: "Tap any category to explore", hi: "किसी भी श्रेणी पर टैप करें" },
     };
-    return translations[key]?.[lang] || key;
+    return t[key]?.[lang] || key;
 };
 
-// SVG Watermarks (Inline for portability and styling)
+/* ─── SVG Watermarks ─── */
 const AshokaChakra = () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full text-blue-900/5 spin-slow" fill="currentColor">
+    <svg viewBox="0 0 100 100" className="w-full h-full text-blue-900/[0.04]" fill="currentColor">
         <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="2" />
-        <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" strokeWidth="0.5" />
         <circle cx="50" cy="50" r="8" fill="none" stroke="currentColor" strokeWidth="1" />
         {[...Array(24)].map((_, i) => (
-            <line
-                key={i}
-                x1="50"
-                y1="50"
-                x2="50"
-                y2="5"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                transform={`rotate(${i * 15} 50 50)`}
-            />
+            <line key={i} x1="50" y1="50" x2="50" y2="5" stroke="currentColor" strokeWidth="1.5"
+                transform={`rotate(${i * 15} 50 50)`} />
         ))}
     </svg>
 );
 
-const TajMahalSilhoutte = () => (
-    <svg viewBox="0 0 200 100" className="w-full h-full text-green-900/10" fill="currentColor">
-        <path d="M100 10 C90 30, 80 50, 70 50 L70 90 L130 90 L130 50 C120 50, 110 30, 100 10 Z" />
-        <path d="M40 40 C35 55, 30 70, 30 90 L50 90 L50 55 C45 55, 42 45, 40 40 Z" />
-        <path d="M160 40 C165 55, 170 70, 170 90 L150 90 L150 55 C155 55, 158 45, 160 40 Z" />
-    </svg>
-);
-
-const RedFortSilhoutte = () => (
-    <svg viewBox="0 0 200 100" className="w-full h-full text-orange-900/10" fill="currentColor">
-        <rect x="20" y="50" width="30" height="40" />
-        <rect x="150" y="50" width="30" height="40" />
-        <rect x="60" y="40" width="80" height="50" />
-        <polygon points="20,50 35,30 50,50" />
-        <polygon points="150,50 165,30 180,50" />
-        <polygon points="60,40 100,20 140,40" />
-    </svg>
-)
-
-// Data Arrays
+/* ─── Data ─── */
 const CATEGORIES = [
-    { id: "business", icon: Briefcase, label: "Start a Business", color: "text-blue-600", bg: "bg-blue-50", img: "https://images.unsplash.com/photo-1664575602276-acd073f104c1?q=80&w=600" },
-    { id: "farming", icon: Wheat, label: "Farming & Agriculture", color: "text-green-600", bg: "bg-green-50", img: "https://images.unsplash.com/photo-1586771107445-d3afeb0dece5?q=80&w=600" },
-    { id: "education", icon: GraduationCap, label: "Education & Scholarship", color: "text-purple-600", bg: "bg-purple-50", img: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=600" },
-    { id: "health", icon: HeartPulse, label: "Health & Insurance", color: "text-rose-600", bg: "bg-rose-50", img: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=600" },
-    { id: "housing", icon: Home, label: "Housing", color: "text-amber-600", bg: "bg-amber-50", img: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=600" },
-    { id: "skills", icon: Wrench, label: "Skill Training", color: "text-slate-600", bg: "bg-slate-50", img: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=600" },
+    {
+        id: "business", icon: Briefcase, label: { en: "Start a Business", hi: "व्यापार शुरू करें" },
+        color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-100",
+        img: "https://images.unsplash.com/photo-1664575602276-acd073f104c1?q=60&w=400&h=200&fit=crop",
+        url: "https://www.mudra.org.in",
+    },
+    {
+        id: "farming", icon: Wheat, label: { en: "Farming & Agriculture", hi: "कृषि और खेती" },
+        color: "text-green-600", bg: "bg-green-50", border: "border-green-100",
+        img: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=60&w=400&h=200&fit=crop",
+        url: "https://pmkisan.gov.in",
+    },
+    {
+        id: "education", icon: GraduationCap, label: { en: "Education & Scholarship", hi: "शिक्षा और छात्रवृत्ति" },
+        color: "text-purple-600", bg: "bg-purple-50", border: "border-purple-100",
+        img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=60&w=400&h=200&fit=crop",
+        url: "https://scholarships.gov.in",
+    },
+    {
+        id: "health", icon: HeartPulse, label: { en: "Health & Insurance", hi: "स्वास्थ्य और बीमा" },
+        color: "text-rose-600", bg: "bg-rose-50", border: "border-rose-100",
+        img: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=60&w=400&h=200&fit=crop",
+        url: "https://pmjay.gov.in",
+    },
+    {
+        id: "housing", icon: Home, label: { en: "Housing", hi: "आवास" },
+        color: "text-amber-600", bg: "bg-amber-50", border: "border-amber-100",
+        img: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=60&w=400&h=200&fit=crop",
+        url: "https://pmaymis.gov.in",
+    },
+    {
+        id: "skills", icon: Wrench, label: { en: "Skill Training", hi: "कौशल प्रशिक्षण" },
+        color: "text-slate-600", bg: "bg-slate-50", border: "border-slate-100",
+        img: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=60&w=400&h=200&fit=crop",
+        url: "https://www.skillindia.gov.in",
+    },
 ];
 
 const INITIATIVES = [
     {
-        id: "surya-ghar",
-        title: "PM Surya Ghar",
-        desc: "Free electricity via rooftop solar panels. Subsidy up to ₹78,000.",
+        id: "surya-ghar", title: "PM Surya Ghar",
+        desc: { en: "Free electricity via rooftop solar. Subsidy up to ₹78,000.", hi: "छत पर सोलर से मुफ्त बिजली। ₹78,000 तक सब्सिडी।" },
         icon: SunMedium,
-        bgImg: "https://images.unsplash.com/photo-1587474260584-136574528ed5?q=80&w=800",
+        img: "https://images.unsplash.com/photo-1509391366360-2e959784a276?q=60&w=600&fit=crop",
+        url: "https://pmsuryaghar.gov.in",
     },
     {
-        id: "jal-jeevan",
-        title: "Jal Jeevan Mission",
-        desc: "Safe and adequate drinking water through individual household tap connections.",
+        id: "jal-jeevan", title: "Jal Jeevan Mission",
+        desc: { en: "Safe drinking water via household tap connections for every home.", hi: "हर घर में नल से सुरक्षित पेयजल।" },
         icon: Droplet,
-        bgImg: "https://images.unsplash.com/photo-1519494336049-7557e4e16447?q=80&w=800",
+        img: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?q=60&w=600&fit=crop",
+        url: "https://jaljeevanmission.gov.in",
     },
 ];
 
 const SCHEMES = [
-    { id: "pmkisan", acronym: "PM-KISAN", desc: "₹6,000/yr for farmers", img: "🌾" },
-    { id: "pmay", acronym: "PMAY", desc: "Housing for All", img: "🏠" },
-    { id: "epfo", acronym: "EPFO", desc: "Retirement Fund", img: "💼" },
-    { id: "eshram", acronym: "e-SHRAM", desc: "Unorganized Workers", img: "🪪" },
+    { id: "pmkisan", acronym: "PM-KISAN", desc: { en: "₹6,000/yr for farmers", hi: "किसानों को ₹6,000/वर्ष" }, emoji: "🌾", url: "https://pmkisan.gov.in" },
+    { id: "pmay", acronym: "PMAY", desc: { en: "Housing for All", hi: "सबके लिए आवास" }, emoji: "🏠", url: "https://pmaymis.gov.in" },
+    { id: "epfo", acronym: "EPFO", desc: { en: "Retirement Fund", hi: "भविष्य निधि" }, emoji: "💼", url: "https://www.epfindia.gov.in" },
+    { id: "eshram", acronym: "e-SHRAM", desc: { en: "Unorganized Workers", hi: "असंगठित श्रमिक" }, emoji: "🪪", url: "https://eshram.gov.in" },
+    { id: "ayushman", acronym: "Ayushman", desc: { en: "₹5L health cover", hi: "₹5 लाख स्वास्थ्य कवर" }, emoji: "🏥", url: "https://pmjay.gov.in" },
+    { id: "mudra", acronym: "MUDRA", desc: { en: "Business loans ₹10L", hi: "व्यापार ऋण ₹10 लाख" }, emoji: "💰", url: "https://www.mudra.org.in" },
 ];
 
 const FAQS = [
     {
-        q: "Is this an official government website?",
-        a: "No, this is an independent platform that helps you discover schemes. We direct you to official .gov.in websites to apply.",
+        q: { en: "Is this an official government website?", hi: "क्या यह सरकारी वेबसाइट है?" },
+        a: { en: "No. We are an independent platform that helps you discover schemes. We redirect you to official .gov.in sites to apply.", hi: "नहीं। हम एक स्वतंत्र प्लेटफॉर्म हैं। आवेदन के लिए हम आपको .gov.in साइट पर भेजते हैं।" }
     },
     {
-        q: "How accurate is the matching?",
-        a: "Our AI uses the latest criteria published by government portals to estimate your eligibility accurately.",
+        q: { en: "How accurate is the matching?", hi: "मैचिंग कितनी सटीक है?" },
+        a: { en: "Our AI uses the latest eligibility criteria from government portals to estimate your eligibility.", hi: "हमारा AI सरकारी पोर्टल से नवीनतम पात्रता मानदंड का उपयोग करता है।" }
     },
     {
-        q: "Where is my data stored?",
-        a: "We do not store your personal data. Your answers reside temporarily on your device to find matches.",
+        q: { en: "Where is my data stored?", hi: "मेरा डेटा कहाँ स्टोर है?" },
+        a: { en: "We do not store any personal data. Your answers stay on your device only.", hi: "हम कोई व्यक्तिगत डेटा स्टोर नहीं करते। आपके उत्तर केवल आपके डिवाइस पर रहते हैं।" }
     },
 ];
 
-// Animation Variants
-const staggerContainer: Variants = {
+/* ─── Motion variants ─── */
+const stagger: Variants = {
     hidden: { opacity: 0 },
-    show: {
-        opacity: 1,
-        transition: { staggerChildren: 0.1 },
-    },
+    show: { opacity: 1, transition: { staggerChildren: 0.08 } },
+};
+const fadeUp: Variants = {
+    hidden: { opacity: 0, y: 24 },
+    show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 260, damping: 20 } },
 };
 
-const fadeUpItem: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } },
-};
-
+/* ─── Main Component ─── */
 export default function NewHomePage() {
     const [lang, setLang] = useState<"en" | "hi">("en");
     const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+    const [showWizard, setShowWizard] = useState(false);
+    const categoriesRef = useRef<HTMLDivElement>(null);
+    const wizardRef = useRef<HTMLDivElement>(null);
+
+    const scrollToCategories = () => categoriesRef.current?.scrollIntoView({ behavior: "smooth" });
+
+    const launchWizard = () => {
+        setShowWizard(true);
+        setTimeout(() => wizardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
+    };
+
+    const handleShare = () => {
+        const text = lang === "hi"
+            ? "🇮🇳 अपनी सरकारी योजना खोजें — मुफ्त AI मैचिंग!\nhttps://yojana-matcher.vercel.app"
+            : "🇮🇳 Find your government scheme — free AI matching!\nhttps://yojana-matcher.vercel.app";
+        if (typeof navigator !== "undefined" && navigator.share) {
+            navigator.share({ text }).catch(() => { });
+        } else {
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
+        }
+    };
 
     return (
-        <div className="min-h-screen relative overflow-hidden font-sans text-slate-800">
-            {/* Global Background */}
-            <div className="fixed inset-0 z-[-20] bg-[url('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?q=80&w=2000')] bg-center bg-cover" />
-            <div className="fixed inset-0 z-[-15] bg-gradient-to-b from-orange-200/90 via-white/95 to-green-200/90" />
-
-            {/* Background Watermarks */}
-            <div className="fixed top-20 left-10 w-64 h-64 -z-10 pointer-events-none opacity-40">
-                <RedFortSilhoutte />
-            </div>
-            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 -z-10 pointer-events-none opacity-20 hidden md:block">
-                <AshokaChakra />
-            </div>
-            <div className="fixed bottom-0 right-10 w-80 h-80 -z-10 pointer-events-none opacity-40">
-                <TajMahalSilhoutte />
+        <div className="min-h-screen relative overflow-x-hidden font-sans text-slate-800">
+            {/* ── Fixed Background ── */}
+            <div className="fixed inset-0 -z-30 bg-gradient-to-b from-[#FFF3E0] via-white to-[#E8F5E9]" />
+            <div className="fixed inset-0 -z-20 pointer-events-none flex items-center justify-center opacity-[0.035]">
+                <div className="w-[500px] h-[500px]"><AshokaChakra /></div>
             </div>
 
-            {/* Main Glassmorphism Container */}
-            <main className="max-w-md mx-auto min-h-screen bg-white/40 backdrop-blur-sm border-l border-r border-white/50 shadow-2xl relative pb-20">
+            {/* ── Main Container ── */}
+            <main className="max-w-md mx-auto min-h-screen bg-white/60 backdrop-blur-md border-x border-white/40 shadow-2xl relative">
 
-                {/* Header Top Bar */}
-                <header className="flex items-center justify-between p-4 sticky top-0 z-50 bg-white/60 backdrop-blur-md border-b border-white/40">
-                    <motion.button
-                        whileTap={{ scale: 0.95 }}
-                        className="flex items-center gap-2 bg-white border border-[#25D366]/30 text-[#25D366] px-4 py-2 rounded-full shadow-sm text-sm font-bold shadow-[#25D366]/10"
-                    >
-                        <Share2 className="w-4 h-4" />
+                {/* ── Sticky Header ── */}
+                <header className="flex items-center justify-between px-4 py-3 sticky top-0 z-50 bg-white/70 backdrop-blur-lg border-b border-slate-100/60">
+                    <motion.button whileTap={{ scale: 0.93 }} onClick={handleShare}
+                        className="flex items-center gap-1.5 border border-[#25D366]/40 text-[#25D366] pl-3 pr-4 py-1.5 rounded-full text-xs font-bold bg-white shadow-sm active:bg-green-50 transition-colors">
+                        <Share2 className="w-3.5 h-3.5" />
                         {tx("shareStatus", lang)}
                     </motion.button>
-                    <motion.button
-                        whileTap={{ scale: 0.95 }}
+                    <motion.button whileTap={{ scale: 0.93 }}
                         onClick={() => setLang(lang === "en" ? "hi" : "en")}
-                        className="flex items-center gap-2 bg-white border border-slate-200 px-4 py-2 rounded-full shadow-sm text-sm font-bold text-slate-700"
-                    >
-                        <span>🇮🇳</span> {lang === "en" ? "A/अ HI" : "A/अ EN"}
+                        className="flex items-center gap-1.5 border border-slate-200 pl-3 pr-4 py-1.5 rounded-full text-xs font-bold text-slate-700 bg-white shadow-sm active:bg-slate-50 transition-colors">
+                        🇮🇳 {lang === "en" ? "हिंदी" : "EN"}
                     </motion.button>
                 </header>
 
-                <div className="p-5 space-y-10">
+                <div className="px-5 pb-20">
 
-                    {/* Hero Section */}
-                    <section className="text-center space-y-4 tracking-tight pt-4">
-                        <motion.h1
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="text-4xl font-black text-slate-900 drop-shadow-sm"
-                        >
-                            {tx("findYojana", lang)} <span className="text-[#166534]">{tx("yojana", lang)}</span>
+                    {/* ── Hero Section ── */}
+                    <section className="text-center pt-8 pb-6">
+                        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }}
+                            className="inline-flex items-center gap-1.5 bg-green-50 text-green-700 text-[11px] font-bold px-3 py-1 rounded-full mb-4 border border-green-100">
+                            <Sparkles className="w-3 h-3" /> FREE · AI-POWERED · 8 QUICK TAPS
+                        </motion.div>
+                        <motion.h1 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+                            className="text-[2.5rem] leading-[1.1] font-black text-slate-900 tracking-tight">
+                            {tx("findYojana", lang)}{" "}
+                            <span className="text-[#166534] relative">
+                                {tx("yojana", lang)}
+                                <svg className="absolute -bottom-1 left-0 w-full h-2 text-green-200" viewBox="0 0 100 8" preserveAspectRatio="none">
+                                    <path d="M0 7 Q 25 0, 50 4 Q 75 8, 100 1" fill="none" stroke="currentColor" strokeWidth="3" />
+                                </svg>
+                            </span>
                         </motion.h1>
-                        <motion.p
-                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
-                            className="text-slate-600 font-medium text-sm leading-relaxed px-4"
-                        >
+                        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.25 }}
+                            className="text-slate-500 text-sm font-medium leading-relaxed mt-4 max-w-xs mx-auto">
                             {tx("subtitle", lang)}
                         </motion.p>
 
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }}
-                            className="relative max-w-sm mx-auto mt-6 group"
-                        >
-                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <Search className="h-5 w-5 text-slate-400 group-focus-within:text-[#166534] transition-colors" />
-                            </div>
-                            <input
-                                type="text"
-                                className="block w-full pl-11 pr-12 py-4 bg-white border-2 border-slate-100 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-[#166534]/20 focus:border-[#166534] transition-all shadow-sm font-medium"
-                                placeholder={tx("searchPlaceholder", lang)}
-                            />
-                            <button className="absolute inset-y-2 right-2 bg-[#166534] text-white rounded-xl px-3 hover:bg-[#155e30] transition-colors flex items-center justify-center">
-                                <ArrowRight className="w-4 h-4" />
-                            </button>
-                        </motion.div>
+                        <motion.button whileTap={{ scale: 0.96 }} onClick={showWizard ? scrollToCategories : launchWizard}
+                            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
+                            className="mt-6 inline-flex items-center gap-2 bg-[#166534] hover:bg-[#14532d] text-white font-bold text-sm px-6 py-3.5 rounded-2xl shadow-lg shadow-green-200/50 active:scale-[0.97] transition-all">
+                            <ArrowDown className="w-4 h-4" />
+                            {tx("startMatching", lang)}
+                        </motion.button>
                     </section>
 
-                    {/* Section 1: Categories */}
-                    <section>
-                        <h2 className="text-lg font-bold text-slate-800 mb-4 px-1">{tx("lookingFor", lang)}</h2>
-                        <motion.div
-                            variants={staggerContainer} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-50px" }}
-                            className="flex flex-col gap-3"
-                        >
+                    {/* ── Inline Wizard (appears when Start Matching is clicked) ── */}
+                    <AnimatePresence>
+                        {showWizard && (
+                            <motion.section ref={wizardRef}
+                                initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
+                                transition={{ type: "spring", stiffness: 200, damping: 25 }}
+                                className="overflow-hidden">
+                                <div className="bg-white/80 backdrop-blur-md rounded-3xl border border-green-100 shadow-lg p-5 mb-4">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <h2 className="text-base font-black text-slate-800">
+                                            {lang === "en" ? "🎯 Your Eligibility Check" : "🎯 आपकी पात्रता जांच"}
+                                        </h2>
+                                        <button onClick={() => setShowWizard(false)} className="text-xs text-slate-400 hover:text-red-500 font-bold transition-colors">
+                                            ✕ {lang === "en" ? "Close" : "बंद करें"}
+                                        </button>
+                                    </div>
+                                    <YojanaForm lang={lang} />
+                                </div>
+                            </motion.section>
+                        )}
+                    </AnimatePresence>
+
+                    {/* ── Section 1: Categories ── */}
+                    <section ref={categoriesRef} className="pt-2 pb-2">
+                        <h2 className="text-lg font-bold text-slate-800 mb-1">{tx("lookingFor", lang)}</h2>
+                        <p className="text-xs text-slate-400 font-medium mb-4">{tx("tapToExplore", lang)}</p>
+                        <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-40px" }}
+                            className="flex flex-col gap-2.5">
                             {CATEGORIES.map((cat) => (
-                                <motion.button
-                                    key={cat.id}
-                                    variants={fadeUpItem}
-                                    whileTap={{ scale: 0.98 }}
-                                    className="flex items-center justify-between p-4 bg-white rounded-2xl shadow-sm border border-slate-100 hover:border-[#166534]/30 hover:shadow-md transition-all group overflow-hidden relative"
-                                >
-                                    <div className="flex items-center gap-4 relative z-10">
-                                        <div className={`w-12 h-12 rounded-full ${cat.bg} flex items-center justify-center`}>
-                                            <cat.icon className={`w-6 h-6 ${cat.color}`} />
+                                <motion.a key={cat.id} href={cat.url} target="_blank" rel="noopener noreferrer"
+                                    variants={fadeUp} whileTap={{ scale: 0.97 }}
+                                    onClick={(e) => { e.preventDefault(); launchWizard(); }}
+                                    className={`flex items-center justify-between p-3.5 bg-white rounded-2xl shadow-sm border ${cat.border} hover:shadow-md active:bg-slate-50 transition-all group overflow-hidden relative cursor-pointer`}>
+                                    <div className="flex items-center gap-3.5 relative z-10">
+                                        <div className={`w-11 h-11 rounded-xl ${cat.bg} flex items-center justify-center flex-shrink-0`}>
+                                            <cat.icon className={`w-5 h-5 ${cat.color}`} />
                                         </div>
-                                        <span className="font-bold text-slate-700">{cat.label}</span>
+                                        <span className="font-bold text-sm text-slate-700">{cat.label[lang]}</span>
                                     </div>
-                                    <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-[#166534] transition-colors relative z-10" />
+                                    <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-[#166534] group-active:translate-x-0.5 transition-all relative z-10 flex-shrink-0" />
 
-                                    {/* Subtly Masked Right Image */}
-                                    <div
-                                        className="absolute right-0 top-0 h-full w-1/3 z-0 pointer-events-none"
-                                        style={{ WebkitMaskImage: 'linear-gradient(to right, transparent, black)' }}
-                                    >
-                                        <img src={cat.img} alt={cat.label} className="w-full h-full object-cover opacity-80" />
+                                    {/* Masked Right Image */}
+                                    <div className="absolute right-0 top-0 h-full w-2/5 z-0 pointer-events-none"
+                                        style={{ WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 60%)", maskImage: "linear-gradient(to right, transparent 0%, black 60%)" }}>
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img src={cat.img} alt="" loading="lazy" className="w-full h-full object-cover opacity-60" />
                                     </div>
-                                </motion.button>
+                                </motion.a>
                             ))}
                         </motion.div>
                     </section>
 
-                    {/* Section 2: Highlighted Schemes */}
-                    <section>
-                        <h2 className="text-lg font-bold text-slate-800 mb-4 px-1">{tx("govInitiatives", lang)}</h2>
-                        <motion.div
-                            variants={staggerContainer} initial="hidden" whileInView="show" viewport={{ once: true }}
-                            className="flex flex-col gap-4"
-                        >
+                    {/* ── Section 2: Government Initiatives ── */}
+                    <section className="pt-8">
+                        <h2 className="text-lg font-bold text-slate-800 mb-4">{tx("govInitiatives", lang)}</h2>
+                        <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}
+                            className="flex flex-col gap-4">
                             {INITIATIVES.map((init) => (
-                                <motion.div
-                                    key={init.id}
-                                    variants={fadeUpItem}
-                                    whileTap={{ scale: 0.98 }}
-                                    className="relative bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 cursor-pointer group"
-                                >
-                                    {/* Image Header Band */}
-                                    <div className="h-24 w-full relative overflow-hidden p-5">
-                                        <img src={init.bgImg} alt={init.title} className="absolute inset-0 w-full h-full object-cover z-0" />
-                                        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent z-10"></div>
-                                        <div className="relative z-20 h-full flex items-center">
-                                            <init.icon className="w-12 h-12 text-[#166534] drop-shadow-sm" />
+                                <motion.a key={init.id} href={init.url} target="_blank" rel="noopener noreferrer"
+                                    variants={fadeUp} whileTap={{ scale: 0.97 }}
+                                    className="relative bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 active:bg-slate-50 transition-all group block">
+                                    {/* Image Band */}
+                                    <div className="h-28 w-full relative overflow-hidden">
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img src={init.img} alt={init.title} loading="lazy"
+                                            className="absolute inset-0 w-full h-full object-cover" />
+                                        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent" />
+                                        <div className="absolute inset-0 flex items-center pl-5 z-10">
+                                            <div className={`w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center`}>
+                                                <init.icon className="w-6 h-6 text-[#166534]" />
+                                            </div>
                                         </div>
+                                        <ExternalLink className="absolute top-3 right-3 w-4 h-4 text-white/70 z-10" />
                                     </div>
-                                    <div className="p-5 pt-4">
-                                        <h3 className="font-black text-lg text-slate-800 mb-1">{init.title}</h3>
-                                        <p className="text-sm font-medium text-slate-500 leading-snug">{init.desc}</p>
+                                    <div className="px-5 py-4">
+                                        <h3 className="font-black text-base text-slate-800">{init.title}</h3>
+                                        <p className="text-sm text-slate-500 font-medium mt-1 leading-snug">{init.desc[lang]}</p>
                                     </div>
-                                </motion.div>
+                                </motion.a>
                             ))}
                         </motion.div>
                     </section>
 
-                    {/* Section 3: Scheme Grid */}
-                    <section>
-                        <h2 className="text-lg font-bold text-slate-800 mb-4 px-1">{tx("schemesWeCover", lang)}</h2>
-                        <motion.div
-                            variants={staggerContainer} initial="hidden" whileInView="show" viewport={{ once: true }}
-                            className="grid grid-cols-2 gap-3"
-                        >
-                            {SCHEMES.map((scheme) => (
-                                <motion.button
-                                    key={scheme.id}
-                                    variants={fadeUpItem}
-                                    whileTap={{ scale: 0.95 }}
-                                    className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm text-left hover:border-green-200 transition-colors relative overflow-hidden"
-                                >
-                                    <h4 className="font-black text-slate-800 text-sm">{scheme.acronym}</h4>
-                                    <p className="text-[11px] text-slate-500 font-medium mt-1 pr-6 tracking-tight line-clamp-2">{scheme.desc}</p>
-                                    <div className="absolute bottom-2 right-2 w-8 h-8 bg-slate-50 rounded-full flex items-center justify-center text-lg shadow-inner">
-                                        {scheme.img}
-                                    </div>
-                                </motion.button>
+                    {/* ── Section 3: Scheme Grid ── */}
+                    <section className="pt-8">
+                        <h2 className="text-lg font-bold text-slate-800 mb-4">{tx("schemesWeCover", lang)}</h2>
+                        <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}
+                            className="grid grid-cols-2 gap-2.5">
+                            {SCHEMES.map((s) => (
+                                <motion.a key={s.id} href={s.url} target="_blank" rel="noopener noreferrer"
+                                    variants={fadeUp} whileTap={{ scale: 0.94 }}
+                                    className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm text-left hover:shadow-md active:bg-slate-50 transition-all relative overflow-hidden block">
+                                    <h4 className="font-black text-slate-800 text-sm">{s.acronym}</h4>
+                                    <p className="text-[11px] text-slate-500 font-medium mt-1 pr-7 line-clamp-2">{s.desc[lang]}</p>
+                                    <div className="absolute bottom-2.5 right-2.5 w-8 h-8 bg-slate-50 rounded-full flex items-center justify-center text-lg">{s.emoji}</div>
+                                </motion.a>
                             ))}
                         </motion.div>
+                        <a href="https://www.india.gov.in/my-government/schemes" target="_blank" rel="noopener noreferrer"
+                            className="mt-4 block text-center text-sm font-bold text-[#166534] hover:underline active:opacity-70 transition-opacity">
+                            {tx("viewAll", lang)}
+                        </a>
                     </section>
 
-                    {/* Section 4: FAQ */}
-                    <section className="pb-10">
-                        <h2 className="text-lg font-bold text-slate-800 mb-4 px-1">{tx("faq", lang)}</h2>
-                        <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden divide-y divide-slate-50">
+                    {/* ── Section 4: FAQ ── */}
+                    <section className="pt-8 pb-6">
+                        <h2 className="text-lg font-bold text-slate-800 mb-4">{tx("faq", lang)}</h2>
+                        <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden divide-y divide-slate-100/80">
                             {FAQS.map((faq, idx) => (
-                                <div key={idx} className="overflow-hidden">
-                                    <button
-                                        onClick={() => setExpandedFaq(expandedFaq === idx ? null : idx)}
-                                        className="w-full text-left p-4 flex items-center justify-between bg-white hover:bg-slate-50 transition-colors focus:outline-none"
-                                    >
-                                        <span className="font-bold text-sm text-slate-700 pr-4">{faq.q}</span>
-                                        <motion.div
-                                            animate={{ rotate: expandedFaq === idx ? 180 : 0 }}
+                                <div key={idx}>
+                                    <button onClick={() => setExpandedFaq(expandedFaq === idx ? null : idx)}
+                                        className="w-full text-left px-4 py-3.5 flex items-center justify-between hover:bg-slate-50 active:bg-slate-100 transition-colors focus:outline-none">
+                                        <span className="font-bold text-[13px] text-slate-700 pr-3 leading-snug">{faq.q[lang]}</span>
+                                        <motion.div animate={{ rotate: expandedFaq === idx ? 180 : 0 }}
                                             transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                                            className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${expandedFaq === idx ? "bg-[#166534] text-white" : "bg-slate-100 text-slate-400"}`}
-                                        >
-                                            <ChevronDown className="w-4 h-4" />
+                                            className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${expandedFaq === idx ? "bg-[#166534] text-white" : "bg-slate-100 text-slate-400"}`}>
+                                            <ChevronDown className="w-3.5 h-3.5" />
                                         </motion.div>
                                     </button>
                                     <AnimatePresence>
                                         {expandedFaq === idx && (
-                                            <motion.div
-                                                initial={{ height: 0, opacity: 0 }}
+                                            <motion.div initial={{ height: 0, opacity: 0 }}
                                                 animate={{ height: "auto", opacity: 1 }}
                                                 exit={{ height: 0, opacity: 0 }}
-                                                transition={{ duration: 0.2 }}
-                                            >
-                                                <div className="px-4 pb-4 pt-1 text-sm text-slate-500 font-medium leading-relaxed">
-                                                    {faq.a}
+                                                transition={{ duration: 0.2 }}>
+                                                <div className="px-4 pb-4 text-sm text-slate-500 font-medium leading-relaxed">
+                                                    {faq.a[lang]}
                                                 </div>
                                             </motion.div>
                                         )}
@@ -346,6 +362,11 @@ export default function NewHomePage() {
                         </div>
                     </section>
 
+                    {/* ── Footer ── */}
+                    <footer className="text-center text-[10px] text-slate-400 pt-4 pb-6 space-y-1 border-t border-slate-100">
+                        <p>Not affiliated with the Government of India.</p>
+                        <p>Data sourced from <a href="https://www.india.gov.in" target="_blank" rel="noopener noreferrer" className="underline">india.gov.in</a> · © 2026 Yojana Matcher</p>
+                    </footer>
                 </div>
             </main>
         </div>
