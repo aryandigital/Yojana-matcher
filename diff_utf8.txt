@@ -1,0 +1,933 @@
+﻿diff --git a/app/_components/PageWrapper.tsx b/app/_components/PageWrapper.tsx
+index 28a75d0..30bf55b 100644
+--- a/app/_components/PageWrapper.tsx
++++ b/app/_components/PageWrapper.tsx
+@@ -5,55 +5,59 @@ import { Shield, ExternalLink, ChevronDown, Sparkles, TrendingUp } from "lucide-
+ import { tx, type Lang } from "@/lib/i18n";
+ 
+ const SCHEME_LIST = [
+-  { name:"PM-KISAN",            nameHi:"PM-αñòαñ┐αñ╕αñ╛αñ¿",            desc:"Γé╣6,000/yr for farmers",           url:"https://pmkisan.gov.in" },
+-  { name:"PMAY",                nameHi:"PMAY",                desc:"Housing loan subsidy 3ΓÇô6.5%",      url:"https://pmaymis.gov.in" },
+-  { name:"Ayushman Bharat",     nameHi:"αñåαñ»αÑüαñ╖αÑìαñ«αñ╛αñ¿ αñ¡αñ╛αñ░αññ",      desc:"Γé╣5 lakh health cover/year",        url:"https://pmjay.gov.in" },
+-  { name:"MUDRA Loan",          nameHi:"αñ«αÑüαñªαÑìαñ░αñ╛ αñ▓αÑïαñ¿",          desc:"Business loan up to Γé╣10 lakh",     url:"https://www.mudra.org.in" },
+-  { name:"PMEGP",               nameHi:"PMEGP",               desc:"Business subsidy 15ΓÇô35%",           url:"https://www.kviconline.gov.in/pmegpeportal/pmegphome/index.jsp" },
+-  { name:"PMJJBY",              nameHi:"PMJJBY",              desc:"Life insurance Γé╣2L at Γé╣436/yr",    url:"https://www.jansuraksha.gov.in" },
+-  { name:"PMSBY",               nameHi:"PMSBY",               desc:"Accident cover Γé╣2L at Γé╣20/yr",     url:"https://www.jansuraksha.gov.in" },
+-  { name:"e-SHRAM Card",        nameHi:"e-αñ╢αÑìαñ░αñ« αñòαñ╛αñ░αÑìαñí",        desc:"Gig/unorganized worker benefits",  url:"https://eshram.gov.in" },
+-  { name:"PPF",                 nameHi:"PPF",                 desc:"7.1% tax-free investment",          url:"https://www.nsiindia.gov.in" },
+-  { name:"Sovereign Gold Bond", nameHi:"αñ╕αÑëαñ╡αñ░αÑçαñ¿ αñùαÑïαñ▓αÑìαñí αñ¼αÑëαñ¿αÑìαñí", desc:"Digital gold + 2.5% interest",    url:"https://rbi.org.in" },
+-  { name:"NPS",                 nameHi:"NPS",                 desc:"Pension + extra Γé╣50K tax deduction",url:"https://enps.nsdl.com" },
+-  { name:"NSP SC Scholarship",  nameHi:"NSP SC αñ¢αñ╛αññαÑìαñ░αñ╡αÑâαññαÑìαññαñ┐",  desc:"Full fees + monthly allowance",   url:"https://scholarships.gov.in" },
+-  { name:"Sukanya Samriddhi",   nameHi:"αñ╕αÑüαñòαñ¿αÑìαñ»αñ╛ αñ╕αñ«αÑâαñªαÑìαñºαñ┐",     desc:"8.2% savings for girl child",     url:"https://www.nsiindia.gov.in" },
+-  { name:"Stand-Up India",      nameHi:"αñ╕αÑìαñƒαÑêαñéαñí-αñàαñ¬ αñçαñéαñíαñ┐αñ»αñ╛",   desc:"Γé╣10LΓÇôΓé╣1Cr for SC/ST & women",    url:"https://www.standupmitra.in" },
+-  { name:"PM SVANidhi",         nameHi:"PM SVANidhi",         desc:"Street vendor loan Γé╣10KΓÇôΓé╣50K",    url:"https://pmsvanidhi.mohua.gov.in" },
+-  { name:"PMKVY",               nameHi:"PMKVY",               desc:"Free skill training + certificate",url:"https://www.pmkvyofficial.org" },
+-  { name:"Atal Pension (APY)",  nameHi:"αñàαñƒαñ▓ αñ¬αÑçαñéαñ╢αñ¿ (APY)",    desc:"Γé╣5,000/month pension from age 60",url:"https://www.npscra.nsdl.co.in" },
+-  { name:"PM Jan Dhan",         nameHi:"PM αñ£αñ¿ αñºαñ¿",            desc:"Zero-balance bank + free insurance",url:"https://pmjdy.gov.in" },
+-  { name:"Fasal Bima",          nameHi:"αñ½αñ╕αñ▓ αñ¼αÑÇαñ«αñ╛",            desc:"Crop insurance at 2% premium",    url:"https://pmfby.gov.in" },
++  { name: "PM-KISAN", nameHi: "PM-αñòαñ┐αñ╕αñ╛αñ¿", desc: "Γé╣6,000/yr for farmers", url: "https://pmkisan.gov.in" },
++  { name: "PMAY", nameHi: "PMAY", desc: "Housing loan subsidy 3ΓÇô6.5%", url: "https://pmaymis.gov.in" },
++  { name: "Ayushman Bharat", nameHi: "αñåαñ»αÑüαñ╖αÑìαñ«αñ╛αñ¿ αñ¡αñ╛αñ░αññ", desc: "Γé╣5 lakh health cover/year", url: "https://pmjay.gov.in" },
++  { name: "MUDRA Loan", nameHi: "αñ«αÑüαñªαÑìαñ░αñ╛ αñ▓αÑïαñ¿", desc: "Business loan up to Γé╣10 lakh", url: "https://www.mudra.org.in" },
++  { name: "PMEGP", nameHi: "PMEGP", desc: "Business subsidy 15ΓÇô35%", url: "https://www.kviconline.gov.in/pmegpeportal/pmegphome/index.jsp" },
++  { name: "PMJJBY", nameHi: "PMJJBY", desc: "Life insurance Γé╣2L at Γé╣436/yr", url: "https://www.jansuraksha.gov.in" },
++  { name: "PMSBY", nameHi: "PMSBY", desc: "Accident cover Γé╣2L at Γé╣20/yr", url: "https://www.jansuraksha.gov.in" },
++  { name: "e-SHRAM Card", nameHi: "e-αñ╢αÑìαñ░αñ« αñòαñ╛αñ░αÑìαñí", desc: "Gig/unorganized worker benefits", url: "https://eshram.gov.in" },
++  { name: "PPF", nameHi: "PPF", desc: "7.1% tax-free investment", url: "https://www.nsiindia.gov.in" },
++  { name: "Sovereign Gold Bond", nameHi: "αñ╕αÑëαñ╡αñ░αÑçαñ¿ αñùαÑïαñ▓αÑìαñí αñ¼αÑëαñ¿αÑìαñí", desc: "Digital gold + 2.5% interest", url: "https://rbi.org.in" },
++  { name: "NPS", nameHi: "NPS", desc: "Pension + extra Γé╣50K tax deduction", url: "https://enps.nsdl.com" },
++  { name: "NSP SC Scholarship", nameHi: "NSP SC αñ¢αñ╛αññαÑìαñ░αñ╡αÑâαññαÑìαññαñ┐", desc: "Full fees + monthly allowance", url: "https://scholarships.gov.in" },
++  { name: "Sukanya Samriddhi", nameHi: "αñ╕αÑüαñòαñ¿αÑìαñ»αñ╛ αñ╕αñ«αÑâαñªαÑìαñºαñ┐", desc: "8.2% savings for girl child", url: "https://www.nsiindia.gov.in" },
++  { name: "Stand-Up India", nameHi: "αñ╕αÑìαñƒαÑêαñéαñí-αñàαñ¬ αñçαñéαñíαñ┐αñ»αñ╛", desc: "Γé╣10LΓÇôΓé╣1Cr for SC/ST & women", url: "https://www.standupmitra.in" },
++  { name: "PM SVANidhi", nameHi: "PM SVANidhi", desc: "Street vendor loan Γé╣10KΓÇôΓé╣50K", url: "https://pmsvanidhi.mohua.gov.in" },
++  { name: "PMKVY", nameHi: "PMKVY", desc: "Free skill training + certificate", url: "https://www.pmkvyofficial.org" },
++  { name: "Atal Pension (APY)", nameHi: "αñàαñƒαñ▓ αñ¬αÑçαñéαñ╢αñ¿ (APY)", desc: "Γé╣5,000/month pension from age 60", url: "https://www.npscra.nsdl.co.in" },
++  { name: "PM Jan Dhan", nameHi: "PM αñ£αñ¿ αñºαñ¿", desc: "Zero-balance bank + free insurance", url: "https://pmjdy.gov.in" },
++  { name: "Fasal Bima", nameHi: "αñ½αñ╕αñ▓ αñ¼αÑÇαñ«αñ╛", desc: "Crop insurance at 2% premium", url: "https://pmfby.gov.in" },
+ ];
+ 
+ // What India's govt is building ΓÇö major investment/infrastructure programs
+ const GOV_BUILDING = [
+-  { emoji:"≡ƒ¢ñ∩╕Å", name:"PM Gati Shakti",      nameHi:"PM αñùαññαñ┐ αñ╢αñòαÑìαññαñ┐",      desc:"Γé╣100 lakh crore national infrastructure master plan ΓÇö roads, rail, airports, waterways integrated.",   descHi:"Γé╣100 αñ▓αñ╛αñû αñòαñ░αÑïαñíαñ╝ αñòαñ╛ αñ░αñ╛αñ╖αÑìαñƒαÑìαñ░αÑÇαñ» αñàαñ╡αñ╕αñéαñ░αñÜαñ¿αñ╛ αñ«αñ╛αñ╕αÑìαñƒαñ░ αñ¬αÑìαñ▓αñ╛αñ¿ ΓÇö αñ╕αñíαñ╝αñò, αñ░αÑçαñ▓, αñ╣αñ╡αñ╛αñê αñàαñíαÑìαñíαÑç, αñ£αñ▓αñ«αñ╛αñ░αÑìαñùαÑñ",     url:"https://www.pmindia.gov.in/en/government_tr_rec/pm-gatishakti/" },
+-  { emoji:"ΓÜí", name:"PM Surya Ghar",        nameHi:"PM αñ╕αÑéαñ░αÑìαñ» αñÿαñ░",        desc:"1 crore households to get free solar rooftop ΓÇö save Γé╣15,000ΓÇôΓé╣18,000/year on electricity bills.",     descHi:"1 αñòαñ░αÑïαñíαñ╝ αñÿαñ░αÑïαñé αñòαÑï αñ«αÑüαñ½αñ╝αÑìαññ αñ╕αÑïαñ▓αñ░ αñ░αÑéαñ½αñƒαÑëαñ¬ ΓÇö αñ¼αñ┐αñ£αñ▓αÑÇ αñ¼αñ┐αñ▓ αñ«αÑçαñé Γé╣15,000ΓÇôΓé╣18,000/αñ╡αñ░αÑìαñ╖ αñòαÑÇ αñ¼αñÜαññαÑñ",         url:"https://pmsuryaghar.gov.in" },
+-  { emoji:"≡ƒÆº", name:"Jal Jeevan Mission",   nameHi:"αñ£αñ▓ αñ£αÑÇαñ╡αñ¿ αñ«αñ┐αñ╢αñ¿",      desc:"Tap water connection to every rural home by 2024 ΓÇö 19 crore households covered under mission.",      descHi:"2024 αññαñò αñ╣αñ░ αñùαÑìαñ░αñ╛αñ«αÑÇαñú αñÿαñ░ αñòαÑï αñ¿αñ▓ αñ£αñ▓ αñòαñ¿αÑçαñòαÑìαñ╢αñ¿ ΓÇö 19 αñòαñ░αÑïαñíαñ╝ αñ¬αñ░αñ┐αñ╡αñ╛αñ░ αñ▓αñòαÑìαñ╖αñ┐αññαÑñ",                           url:"https://jaljeevanmission.gov.in" },
+-  { emoji:"≡ƒÅÑ", name:"PM ABHIM Health",      nameHi:"PM ABHIM αñ╕αÑìαñ╡αñ╛αñ╕αÑìαñÑαÑìαñ»", desc:"Γé╣64,180 crore for 75 medical colleges, new hospitals and health infrastructure across India.",         descHi:"Γé╣64,180 αñòαñ░αÑïαñíαñ╝ ΓÇö 75 αñ«αÑçαñíαñ┐αñòαñ▓ αñòαÑëαñ▓αÑçαñ£, αñ¿αñÅ αñàαñ╕αÑìαñ¬αññαñ╛αñ▓ αñöαñ░ αñ╕αÑìαñ╡αñ╛αñ╕αÑìαñÑαÑìαñ» αñàαñ╡αñ╕αñéαñ░αñÜαñ¿αñ╛αÑñ",                        url:"https://www.mohfw.gov.in" },
+-  { emoji:"≡ƒî╛", name:"PM PRANAM Scheme",     nameHi:"PM PRANAM αñ»αÑïαñ£αñ¿αñ╛",    desc:"Incentives for states to reduce chemical fertilizer use ΓÇö sustainable farming for the future.",        descHi:"αñ░αñ╛αñ£αÑìαñ»αÑïαñé αñòαÑï αñ░αñ╛αñ╕αñ╛αñ»αñ¿αñ┐αñò αñëαñ░αÑìαñ╡αñ░αñò αñëαñ¬αñ»αÑïαñù αñÿαñƒαñ╛αñ¿αÑç αñòαÑç αñ▓αñ┐αñÅ αñ¬αÑìαñ░αÑïαññαÑìαñ╕αñ╛αñ╣αñ¿ ΓÇö αñƒαñ┐αñòαñ╛αñè αñûαÑçαññαÑÇαÑñ",                   url:"https://www.india.gov.in" },
+-  { emoji:"≡ƒÜÇ", name:"India Semiconductor", nameHi:"αñ¡αñ╛αñ░αññ αñ╕αÑçαñ«αÑÇαñòαñéαñíαñòαÑìαñƒαñ░",   desc:"Γé╣76,000 crore to build India's own chip industry ΓÇö 3 major fabs, 50,000+ jobs being created.",     descHi:"Γé╣76,000 αñòαñ░αÑïαñíαñ╝ αñ╕αÑç αñ¡αñ╛αñ░αññ αñòαñ╛ αñàαñ¬αñ¿αñ╛ αñÜαñ┐αñ¬ αñëαñªαÑìαñ»αÑïαñù ΓÇö 3 αñ¼αñíαñ╝αÑç fab, 50,000+ αñ¿αÑîαñòαñ░αñ┐αñ»αñ╛αñéαÑñ",                    url:"https://www.india.gov.in/spotlight/india-semiconductor-mission" },
++  { emoji: "≡ƒ¢ñ∩╕Å", name: "PM Gati Shakti", nameHi: "PM αñùαññαñ┐ αñ╢αñòαÑìαññαñ┐", desc: "Γé╣100 lakh crore national infrastructure master plan ΓÇö roads, rail, airports, waterways integrated.", descHi: "Γé╣100 αñ▓αñ╛αñû αñòαñ░αÑïαñíαñ╝ αñòαñ╛ αñ░αñ╛αñ╖αÑìαñƒαÑìαñ░αÑÇαñ» αñàαñ╡αñ╕αñéαñ░αñÜαñ¿αñ╛ αñ«αñ╛αñ╕αÑìαñƒαñ░ αñ¬αÑìαñ▓αñ╛αñ¿ ΓÇö αñ╕αñíαñ╝αñò, αñ░αÑçαñ▓, αñ╣αñ╡αñ╛αñê αñàαñíαÑìαñíαÑç, αñ£αñ▓αñ«αñ╛αñ░αÑìαñùαÑñ", url: "https://www.pmindia.gov.in/en/government_tr_rec/pm-gatishakti/" },
++  { emoji: "ΓÜí", name: "PM Surya Ghar", nameHi: "PM αñ╕αÑéαñ░αÑìαñ» αñÿαñ░", desc: "1 crore households to get free solar rooftop ΓÇö save Γé╣15,000ΓÇôΓé╣18,000/year on electricity bills.", descHi: "1 αñòαñ░αÑïαñíαñ╝ αñÿαñ░αÑïαñé αñòαÑï αñ«αÑüαñ½αñ╝αÑìαññ αñ╕αÑïαñ▓αñ░ αñ░αÑéαñ½αñƒαÑëαñ¬ ΓÇö αñ¼αñ┐αñ£αñ▓αÑÇ αñ¼αñ┐αñ▓ αñ«αÑçαñé Γé╣15,000ΓÇôΓé╣18,000/αñ╡αñ░αÑìαñ╖ αñòαÑÇ αñ¼αñÜαññαÑñ", url: "https://pmsuryaghar.gov.in" },
++  { emoji: "≡ƒÆº", name: "Jal Jeevan Mission", nameHi: "αñ£αñ▓ αñ£αÑÇαñ╡αñ¿ αñ«αñ┐αñ╢αñ¿", desc: "Tap water connection to every rural home by 2024 ΓÇö 19 crore households covered under mission.", descHi: "2024 αññαñò αñ╣αñ░ αñùαÑìαñ░αñ╛αñ«αÑÇαñú αñÿαñ░ αñòαÑï αñ¿αñ▓ αñ£αñ▓ αñòαñ¿αÑçαñòαÑìαñ╢αñ¿ ΓÇö 19 αñòαñ░αÑïαñíαñ╝ αñ¬αñ░αñ┐αñ╡αñ╛αñ░ αñ▓αñòαÑìαñ╖αñ┐αññαÑñ", url: "https://jaljeevanmission.gov.in" },
++  { emoji: "≡ƒÅÑ", name: "PM ABHIM Health", nameHi: "PM ABHIM αñ╕αÑìαñ╡αñ╛αñ╕αÑìαñÑαÑìαñ»", desc: "Γé╣64,180 crore for 75 medical colleges, new hospitals and health infrastructure across India.", descHi: "Γé╣64,180 αñòαñ░αÑïαñíαñ╝ ΓÇö 75 αñ«αÑçαñíαñ┐αñòαñ▓ αñòαÑëαñ▓αÑçαñ£, αñ¿αñÅ αñàαñ╕αÑìαñ¬αññαñ╛αñ▓ αñöαñ░ αñ╕αÑìαñ╡αñ╛αñ╕αÑìαñÑαÑìαñ» αñàαñ╡αñ╕αñéαñ░αñÜαñ¿αñ╛αÑñ", url: "https://www.mohfw.gov.in" },
++  { emoji: "≡ƒî╛", name: "PM PRANAM Scheme", nameHi: "PM PRANAM αñ»αÑïαñ£αñ¿αñ╛", desc: "Incentives for states to reduce chemical fertilizer use ΓÇö sustainable farming for the future.", descHi: "αñ░αñ╛αñ£αÑìαñ»αÑïαñé αñòαÑï αñ░αñ╛αñ╕αñ╛αñ»αñ¿αñ┐αñò αñëαñ░αÑìαñ╡αñ░αñò αñëαñ¬αñ»αÑïαñù αñÿαñƒαñ╛αñ¿αÑç αñòαÑç αñ▓αñ┐αñÅ αñ¬αÑìαñ░αÑïαññαÑìαñ╕αñ╛αñ╣αñ¿ ΓÇö αñƒαñ┐αñòαñ╛αñë αñûαÑçαññαÑÇαÑñ", url: "https://www.india.gov.in" },
++  { emoji: "≡ƒÜÇ", name: "India Semiconductor", nameHi: "αñ¡αñ╛αñ░αññ αñ╕αÑçαñ«αÑÇαñòαñéαñíαñòαÑìαñƒαñ░", desc: "Γé╣76,000 crore to build India's own chip industry ΓÇö 3 major fabs, 50,000+ jobs being created.", descHi: "Γé╣76,000 αñòαñ░αÑïαñíαñ╝ αñ╕αÑç αñ¡αñ╛αñ░αññ αñòαñ╛ αñàαñ¬αñ¿αñ╛ αñÜαñ┐αñ¬ αñëαñªαÑìαñ»αÑïαñù ΓÇö 3 αñ¼αñíαñ╝αÑç fab, 50,000+ αñ¿αÑîαñòαñ░αñ┐αñ»αñ╛αñéαÑñ", url: "https://www.india.gov.in/spotlight/india-semiconductor-mission" },
++  { emoji: "≡ƒæ¿ΓÇì≡ƒö¿", name: "PM Vishwakarma", nameHi: "PM αñ╡αñ┐αñ╢αÑìαñ╡αñòαñ░αÑìαñ«αñ╛", desc: "Γé╣13,000 crore scheme for 18 traditional trades ΓÇö free training, toolkit, Γé╣3 lakh loan at 5% for artisans & craftsmen.", descHi: "18 αñ¬αñ╛αñ░αñéαñ¬αñ░αñ┐αñò αñòαñ╛αñ░αÑïαñ¼αñ╛αñ░αÑïαñé αñòαÑç αñ▓αñ┐αñÅ Γé╣13,000 αñòαñ░αÑïαñíαñ╝ ΓÇö αñ«αÑüαñ½αñ╝αÑìαññ αñ¬αÑìαñ░αñ╢αñ┐αñòαÑìαñ╖αñú, αñƒαÑéαñ▓αñòαñ┐αñƒ, 5% αñ¬αñ░ Γé╣3 αñ▓αñ╛αñû αñ▓αÑïαñ¿αÑñ", url: "https://pmvishwakarma.gov.in" },
++  { emoji: "≡ƒÅ¡", name: "PLI Scheme", nameHi: "PLI αñ»αÑïαñ£αñ¿αñ╛", desc: "Γé╣1.97 lakh crore Production Linked Incentive across 14 sectors ΓÇö mobile, pharma, solar, textiles, food processing.", descHi: "14 αñòαÑìαñ╖αÑçαññαÑìαñ░αÑïαñé αñ«αÑçαñé Γé╣1.97 αñ▓αñ╛αñû αñòαñ░αÑïαñíαñ╝ PLI ΓÇö αñ«αÑïαñ¼αñ╛αñçαñ▓, αñ½αñ╛αñ░αÑìαñ«αñ╛, αñ╕αÑïαñ▓αñ░, αñòαñ¬αñíαñ╝αñ╛, αñûαñ╛αñªαÑìαñ» αñ¬αÑìαñ░αñ╕αñéαñ╕αÑìαñòαñ░αñúαÑñ", url: "https://www.investindia.gov.in/pli" },
++  { emoji: "≡ƒô▒", name: "Digital India", nameHi: "αñíαñ┐αñ£αñ┐αñƒαñ▓ αñçαñéαñíαñ┐αñ»αñ╛", desc: "Connect 6 lakh villages with broadband and 5G ΓÇö digital public infrastructure, DigiLocker, UPI, BHIM.", descHi: "6 αñ▓αñ╛αñû αñùαñ╛αñéαñ╡αÑïαñé αñòαÑï αñ¼αÑìαñ░αÑëαñíαñ¼αÑêαñéαñí αñöαñ░ 5G ΓÇö DigiLocker, UPI, BHIM αñ╕αÑç αñíαñ┐αñ£αñ┐αñƒαñ▓ αñ¡αñ╛αñ░αññ αÑñ", url: "https://www.digitalindia.gov.in" },
++  { emoji: "≡ƒÅÖ∩╕Å", name: "AMRUT 2.0", nameHi: "AMRUT 2.0", desc: "Γé╣2.99 lakh crore for urban water supply, sewerage & faecal management in 500 cities across India.", descHi: "500 αñ╢αñ╣αñ░αÑïαñé αñ«αÑçαñé αñ£αñ▓ αñåαñ¬αÑéαñ░αÑìαññαñ┐, αñ╕αÑÇαñ╡αñ░αÑçαñ£ αñöαñ░ αñ╢αñ╣αñ░αÑÇ αñ╕αÑüαñºαñ╛αñ░ αñòαÑç αñ▓αñ┐αñÅ Γé╣2.99 αñ▓αñ╛αñû αñòαñ░αÑïαñíαñ╝αÑñ", url: "https://amrut.gov.in" },
+ ];
+ 
+ const FAQ: Record<Lang, { q: string; a: string }[]> = {
+   en: [
+-    { q:"Is this an official government website?",     a:"No. Yojana Matcher is an independent AI tool. Always apply through the official .gov.in links shown in results." },
+-    { q:"How accurate is the matching?",               a:"~90%+ accurate for major criteria. Always verify your exact eligibility at the official portal before applying." },
+-    { q:"Is my data stored anywhere?",                 a:"No. Your answers are processed in real-time and never stored on our servers." },
+-    { q:"What is the employment status step for?",     a:"Some schemes exclude government employees (PM-KISAN, APY) while others are only for gig/unorganized workers (e-SHRAM, SVANidhi). This helps us filter correctly." },
+-    { q:"Can I apply offline at a center?",            a:"Yes ΓÇö tap 'Find Nearest CSC Center' in your results to locate a Common Service Centre where staff will help you apply for free." },
+-    { q:"What is an e-SHRAM card and who needs it?",   a:"It's a national ID card for unorganized workers (gig drivers, daily wage, construction, domestic workers). It gives free accident insurance and priority in welfare schemes." },
+-    { q:"Why see PPF/NPS/Gold Bond here?",             a:"Yojana Matcher now covers all government-backed financial products ΓÇö not just welfare schemes. PPF, NPS, and Sovereign Gold Bond are government investment instruments with significant tax benefits." },
++    { q: "Is this an official government website?", a: "No. Yojana Matcher is an independent AI tool. Always apply through the official .gov.in links shown in results." },
++    { q: "How accurate is the matching?", a: "~90%+ accurate for major criteria. Always verify your exact eligibility at the official portal before applying." },
++    { q: "Is my data stored anywhere?", a: "No. Your answers are processed in real-time and never stored on our servers." },
++    { q: "What is the employment status step for?", a: "Some schemes exclude government employees (PM-KISAN, APY) while others are only for gig/unorganized workers (e-SHRAM, SVANidhi). This helps us filter correctly." },
++    { q: "Can I apply offline at a center?", a: "Yes ΓÇö tap 'Find Nearest CSC Center' in your results to locate a Common Service Centre where staff will help you apply for free." },
++    { q: "What is an e-SHRAM card and who needs it?", a: "It's a national ID card for unorganized workers (gig drivers, daily wage, construction, domestic workers). It gives free accident insurance and priority in welfare schemes." },
++    { q: "Why see PPF/NPS/Gold Bond here?", a: "Yojana Matcher now covers all government-backed financial products ΓÇö not just welfare schemes. PPF, NPS, and Sovereign Gold Bond are government investment instruments with significant tax benefits." },
+   ],
+   hi: [
+-    { q:"αñòαÑìαñ»αñ╛ αñ»αñ╣ αñ╕αñ░αñòαñ╛αñ░αÑÇ αñ╡αÑçαñ¼αñ╕αñ╛αñçαñƒ αñ╣αÑê?",                 a:"αñ¿αñ╣αÑÇαñéαÑñ Yojana Matcher αñÅαñò αñ╕αÑìαñ╡αññαñéαññαÑìαñ░ AI αñƒαÑéαñ▓ αñ╣αÑêαÑñ αñåαñ╡αÑçαñªαñ¿ αñ╣αñ«αÑçαñ╢αñ╛ .gov.in αñ¬αÑïαñ░αÑìαñƒαñ▓ αñ¬αñ░ αñòαñ░αÑçαñéαÑñ" },
+-    { q:"αñ«αñ┐αñ▓αñ╛αñ¿ αñòαñ┐αññαñ¿αñ╛ αñ╕αñƒαÑÇαñò αñ╣αÑê?",                       a:"~90%+ αñ╕αñƒαÑÇαñòαÑñ αñåαñ╡αÑçαñªαñ¿ αñ╕αÑç αñ¬αñ╣αñ▓αÑç αñåαñºαñ┐αñòαñ╛αñ░αñ┐αñò αñ¬αÑïαñ░αÑìαñƒαñ▓ αñ¬αñ░ αñàαñ¬αñ¿αÑÇ αñ¬αñ╛αññαÑìαñ░αññαñ╛ αñ£αñ░αÑéαñ░ αñ£αñ╛αñéαñÜαÑçαñéαÑñ" },
+-    { q:"αñòαÑìαñ»αñ╛ αñ«αÑçαñ░αñ╛ αñíαÑçαñƒαñ╛ αñ╕αÑçαñ╡ αñ╣αÑïαññαñ╛ αñ╣αÑê?",                 a:"αñ¿αñ╣αÑÇαñéαÑñ αñåαñ¬αñòαÑç αñ£αñ╡αñ╛αñ¼ αñ╕αñ┐αñ░αÑìαñ½ αñ¬αÑìαñ░αÑïαñ╕αÑçαñ╕αñ┐αñéαñù αñòαÑç αñªαÑîαñ░αñ╛αñ¿ αñëαñ¬αñ»αÑïαñù αñ╣αÑïαññαÑç αñ╣αÑêαñé, αñ╕αñ░αÑìαñ╡αñ░ αñ¬αñ░ αñòαÑüαñ¢ αñ¡αÑÇ αñ╕αÑçαñ╡ αñ¿αñ╣αÑÇαñé αñ╣αÑïαññαñ╛αÑñ" },
+-    { q:"αñ░αÑïαñ£αñùαñ╛αñ░ αñòαñ╛ αñªαñ░αÑìαñ£αñ╛ αñ¬αÑéαñ¢αñ¿αñ╛ αñòαÑìαñ»αÑïαñé αñ£αñ░αÑéαñ░αÑÇ αñ╣αÑê?",       a:"αñòαÑüαñ¢ αñ»αÑïαñ£αñ¿αñ╛αñÅαñé αñ╕αñ░αñòαñ╛αñ░αÑÇ αñòαñ░αÑìαñ«αñÜαñ╛αñ░αñ┐αñ»αÑïαñé αñòαÑç αñ▓αñ┐αñÅ αñ¿αñ╣αÑÇαñé αñ╣αÑêαñé (PM-KISAN, APY) αñöαñ░ αñòαÑüαñ¢ αñòαÑçαñ╡αñ▓ αñùαñ┐αñù/αñàαñ╕αñéαñùαñáαñ┐αññ αñòαñ░αÑìαñ«αñÜαñ╛αñ░αñ┐αñ»αÑïαñé αñòαÑç αñ▓αñ┐αñÅ αñ╣αÑêαñé (e-SHRAM, SVANidhi)αÑñ" },
+-    { q:"αñòαÑìαñ»αñ╛ αñ«αÑêαñé αñæαñ½αñ▓αñ╛αñçαñ¿ αñåαñ╡αÑçαñªαñ¿ αñòαñ░ αñ╕αñòαññαñ╛ αñ╣αÑéαñé?",         a:"αñ╣αñ╛αñé ΓÇö αñ¬αñ░αñ┐αñúαñ╛αñ«αÑïαñé αñ«αÑçαñé 'αñ¿αñ£αñªαÑÇαñòαÑÇ CSC αñòαÑçαñéαñªαÑìαñ░ αñûαÑïαñ£αÑçαñé' αñ¬αñ░ αñòαÑìαñ▓αñ┐αñò αñòαñ░αÑçαñéαÑñ αñ╡αñ╣αñ╛αñé αñòαñ░αÑìαñ«αñÜαñ╛αñ░αÑÇ αñ«αÑüαñ½αÑìαññ αñ«αÑçαñé αñ«αñªαñª αñòαñ░αÑçαñéαñùαÑçαÑñ" },
+-    { q:"e-SHRAM αñòαñ╛αñ░αÑìαñí αñòαÑìαñ»αñ╛ αñ╣αÑê αñöαñ░ αñòαñ┐αñ╕αÑç αñÜαñ╛αñ╣αñ┐αñÅ?",        a:"αñ»αñ╣ αñàαñ╕αñéαñùαñáαñ┐αññ αñòαÑìαñ╖αÑçαññαÑìαñ░ αñòαÑç αñòαñ░αÑìαñ«αñÜαñ╛αñ░αñ┐αñ»αÑïαñé αñòαÑç αñ▓αñ┐αñÅ αñ░αñ╛αñ╖αÑìαñƒαÑìαñ░αÑÇαñ» ID αñòαñ╛αñ░αÑìαñí αñ╣αÑê ΓÇö αñùαñ┐αñù αñíαÑìαñ░αñ╛αñçαñ╡αñ░, αñªαñ┐αñ╣αñ╛αñíαñ╝αÑÇ αñ«αñ£αñªαÑéαñ░, αñ¿αñ┐αñ░αÑìαñ«αñ╛αñú αñòαñ░αÑìαñ«αñÜαñ╛αñ░αÑÇαÑñ αñçαñ╕αñ╕αÑç αñ«αÑüαñ½αÑìαññ αñªαÑüαñ░αÑìαñÿαñƒαñ¿αñ╛ αñ¼αÑÇαñ«αñ╛ αñöαñ░ αñ»αÑïαñ£αñ¿αñ╛αñôαñé αñ«αÑçαñé αñ¬αÑìαñ░αñ╛αñÑαñ«αñ┐αñòαññαñ╛ αñ«αñ┐αñ▓αññαÑÇ αñ╣αÑêαÑñ" },
+-    { q:"αñ»αñ╣αñ╛αñé PPF/NPS/αñùαÑïαñ▓αÑìαñí αñ¼αÑëαñ¿αÑìαñí αñòαÑìαñ»αÑïαñé αñªαñ┐αñûαññαñ╛ αñ╣αÑê?",   a:"Yojana Matcher αñàαñ¼ αñ╕αñ¡αÑÇ αñ╕αñ░αñòαñ╛αñ░αÑÇ αñ╡αñ┐αññαÑìαññαÑÇαñ» αñëαññαÑìαñ¬αñ╛αñªαÑïαñé αñòαÑï αñòαñ╡αñ░ αñòαñ░αññαñ╛ αñ╣αÑê ΓÇö αñòαÑçαñ╡αñ▓ αñòαñ▓αÑìαñ»αñ╛αñú αñ»αÑïαñ£αñ¿αñ╛αñÅαñé αñ¿αñ╣αÑÇαñéαÑñ PPF, NPS αñöαñ░ Sovereign Gold Bond αñ╕αñ░αñòαñ╛αñ░αÑÇ αñ¿αñ┐αñ╡αÑçαñ╢ αñ╕αñ╛αñºαñ¿ αñ╣αÑêαñé αñ£αñ┐αñ¿αñ«αÑçαñé αñ«αñ╣αññαÑìαñ╡αñ¬αÑéαñ░αÑìαñú αñòαñ░ αñ▓αñ╛αñ¡ αñ╣αÑêαñéαÑñ" },
++    { q: "αñòαÑìαñ»αñ╛ αñ»αñ╣ αñ╕αñ░αñòαñ╛αñ░αÑÇ αñ╡αÑçαñ¼αñ╕αñ╛αñçαñƒ αñ╣αÑê?", a: "αñ¿αñ╣αÑÇαñéαÑñ Yojana Matcher αñÅαñò αñ╕αÑìαñ╡αññαñéαññαÑìαñ░ AI αñƒαÑéαñ▓ αñ╣αÑêαÑñ αñåαñ╡αÑçαñªαñ¿ αñ╣αñ«αÑçαñ╢αñ╛ .gov.in αñ¬αÑïαñ░αÑìαñƒαñ▓ αñ¬αñ░ αñòαñ░αÑçαñéαÑñ" },
++    { q: "αñ«αñ┐αñ▓αñ╛αñ¿ αñòαñ┐αññαñ¿αñ╛ αñ╕αñƒαÑÇαñò αñ╣αÑê?", a: "~90%+ αñ╕αñƒαÑÇαñòαÑñ αñåαñ╡αÑçαñªαñ¿ αñ╕αÑç αñ¬αñ╣αñ▓αÑç αñåαñºαñ┐αñòαñ╛αñ░αñ┐αñò αñ¬αÑïαñ░αÑìαñƒαñ▓ αñ¬αñ░ αñàαñ¬αñ¿αÑÇ αñ¬αñ╛αññαÑìαñ░αññαñ╛ αñ£αñ░αÑéαñ░ αñ£αñ╛αñéαñÜαÑçαñéαÑñ" },
++    { q: "αñòαÑìαñ»αñ╛ αñ«αÑçαñ░αñ╛ αñíαÑçαñƒαñ╛ αñ╕αÑçαñ╡ αñ╣αÑïαññαñ╛ αñ╣αÑê?", a: "αñ¿αñ╣αÑÇαñéαÑñ αñåαñ¬αñòαÑç αñ£αñ╡αñ╛αñ¼ αñ╕αñ┐αñ░αÑìαñ½ αñ¬αÑìαñ░αÑïαñ╕αÑçαñ╕αñ┐αñéαñù αñòαÑç αñªαÑîαñ░αñ╛αñ¿ αñëαñ¬αñ»αÑïαñù αñ╣αÑïαññαÑç αñ╣αÑêαñé, αñ╕αñ░αÑìαñ╡αñ░ αñ¬αñ░ αñòαÑüαñ¢ αñ¡αÑÇ αñ╕αÑçαñ╡ αñ¿αñ╣αÑÇαñé αñ╣αÑïαññαñ╛αÑñ" },
++    { q: "αñ░αÑïαñ£αñùαñ╛αñ░ αñòαñ╛ αñªαñ░αÑìαñ£αñ╛ αñ¬αÑéαñ¢αñ¿αñ╛ αñòαÑìαñ»αÑïαñé αñ£αñ░αÑéαñ░αÑÇ αñ╣αÑê?", a: "αñòαÑüαñ¢ αñ»αÑïαñ£αñ¿αñ╛αñÅαñé αñ╕αñ░αñòαñ╛αñ░αÑÇ αñòαñ░αÑìαñ«αñÜαñ╛αñ░αñ┐αñ»αÑïαñé αñòαÑç αñ▓αñ┐αñÅ αñ¿αñ╣αÑÇαñé αñ╣αÑêαñé (PM-KISAN, APY) αñöαñ░ αñòαÑüαñ¢ αñòαÑçαñ╡αñ▓ αñùαñ┐αñù/αñàαñ╕αñéαñùαñáαñ┐αññ αñòαñ░αÑìαñ«αñÜαñ╛αñ░αñ┐αñ»αÑïαñé αñòαÑç αñ▓αñ┐αñÅ αñ╣αÑêαñé (e-SHRAM, SVANidhi)αÑñ" },
++    { q: "αñòαÑìαñ»αñ╛ αñ«αÑêαñé αñæαñ½αñ▓αñ╛αñçαñ¿ αñåαñ╡αÑçαñªαñ¿ αñòαñ░ αñ╕αñòαññαñ╛ αñ╣αÑéαñé?", a: "αñ╣αñ╛αñé ΓÇö αñ¬αñ░αñ┐αñúαñ╛αñ«αÑïαñé αñ«αÑçαñé 'αñ¿αñ£αñªαÑÇαñòαÑÇ CSC αñòαÑçαñéαñªαÑìαñ░ αñûαÑïαñ£αÑçαñé' αñ¬αñ░ αñòαÑìαñ▓αñ┐αñò αñòαñ░αÑçαñéαÑñ αñ╡αñ╣αñ╛αñé αñòαñ░αÑìαñ«αñÜαñ╛αñ░αÑÇ αñ«αÑüαñ½αÑìαññ αñ«αÑçαñé αñ«αñªαñª αñòαñ░αÑçαñéαñùαÑçαÑñ" },
++    { q: "e-SHRAM αñòαñ╛αñ░αÑìαñí αñòαÑìαñ»αñ╛ αñ╣αÑê αñöαñ░ αñòαñ┐αñ╕αÑç αñÜαñ╛αñ╣αñ┐αñÅ?", a: "αñ»αñ╣ αñàαñ╕αñéαñùαñáαñ┐αññ αñòαÑìαñ╖αÑçαññαÑìαñ░ αñòαÑç αñòαñ░αÑìαñ«αñÜαñ╛αñ░αñ┐αñ»αÑïαñé αñòαÑç αñ▓αñ┐αñÅ αñ░αñ╛αñ╖αÑìαñƒαÑìαñ░αÑÇαñ» ID αñòαñ╛αñ░αÑìαñí αñ╣αÑê ΓÇö αñùαñ┐αñù αñíαÑìαñ░αñ╛αñçαñ╡αñ░, αñªαñ┐αñ╣αñ╛αñíαñ╝αÑÇ αñ«αñ£αñªαÑéαñ░, αñ¿αñ┐αñ░αÑìαñ«αñ╛αñú αñòαñ░αÑìαñ«αñÜαñ╛αñ░αÑÇαÑñ αñçαñ╕αñ╕αÑç αñ«αÑüαñ½αÑìαññ αñªαÑüαñ░αÑìαñÿαñƒαñ¿αñ╛ αñ¼αÑÇαñ«αñ╛ αñöαñ░ αñ»αÑïαñ£αñ¿αñ╛αñôαñé αñ«αÑçαñé αñ¬αÑìαñ░αñ╛αñÑαñ«αñ┐αñòαññαñ╛ αñ«αñ┐αñ▓αññαÑÇ αñ╣αÑêαÑñ" },
++    { q: "αñ»αñ╣αñ╛αñé PPF/NPS/αñùαÑïαñ▓αÑìαñí αñ¼αÑëαñ¿αÑìαñí αñòαÑìαñ»αÑïαñé αñªαñ┐αñûαññαñ╛ αñ╣αÑê?", a: "Yojana Matcher αñàαñ¼ αñ╕αñ¡αÑÇ αñ╕αñ░αñòαñ╛αñ░αÑÇ αñ╡αñ┐αññαÑìαññαÑÇαñ» αñëαññαÑìαñ¬αñ╛αñªαÑïαñé αñòαÑï αñòαñ╡αñ░ αñòαñ░αññαñ╛ αñ╣αÑê ΓÇö αñòαÑçαñ╡αñ▓ αñòαñ▓αÑìαñ»αñ╛αñú αñ»αÑïαñ£αñ¿αñ╛αñÅαñé αñ¿αñ╣αÑÇαñéαÑñ PPF, NPS αñöαñ░ Sovereign Gold Bond αñ╕αñ░αñòαñ╛αñ░αÑÇ αñ¿αñ┐αñ╡αÑçαñ╢ αñ╕αñ╛αñºαñ¿ αñ╣αÑêαñé αñ£αñ┐αñ¿αñ«αÑçαñé αñ«αñ╣αññαÑìαñ╡αñ¬αÑéαñ░αÑìαñú αñòαñ░ αñ▓αñ╛αñ¡ αñ╣αÑêαñéαÑñ" },
+   ],
+ };
+ 
+@@ -82,17 +86,17 @@ export default function PageWrapper() {
+         <div className="flex items-center justify-between mb-5 gap-3">
+           {/* SHARE ON STORY ΓÇö very visible, always at top */}
+           <a href={shareUrl} target="_blank" rel="noopener noreferrer"
+-            style={{ minHeight:"auto", minWidth:"auto" }}
++            style={{ minHeight: "auto", minWidth: "auto" }}
+             className="flex items-center gap-2 bg-gradient-to-r from-pink-500 via-rose-500 to-orange-400 text-white text-[11px] font-black rounded-full px-4 py-2 shadow-md shadow-rose-200 hover:shadow-rose-300 hover:scale-105 transition-all">
+             <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-white flex-shrink-0">
+-              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
++              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+             </svg>
+             {lang === "hi" ? "αñ╕αÑìαñƒαÑïαñ░αÑÇ αñ¬αñ░ αñ╢αÑçαñ»αñ░ αñòαñ░αÑçαñé" : "Share on Story"}
+           </a>
+ 
+           {/* Lang toggle */}
+           <button onClick={() => setLang(l => l === "en" ? "hi" : "en")}
+-            style={{ minHeight:"auto", minWidth:"auto" }}
++            style={{ minHeight: "auto", minWidth: "auto" }}
+             className="flex items-center gap-2 text-xs font-bold border-2 border-green-200 text-green-700 bg-green-50 hover:bg-green-100 rounded-full px-4 py-2 transition-colors shadow-sm flex-shrink-0">
+             <span className="text-base">{lang === "en" ? "≡ƒç«≡ƒç│" : "≡ƒîÉ"}</span>
+             {tx("langToggle", lang)}
+@@ -146,12 +150,12 @@ export default function PageWrapper() {
+                   {g.emoji}
+                 </div>
+                 <div className="flex-1 min-w-0">
+-                  <p className="font-bold text-xs text-gray-900 group-hover:text-green-600 transition-colors mb-0.5">
++                  <span className="block font-bold text-xs text-gray-900 group-hover:text-green-600 transition-colors mb-0.5">
+                     {lang === "hi" ? g.nameHi : g.name}
+-                  </p>
+-                  <p className="text-[11px] text-gray-400 leading-relaxed">
++                  </span>
++                  <span className="block text-[11px] text-gray-400 leading-relaxed">
+                     {lang === "hi" ? g.descHi : g.desc}
+-                  </p>
++                  </span>
+                 </div>
+                 <ExternalLink className="w-3 h-3 text-gray-200 group-hover:text-green-400 flex-shrink-0 mt-0.5 transition-colors" />
+               </a>
+@@ -168,10 +172,10 @@ export default function PageWrapper() {
+             {SCHEME_LIST.map(s => (
+               <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer"
+                 className="block bg-white border border-gray-100 rounded-2xl p-3.5 hover:border-green-200 hover:shadow-md transition-all group min-h-[80px]">
+-                <p className="font-bold text-xs text-gray-800 group-hover:text-green-600 transition-colors mb-1 leading-snug">
++                <span className="block font-bold text-xs text-gray-800 group-hover:text-green-600 transition-colors mb-1 leading-snug">
+                   {lang === "hi" ? s.nameHi : s.name}
+-                </p>
+-                <p className="text-[11px] text-gray-400 leading-tight">{s.desc}</p>
++                </span>
++                <span className="block text-[11px] text-gray-400 leading-tight">{s.desc}</span>
+                 <ExternalLink className="w-2.5 h-2.5 text-gray-200 group-hover:text-green-300 mt-1.5 transition-colors" />
+               </a>
+             ))}
+diff --git a/app/_components/YojanaForm.tsx b/app/_components/YojanaForm.tsx
+index 9e1d431..4d5e2e5 100644
+--- a/app/_components/YojanaForm.tsx
++++ b/app/_components/YojanaForm.tsx
+@@ -2,10 +2,10 @@
+ 
+ import { useState, useCallback } from "react";
+ import {
+-  Search, Loader2, ExternalLink, AlertCircle, CheckCircle2,
+-  ChevronRight, ChevronLeft, User, IndianRupee, MapPin,
++  Search, Loader2, ExternalLink, AlertCircle,
++  ChevronLeft, User, IndianRupee, MapPin,
+   GraduationCap, Users, RefreshCw, Sparkles, Share2,
+-  PhoneCall, ChevronDown, TrendingUp, Star, Briefcase,
++  PhoneCall, ChevronDown, TrendingUp, Star, Briefcase, Copy, CheckCircle2,
+ } from "lucide-react";
+ import type { Scheme, UserProfile, SchemeCategory } from "@/lib/schemes";
+ import { getMatchScore } from "@/lib/schemes";
+@@ -29,121 +29,170 @@ interface WizardData {
+ }
+ 
+ const DEFAULT: WizardData = {
+-  purpose:"", age:0, gender:"", employment:"",
+-  state:"unknown", income_lpa:-1, category:"", education:"",
++  purpose: "", age: 0, gender: "", employment: "",
++  state: "unknown", income_lpa: -1, category: "", education: "",
+ };
+ 
+-const STEPS = ["purpose","age","gender","employment","category","income","education","state"] as const;
++const STEPS = ["purpose", "age", "gender", "employment", "category", "income", "education", "state"] as const;
+ type Step = typeof STEPS[number];
+ 
+ // ΓöÇΓöÇ Wizard data ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ const PURPOSES = [
+-  { value:"business",  emoji:"≡ƒÜÇ", labelKey:"purposeBusiness" as const },
+-  { value:"farming",   emoji:"≡ƒî╛", labelKey:"purposeFarming"  as const },
+-  { value:"education", emoji:"≡ƒÄô", labelKey:"purposeEdu"      as const },
+-  { value:"health",    emoji:"≡ƒÅÑ", labelKey:"purposeHealth"   as const },
+-  { value:"housing",   emoji:"≡ƒÅá", labelKey:"purposeHousing"  as const },
+-  { value:"skill",     emoji:"ΓÜÖ∩╕Å", labelKey:"purposeSkill"    as const },
+-  { value:"invest",    emoji:"≡ƒôê", labelKey:"purposeInvest"   as const },
+-  { value:"all",       emoji:"≡ƒîÉ", labelKey:"purposeAll"      as const },
++  { value: "business", emoji: "≡ƒÜÇ", labelKey: "purposeBusiness" as const },
++  { value: "farming", emoji: "≡ƒî╛", labelKey: "purposeFarming" as const },
++  { value: "education", emoji: "≡ƒÄô", labelKey: "purposeEdu" as const },
++  { value: "health", emoji: "≡ƒÅÑ", labelKey: "purposeHealth" as const },
++  { value: "housing", emoji: "≡ƒÅá", labelKey: "purposeHousing" as const },
++  { value: "skill", emoji: "ΓÜÖ∩╕Å", labelKey: "purposeSkill" as const },
++  { value: "invest", emoji: "≡ƒôê", labelKey: "purposeInvest" as const },
++  { value: "all", emoji: "≡ƒîÉ", labelKey: "purposeAll" as const },
+ ];
+ 
+ const AGE_BANDS = [
+-  { label:{ en:"Under 18", hi:"18 αñ╕αÑç αñòαñ«" },    emoji:"≡ƒºÆ", mid:14 },
+-  { label:{ en:"18 ΓÇô 25",  hi:"18 ΓÇô 25" },      emoji:"≡ƒÄô", mid:21 },
+-  { label:{ en:"26 ΓÇô 35",  hi:"26 ΓÇô 35" },      emoji:"≡ƒÆ╝", mid:30 },
+-  { label:{ en:"36 ΓÇô 50",  hi:"36 ΓÇô 50" },      emoji:"≡ƒÅá", mid:43 },
+-  { label:{ en:"51 ΓÇô 60",  hi:"51 ΓÇô 60" },      emoji:"≡ƒî┐", mid:55 },
+-  { label:{ en:"60+",      hi:"60 αñ╕αÑç αñèαñ¬αñ░" },     emoji:"≡ƒºô", mid:65 },
++  { label: { en: "Under 18", hi: "18 αñ╕αÑç αñòαñ«" }, emoji: "≡ƒºÆ", mid: 14 },
++  { label: { en: "18 ΓÇô 25", hi: "18 ΓÇô 25" }, emoji: "≡ƒÄô", mid: 21 },
++  { label: { en: "26 ΓÇô 35", hi: "26 ΓÇô 35" }, emoji: "≡ƒÆ╝", mid: 30 },
++  { label: { en: "36 ΓÇô 50", hi: "36 ΓÇô 50" }, emoji: "≡ƒÅá", mid: 43 },
++  { label: { en: "51 ΓÇô 60", hi: "51 ΓÇô 60" }, emoji: "≡ƒî┐", mid: 55 },
++  { label: { en: "60+", hi: "60 αñ╕αÑç αñèαñ¬αñ░" }, emoji: "≡ƒºô", mid: 65 },
+ ];
+ 
+ const GENDERS = [
+-  { label:{ en:"Male",   hi:"αñ¬αÑüαñ░αÑüαñ╖" }, emoji:"≡ƒæ¿", value:"male"   },
+-  { label:{ en:"Female", hi:"αñ«αñ╣αñ┐αñ▓αñ╛" }, emoji:"≡ƒæ⌐", value:"female" },
+-  { label:{ en:"Other",  hi:"αñàαñ¿αÑìαñ»" },  emoji:"≡ƒºæ", value:"other"  },
++  { label: { en: "Male", hi: "αñ¬αÑüαñ░αÑüαñ╖" }, emoji: "≡ƒæ¿", value: "male" },
++  { label: { en: "Female", hi: "αñ«αñ╣αñ┐αñ▓αñ╛" }, emoji: "≡ƒæ⌐", value: "female" },
++  { label: { en: "Other", hi: "αñàαñ¿αÑìαñ»" }, emoji: "≡ƒºæ", value: "other" },
+ ];
+ 
++// Employment options with visual illustration gradients
+ const EMPLOYMENT_OPTIONS = [
+-  { value:"government",   emoji:"≡ƒÅ¢∩╕Å", label:{ en:"Government Employee",       hi:"αñ╕αñ░αñòαñ╛αñ░αÑÇ αñòαñ░αÑìαñ«αñÜαñ╛αñ░αÑÇ" },   desc:{ en:"Central/State govt job",      hi:"αñòαÑçαñéαñªαÑìαñ░/αñ░αñ╛αñ£αÑìαñ» αñ╕αñ░αñòαñ╛αñ░ αñ¿αÑîαñòαñ░αÑÇ" } },
+-  { value:"private",      emoji:"≡ƒÅó", label:{ en:"Private Sector Employee",    hi:"αñ¬αÑìαñ░αñ╛αñçαñ╡αÑçαñƒ αñòαñ░αÑìαñ«αñÜαñ╛αñ░αÑÇ" }, desc:{ en:"Company / corporate job",     hi:"αñòαñéαñ¬αñ¿αÑÇ / αñòαÑëαñ░αÑìαñ¬αÑïαñ░αÑçαñƒ αñ¿αÑîαñòαñ░αÑÇ" } },
+-  { value:"self_employed",emoji:"≡ƒÅ¬", label:{ en:"Self-Employed / Business",   hi:"αñ╕αÑìαñ╡-αñ░αÑïαñ£αñùαñ╛αñ░ / αñ╡αÑìαñ»αñ╛αñ¬αñ╛αñ░" },desc:{ en:"Own shop/business/profession",hi:"αñûαÑüαñª αñòαñ╛ αñòαñ╛αñ«/αñ╡αÑìαñ»αñ╛αñ¬αñ╛αñ░" } },
+-  { value:"gig",          emoji:"≡ƒ¢╡", label:{ en:"Gig / Freelance Worker",     hi:"αñùαñ┐αñù / αñ½αÑìαñ░αÑÇαñ▓αñ╛αñéαñ╕" },     desc:{ en:"Ola, Uber, Swiggy, UpworkΓÇª", hi:"Ola, Uber, Swiggy, UpworkΓÇª" } },
+-  { value:"farmer",       emoji:"≡ƒî╛", label:{ en:"Farmer / Agricultural Worker",hi:"αñòαñ┐αñ╕αñ╛αñ¿ / αñòαÑâαñ╖αñ┐ αñ«αñ£αñªαÑéαñ░" }, desc:{ en:"Own or leased farmland",      hi:"αñûαÑüαñª αñòαÑÇ αñ»αñ╛ αñ¬αñƒαÑìαñƒαÑç αñòαÑÇ αñ£αñ«αÑÇαñ¿" } },
+-  { value:"daily_wage",   emoji:"≡ƒ¬Ü", label:{ en:"Daily Wage / Construction",  hi:"αñªαñ┐αñ╣αñ╛αñíαñ╝αÑÇ / αñ¿αñ┐αñ░αÑìαñ«αñ╛αñú" },   desc:{ en:"Labour, helper, masonΓÇª",      hi:"αñ«αñ£αñªαÑéαñ░, αñ╕αñ╣αñ╛αñ»αñò, αñ░αñ╛αñ£αñ«αñ┐αñ╕αÑìαññαÑìαñ░αÑÇΓÇª" } },
+-  { value:"student",      emoji:"≡ƒôÜ", label:{ en:"Student",                    hi:"αñ¢αñ╛αññαÑìαñ░" },               desc:{ en:"School / college / university",hi:"αñ╕αÑìαñòαÑéαñ▓/αñòαÑëαñ▓αÑçαñ£/αñ»αÑéαñ¿αñ┐αñ╡αñ░αÑìαñ╕αñ┐αñƒαÑÇ" } },
+-  { value:"unemployed",   emoji:"≡ƒöì", label:{ en:"Unemployed / Homemaker",     hi:"αñ¼αÑçαñ░αÑïαñ£αñùαñ╛αñ░ / αñùαÑâαñ╣αñ┐αñúαÑÇ" },   desc:{ en:"Looking for work or at home", hi:"αñòαñ╛αñ« αñòαÑÇ αññαñ▓αñ╛αñ╢ αñ«αÑçαñé αñ»αñ╛ αñÿαñ░ αñ¬αñ░" } },
++  {
++    value: "government", emoji: "≡ƒÅ¢∩╕Å",
++    gradient: "from-blue-600 to-indigo-600",
++    badge: { en: "ΓÜá∩╕Å Some schemes excluded", hi: "ΓÜá∩╕Å αñòαÑüαñ¢ αñ»αÑïαñ£αñ¿αñ╛αñÅαñé αñ▓αñ╛αñùαÑé αñ¿αñ╣αÑÇαñé" },
++    label: { en: "Government Employee", hi: "αñ╕αñ░αñòαñ╛αñ░αÑÇ αñòαñ░αÑìαñ«αñÜαñ╛αñ░αÑÇ" },
++    desc: { en: "Central/State govt job", hi: "αñòαÑçαñéαñªαÑìαñ░/αñ░αñ╛αñ£αÑìαñ» αñ╕αñ░αñòαñ╛αñ░ αñ¿αÑîαñòαñ░αÑÇ" },
++  },
++  {
++    value: "private", emoji: "≡ƒÅó",
++    gradient: "from-slate-600 to-gray-700",
++    badge: { en: "Γ£à Most schemes apply", hi: "Γ£à αñàαñºαñ┐αñòαñ╛αñéαñ╢ αñ»αÑïαñ£αñ¿αñ╛αñÅαñé αñ▓αñ╛αñùαÑé" },
++    label: { en: "Private Sector Employee", hi: "αñ¬αÑìαñ░αñ╛αñçαñ╡αÑçαñƒ αñòαñ░αÑìαñ«αñÜαñ╛αñ░αÑÇ" },
++    desc: { en: "Company / corporate job", hi: "αñòαñéαñ¬αñ¿αÑÇ / αñòαÑëαñ░αÑìαñ¬αÑïαñ░αÑçαñƒ αñ¿αÑîαñòαñ░αÑÇ" },
++  },
++  {
++    value: "self_employed", emoji: "≡ƒÅ¬",
++    gradient: "from-orange-500 to-amber-500",
++    badge: { en: "Γ£à Business loans & subsidies", hi: "Γ£à αñ¼αñ┐αñ£αñ╝αñ¿αÑçαñ╕ αñ▓αÑïαñ¿ αñöαñ░ αñ╕αñ¼αÑìαñ╕αñ┐αñíαÑÇ" },
++    label: { en: "Self-Employed / Business", hi: "αñ╕αÑìαñ╡-αñ░αÑïαñ£αñùαñ╛αñ░ / αñ╡αÑìαñ»αñ╛αñ¬αñ╛αñ░" },
++    desc: { en: "Own shop/business/profession", hi: "αñûαÑüαñª αñòαñ╛ αñòαñ╛αñ«/αñ╡αÑìαñ»αñ╛αñ¬αñ╛αñ░" },
++  },
++  {
++    value: "gig", emoji: "≡ƒ¢╡",
++    gradient: "from-teal-500 to-cyan-500",
++    badge: { en: "Γ£à e-SHRAM + gig benefits", hi: "Γ£à e-αñ╢αÑìαñ░αñ« + αñùαñ┐αñù αñ▓αñ╛αñ¡" },
++    label: { en: "Gig / Freelance Worker", hi: "αñùαñ┐αñù / αñ½αÑìαñ░αÑÇαñ▓αñ╛αñéαñ╕" },
++    desc: { en: "Ola, Uber, Swiggy, UpworkΓÇª", hi: "Ola, Uber, Swiggy, UpworkΓÇª" },
++  },
++  {
++    value: "farmer", emoji: "≡ƒî╛",
++    gradient: "from-green-500 to-lime-500",
++    badge: { en: "Γ£à PM-KISAN + crop cover", hi: "Γ£à PM-αñòαñ┐αñ╕αñ╛αñ¿ + αñ½αñ╕αñ▓ αñ¼αÑÇαñ«αñ╛" },
++    label: { en: "Farmer / Agricultural Worker", hi: "αñòαñ┐αñ╕αñ╛αñ¿ / αñòαÑâαñ╖αñ┐ αñ«αñ£αñªαÑéαñ░" },
++    desc: { en: "Own or leased farmland", hi: "αñûαÑüαñª αñòαÑÇ αñ»αñ╛ αñ¬αñƒαÑìαñƒαÑç αñòαÑÇ αñ£αñ«αÑÇαñ¿" },
++  },
++  {
++    value: "daily_wage", emoji: "≡ƒ¬Ü",
++    gradient: "from-yellow-500 to-orange-400",
++    badge: { en: "Γ£à e-SHRAM + APY eligible", hi: "Γ£à e-αñ╢αÑìαñ░αñ« + APY αñ¬αñ╛αññαÑìαñ░" },
++    label: { en: "Daily Wage / Construction", hi: "αñªαñ┐αñ╣αñ╛αñíαñ╝αÑÇ / αñ¿αñ┐αñ░αÑìαñ«αñ╛αñú" },
++    desc: { en: "Labour, helper, masonΓÇª", hi: "αñ«αñ£αñªαÑéαñ░, αñ╕αñ╣αñ╛αñ»αñò, αñ░αñ╛αñ£αñ«αñ┐αñ╕αÑìαññαÑìαñ░αÑÇΓÇª" },
++  },
++  {
++    value: "student", emoji: "≡ƒôÜ",
++    gradient: "from-purple-500 to-violet-500",
++    badge: { en: "Γ£à Scholarships & training", hi: "Γ£à αñ¢αñ╛αññαÑìαñ░αñ╡αÑâαññαÑìαññαñ┐ αñöαñ░ αñ¬αÑìαñ░αñ╢αñ┐αñòαÑìαñ╖αñú" },
++    label: { en: "Student", hi: "αñ¢αñ╛αññαÑìαñ░" },
++    desc: { en: "School / college / university", hi: "αñ╕αÑìαñòαÑéαñ▓/αñòαÑëαñ▓αÑçαñ£/αñ»αÑéαñ¿αñ┐αñ╡αñ░αÑìαñ╕αñ┐αñƒαÑÇ" },
++  },
++  {
++    value: "unemployed", emoji: "≡ƒöì",
++    gradient: "from-rose-500 to-pink-500",
++    badge: { en: "Γ£à Skill training & loans", hi: "Γ£à αñòαÑîαñ╢αñ▓ αñ¬αÑìαñ░αñ╢αñ┐αñòαÑìαñ╖αñú αñöαñ░ αñ▓αÑïαñ¿" },
++    label: { en: "Unemployed / Homemaker", hi: "αñ¼αÑçαñ░αÑïαñ£αñùαñ╛αñ░ / αñùαÑâαñ╣αñ┐αñúαÑÇ" },
++    desc: { en: "Looking for work or at home", hi: "αñòαñ╛αñ« αñòαÑÇ αññαñ▓αñ╛αñ╢ αñ«αÑçαñé αñ»αñ╛ αñÿαñ░ αñ¬αñ░" },
++  },
+ ];
+ 
+ const CATEGORIES = [
+-  { label:{ en:"General", hi:"αñ╕αñ╛αñ«αñ╛αñ¿αÑìαñ»" }, desc:{ en:"No reservation", hi:"αñòαÑïαñê αñåαñ░αñòαÑìαñ╖αñú αñ¿αñ╣αÑÇαñé" },       emoji:"≡ƒÅ¢∩╕Å", value:"general" },
+-  { label:{ en:"OBC",     hi:"OBC" },     desc:{ en:"Other Backward Classes", hi:"αñàαñ¿αÑìαñ» αñ¬αñ┐αñ¢αñíαñ╝αñ╛ αñ╡αñ░αÑìαñù" }, emoji:"≡ƒôï", value:"OBC" },
+-  { label:{ en:"SC",      hi:"SC" },      desc:{ en:"Scheduled Caste", hi:"αñàαñ¿αÑüαñ╕αÑéαñÜαñ┐αññ αñ£αñ╛αññαñ┐" },          emoji:"ΓÜû∩╕Å", value:"SC" },
+-  { label:{ en:"ST",      hi:"ST" },      desc:{ en:"Scheduled Tribe", hi:"αñàαñ¿αÑüαñ╕αÑéαñÜαñ┐αññ αñ£αñ¿αñ£αñ╛αññαñ┐" },        emoji:"≡ƒî┐", value:"ST" },
++  { label: { en: "General", hi: "αñ╕αñ╛αñ«αñ╛αñ¿αÑìαñ»" }, desc: { en: "No reservation", hi: "αñòαÑïαñê αñåαñ░αñòαÑìαñ╖αñú αñ¿αñ╣αÑÇαñé" }, emoji: "≡ƒÅ¢∩╕Å", value: "general" },
++  { label: { en: "OBC", hi: "OBC" }, desc: { en: "Other Backward Classes", hi: "αñàαñ¿αÑìαñ» αñ¬αñ┐αñ¢αñíαñ╝αñ╛ αñ╡αñ░αÑìαñù" }, emoji: "≡ƒôï", value: "OBC" },
++  { label: { en: "SC", hi: "SC" }, desc: { en: "Scheduled Caste", hi: "αñàαñ¿αÑüαñ╕αÑéαñÜαñ┐αññ αñ£αñ╛αññαñ┐" }, emoji: "ΓÜû∩╕Å", value: "SC" },
++  { label: { en: "ST", hi: "ST" }, desc: { en: "Scheduled Tribe", hi: "αñàαñ¿αÑüαñ╕αÑéαñÜαñ┐αññ αñ£αñ¿αñ£αñ╛αññαñ┐" }, emoji: "≡ƒî┐", value: "ST" },
+ ];
+ 
+ const INCOME_BANDS = [
+-  { label:{ en:"No income",     hi:"αñòαÑïαñê αñåαñ«αñªαñ¿αÑÇ αñ¿αñ╣αÑÇαñé" },  emoji:"≡ƒöì", value:0,   desc:{ en:"Unemployed / Student", hi:"αñ¼αÑçαñ░αÑïαñ£αñùαñ╛αñ░ / αñ¢αñ╛αññαÑìαñ░" } },
+-  { label:{ en:"Under Γé╣1 LPA", hi:"Γé╣1 αñ▓αñ╛αñû αñ╕αÑç αñòαñ«" },   emoji:"≡ƒÆº", value:0.8, desc:{ en:"Below poverty line",   hi:"αñùαñ░αÑÇαñ¼αÑÇ αñ░αÑçαñûαñ╛ αñ╕αÑç αñ¿αÑÇαñÜαÑç" } },
+-  { label:{ en:"Γé╣1 ΓÇô 2.5 LPA", hi:"Γé╣1 ΓÇô 2.5 αñ▓αñ╛αñû" },   emoji:"≡ƒî▒", value:1.8, desc:{ en:"Low income",           hi:"αñòαñ« αñåαñ«αñªαñ¿αÑÇ" } },
+-  { label:{ en:"Γé╣2.5 ΓÇô 5 LPA", hi:"Γé╣2.5 ΓÇô 5 αñ▓αñ╛αñû" },   emoji:"≡ƒî┐", value:3.5, desc:{ en:"Lower-middle",         hi:"αñ¿αñ┐αñ«αÑìαñ¿ αñ«αñºαÑìαñ»αñ« αñ╡αñ░αÑìαñù" } },
+-  { label:{ en:"Γé╣5 ΓÇô 10 LPA",  hi:"Γé╣5 ΓÇô 10 αñ▓αñ╛αñû" },     emoji:"≡ƒÆ╝", value:7.5, desc:{ en:"Middle income",        hi:"αñ«αñºαÑìαñ»αñ« αñåαñ«αñªαñ¿αÑÇ" } },
+-  { label:{ en:"Γé╣10 ΓÇô 18 LPA", hi:"Γé╣10 ΓÇô 18 αñ▓αñ╛αñû" },    emoji:"≡ƒÅó", value:14,  desc:{ en:"Upper-middle",         hi:"αñëαñÜαÑìαñÜ αñ«αñºαÑìαñ»αñ« αñ╡αñ░αÑìαñù" } },
+-  { label:{ en:"Above Γé╣18 LPA",hi:"Γé╣18 αñ▓αñ╛αñû αñ╕αÑç αñèαñ¬αñ░" },  emoji:"≡ƒÅå", value:25,  desc:{ en:"High income",          hi:"αñëαñÜαÑìαñÜ αñåαñ«αñªαñ¿αÑÇ" } },
++  { label: { en: "No income", hi: "αñòαÑïαñê αñåαñ«αñªαñ¿αÑÇ αñ¿αñ╣αÑÇαñé" }, emoji: "≡ƒöì", value: 0, desc: { en: "Unemployed / Student", hi: "αñ¼αÑçαñ░αÑïαñ£αñùαñ╛αñ░ / αñ¢αñ╛αññαÑìαñ░" } },
++  { label: { en: "Under Γé╣1 LPA", hi: "Γé╣1 αñ▓αñ╛αñû αñ╕αÑç αñòαñ«" }, emoji: "≡ƒÆº", value: 0.8, desc: { en: "Below poverty line", hi: "αñùαñ░αÑÇαñ¼αÑÇ αñ░αÑçαñûαñ╛ αñ╕αÑç αñ¿αÑÇαñÜαÑç" } },
++  { label: { en: "Γé╣1 ΓÇô 2.5 LPA", hi: "Γé╣1 ΓÇô 2.5 αñ▓αñ╛αñû" }, emoji: "≡ƒî▒", value: 1.8, desc: { en: "Low income", hi: "αñòαñ« αñåαñ«αñªαñ¿αÑÇ" } },
++  { label: { en: "Γé╣2.5 ΓÇô 5 LPA", hi: "Γé╣2.5 ΓÇô 5 αñ▓αñ╛αñû" }, emoji: "≡ƒî┐", value: 3.5, desc: { en: "Lower-middle", hi: "αñ¿αñ┐αñ«αÑìαñ¿ αñ«αñºαÑìαñ»αñ« αñ╡αñ░αÑìαñù" } },
++  { label: { en: "Γé╣5 ΓÇô 10 LPA", hi: "Γé╣5 ΓÇô 10 αñ▓αñ╛αñû" }, emoji: "≡ƒÆ╝", value: 7.5, desc: { en: "Middle income", hi: "αñ«αñºαÑìαñ»αñ« αñåαñ«αñªαñ¿αÑÇ" } },
++  { label: { en: "Γé╣10 ΓÇô 18 LPA", hi: "Γé╣10 ΓÇô 18 αñ▓αñ╛αñû" }, emoji: "≡ƒÅó", value: 14, desc: { en: "Upper-middle", hi: "αñëαñÜαÑìαñÜ αñ«αñºαÑìαñ»αñ« αñ╡αñ░αÑìαñù" } },
++  { label: { en: "Above Γé╣18 LPA", hi: "Γé╣18 αñ▓αñ╛αñû αñ╕αÑç αñèαñ¬αñ░" }, emoji: "≡ƒÅå", value: 25, desc: { en: "High income", hi: "αñëαñÜαÑìαñÜ αñåαñ«αñªαñ¿αÑÇ" } },
+ ];
+ 
+ const EDUCATION_LEVELS = [
+-  { label:{ en:"Below 10th",      hi:"10αñ╡αÑÇαñé αñ╕αÑç αñòαñ«" },   emoji:"≡ƒôÜ", value:"below 10th"   },
+-  { label:{ en:"10th Pass",       hi:"10αñ╡αÑÇαñé αñ¬αñ╛αñ╕" },      emoji:"≡ƒôù", value:"10th pass"    },
+-  { label:{ en:"12th Pass",       hi:"12αñ╡αÑÇαñé αñ¬αñ╛αñ╕" },      emoji:"≡ƒôÿ", value:"12th pass"    },
+-  { label:{ en:"Graduation",      hi:"αñ╕αÑìαñ¿αñ╛αññαñò" },         emoji:"≡ƒÄô", value:"graduation"   },
+-  { label:{ en:"Post Graduation", hi:"αñ¬αñ░αñ╛αñ╕αÑìαñ¿αñ╛αññαñò" },      emoji:"≡ƒö¼", value:"postgraduate" },
++  { label: { en: "Below 10th", hi: "10αñ╡αÑÇαñé αñ╕αÑç αñòαñ«" }, emoji: "≡ƒôÜ", value: "below 10th" },
++  { label: { en: "10th Pass", hi: "10αñ╡αÑÇαñé αñ¬αñ╛αñ╕" }, emoji: "≡ƒôù", value: "10th pass" },
++  { label: { en: "12th Pass", hi: "12αñ╡αÑÇαñé αñ¬αñ╛αñ╕" }, emoji: "≡ƒôÿ", value: "12th pass" },
++  { label: { en: "Graduation", hi: "αñ╕αÑìαñ¿αñ╛αññαñò" }, emoji: "≡ƒÄô", value: "graduation" },
++  { label: { en: "Post Graduation", hi: "αñ¬αñ░αñ╛αñ╕αÑìαñ¿αñ╛αññαñò" }, emoji: "≡ƒö¼", value: "postgraduate" },
+ ];
+ 
+ const STATES = [
+-  "Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat",
+-  "Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh",
+-  "Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab",
+-  "Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh",
+-  "Uttarakhand","West Bengal","Delhi","Chandigarh","Puducherry","Jammu & Kashmir","Ladakh",
++  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat",
++  "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh",
++  "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
++  "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh",
++  "Uttarakhand", "West Bengal", "Delhi", "Chandigarh", "Puducherry", "Jammu & Kashmir", "Ladakh",
+ ];
+ 
+ // State-wise doorstep service portals
+ const DOORSTEP_LINKS: Record<string, { name: string; url: string; nameHi: string }> = {
+-  "Delhi":           { name:"Delhi Doorstep Services",   nameHi:"αñªαñ┐αñ▓αÑìαñ▓αÑÇ αñíαÑïαñ░αñ╕αÑìαñƒαÑçαñ¬ αñ╕αÑçαñ╡αñ╛αñÅαñé",   url:"https://edistrict.delhigovt.nic.in" },
+-  "Maharashtra":     { name:"Aaple Sarkar",               nameHi:"αñåαñ¬αñ▓αÑç αñ╕αñ░αñòαñ╛αñ░",               url:"https://aaplesarkar.mahaonline.gov.in" },
+-  "Uttar Pradesh":   { name:"UP e-Seva / Jansewa Kendra", nameHi:"UP e-αñ╕αÑçαñ╡αñ╛ / αñ£αñ¿αñ╕αÑçαñ╡αñ╛ αñòαÑçαñéαñªαÑìαñ░",url:"https://edistrict.up.gov.in" },
+-  "Bihar":           { name:"RTPS Bihar",                 nameHi:"RTPS αñ¼αñ┐αñ╣αñ╛αñ░",               url:"https://serviceonline.bihar.gov.in" },
+-  "Rajasthan":       { name:"Rajasthan Single Sign On",   nameHi:"αñ░αñ╛αñ£αñ╕αÑìαñÑαñ╛αñ¿ SSO αñ¬αÑïαñ░αÑìαñƒαñ▓",      url:"https://sso.rajasthan.gov.in" },
+-  "Madhya Pradesh":  { name:"MP e-Nagar Palika",          nameHi:"MP e-αñ¿αñùαñ░ αñ¬αñ╛αñ▓αñ┐αñòαñ╛",          url:"https://mpedistrict.gov.in" },
+-  "Tamil Nadu":      { name:"TN e-Sevai",                 nameHi:"TN e-αñ╕αÑçαñ╡αñ╛αñê",               url:"https://www.tnesevai.tn.gov.in" },
+-  "Telangana":       { name:"TS Mee Seva",                nameHi:"TS αñ«αÑÇ αñ╕αÑçαñ╡αñ╛",               url:"https://ts.meeseva.telangana.gov.in" },
+-  "Karnataka":       { name:"Atalji Janasnehi Kendra",    nameHi:"αñàαñƒαñ▓αñ£αÑÇ αñ£αñ¿αñ╕αÑìαñ¿αÑçαñ╣αÑÇ αñòαÑçαñéαñªαÑìαñ░",   url:"https://nadakacheri.karnataka.gov.in" },
+-  "Gujarat":         { name:"Digital Gujarat",            nameHi:"αñíαñ┐αñ£αñ┐αñƒαñ▓ αñùαÑüαñ£αñ░αñ╛αññ",            url:"https://digitalgujarat.gov.in" },
+-  "West Bengal":     { name:"Duare Sarkar",               nameHi:"αñªαÑüαñåαñ░αÑç αñ╕αñ░αñòαñ╛αñ░",              url:"https://wb.gov.in/government-schemes" },
+-  "Kerala":          { name:"Kerala Akshaya e-Kendra",    nameHi:"αñòαÑçαñ░αñ▓ αñàαñòαÑìαñ╖αñ» e-αñòαÑçαñéαñªαÑìαñ░",     url:"https://akshaya.kerala.gov.in" },
+-  "Haryana":         { name:"Antyodaya Saral Portal",     nameHi:"αñàαñéαññαÑìαñ»αÑïαñªαñ» αñ╕αñ░αñ▓ αñ¬αÑïαñ░αÑìαñƒαñ▓",    url:"https://saralharyana.gov.in" },
+-  "Punjab":          { name:"Punjab Sewa Kendra",         nameHi:"αñ¬αñéαñ£αñ╛αñ¼ αñ╕αÑçαñ╡αñ╛ αñòαÑçαñéαñªαÑìαñ░",       url:"https://connect.punjab.gov.in" },
+-  "Assam":           { name:"Assam e-District",           nameHi:"αñàαñ╕αñ« e-αñ£αñ┐αñ▓αñ╛",               url:"https://edistrict.assam.gov.in" },
+-  "Andhra Pradesh":  { name:"AP MeeSeva",                 nameHi:"AP MeeSeva",               url:"https://www.meeseva.gov.in" },
+-  "Odisha":          { name:"Odisha e-District",          nameHi:"αñôαñíαñ┐αñ╢αñ╛ e-αñ£αñ┐αñ▓αñ╛",            url:"https://edistrict.odisha.gov.in" },
+-  "Jharkhand":       { name:"Jharkhand e-District",       nameHi:"αñ¥αñ╛αñ░αñûαñéαñí e-αñ£αñ┐αñ▓αñ╛",           url:"https://jharkhand.gov.in/eDistrict" },
+-  "Chhattisgarh":    { name:"CG e-District",              nameHi:"CG e-αñ£αñ┐αñ▓αñ╛",                url:"https://edistrict.cgstate.gov.in" },
+-  "Himachal Pradesh":{ name:"HP e-Samadhan",              nameHi:"HP e-αñ╕αñ«αñ╛αñºαñ╛αñ¿",              url:"https://edistrict.hp.gov.in" },
++  "Delhi": { name: "Delhi Doorstep Services", nameHi: "αñªαñ┐αñ▓αÑìαñ▓αÑÇ αñíαÑïαñ░αñ╕αÑìαñƒαÑçαñ¬ αñ╕αÑçαñ╡αñ╛αñÅαñé", url: "https://edistrict.delhigovt.nic.in" },
++  "Maharashtra": { name: "Aaple Sarkar", nameHi: "αñåαñ¬αñ▓αÑç αñ╕αñ░αñòαñ╛αñ░", url: "https://aaplesarkar.mahaonline.gov.in" },
++  "Uttar Pradesh": { name: "UP e-Seva / Jansewa Kendra", nameHi: "UP e-αñ╕αÑçαñ╡αñ╛ / αñ£αñ¿αñ╕αÑçαñ╡αñ╛ αñòαÑçαñéαñªαÑìαñ░", url: "https://edistrict.up.gov.in" },
++  "Bihar": { name: "RTPS Bihar", nameHi: "RTPS αñ¼αñ┐αñ╣αñ╛αñ░", url: "https://serviceonline.bihar.gov.in" },
++  "Rajasthan": { name: "Rajasthan Single Sign On", nameHi: "αñ░αñ╛αñ£αñ╕αÑìαñÑαñ╛αñ¿ SSO αñ¬αÑïαñ░αÑìαñƒαñ▓", url: "https://sso.rajasthan.gov.in" },
++  "Madhya Pradesh": { name: "MP e-Nagar Palika", nameHi: "MP e-αñ¿αñùαñ░ αñ¬αñ╛αñ▓αñ┐αñòαñ╛", url: "https://mpedistrict.gov.in" },
++  "Tamil Nadu": { name: "TN e-Sevai", nameHi: "TN e-αñ╕αÑçαñ╡αñ╛αñê", url: "https://www.tnesevai.tn.gov.in" },
++  "Telangana": { name: "TS Mee Seva", nameHi: "TS αñ«αÑÇ αñ╕αÑçαñ╡αñ╛", url: "https://ts.meeseva.telangana.gov.in" },
++  "Karnataka": { name: "Atalji Janasnehi Kendra", nameHi: "αñàαñƒαñ▓αñ£αÑÇ αñ£αñ¿αñ╕αÑìαñ¿αÑçαñ╣αÑÇ αñòαÑçαñéαñªαÑìαñ░", url: "https://nadakacheri.karnataka.gov.in" },
++  "Gujarat": { name: "Digital Gujarat", nameHi: "αñíαñ┐αñ£αñ┐αñƒαñ▓ αñùαÑüαñ£αñ░αñ╛αññ", url: "https://digitalgujarat.gov.in" },
++  "West Bengal": { name: "Duare Sarkar", nameHi: "αñªαÑüαñåαñ░αÑç αñ╕αñ░αñòαñ╛αñ░", url: "https://wb.gov.in/government-schemes" },
++  "Kerala": { name: "Kerala Akshaya e-Kendra", nameHi: "αñòαÑçαñ░αñ▓ αñàαñòαÑìαñ╖αñ» e-αñòαÑçαñéαñªαÑìαñ░", url: "https://akshaya.kerala.gov.in" },
++  "Haryana": { name: "Antyodaya Saral Portal", nameHi: "αñàαñéαññαÑìαñ»αÑïαñªαñ» αñ╕αñ░αñ▓ αñ¬αÑïαñ░αÑìαñƒαñ▓", url: "https://saralharyana.gov.in" },
++  "Punjab": { name: "Punjab Sewa Kendra", nameHi: "αñ¬αñéαñ£αñ╛αñ¼ αñ╕αÑçαñ╡αñ╛ αñòαÑçαñéαñªαÑìαñ░", url: "https://connect.punjab.gov.in" },
++  "Assam": { name: "Assam e-District", nameHi: "αñàαñ╕αñ« e-αñ£αñ┐αñ▓αñ╛", url: "https://edistrict.assam.gov.in" },
++  "Andhra Pradesh": { name: "AP MeeSeva", nameHi: "AP MeeSeva", url: "https://www.meeseva.gov.in" },
++  "Odisha": { name: "Odisha e-District", nameHi: "αñôαñíαñ┐αñ╢αñ╛ e-αñ£αñ┐αñ▓αñ╛", url: "https://edistrict.odisha.gov.in" },
++  "Jharkhand": { name: "Jharkhand e-District", nameHi: "αñ¥αñ╛αñ░αñûαñéαñí e-αñ£αñ┐αñ▓αñ╛", url: "https://jharkhand.gov.in/eDistrict" },
++  "Chhattisgarh": { name: "CG e-District", nameHi: "CG e-αñ£αñ┐αñ▓αñ╛", url: "https://edistrict.cgstate.gov.in" },
++  "Himachal Pradesh": { name: "HP e-Samadhan", nameHi: "HP e-αñ╕αñ«αñ╛αñºαñ╛αñ¿", url: "https://edistrict.hp.gov.in" },
+ };
+ 
+ // Category filter config
+ const CATEGORY_FILTERS: { key: SchemeCategory | "All"; label: { en: string; hi: string }; emoji: string }[] = [
+-  { key:"All",        label:{ en:"All",        hi:"αñ╕αñ¡αÑÇ" },      emoji:"Γ£¿" },
+-  { key:"Business",   label:{ en:"Business",   hi:"αñ╡αÑìαñ»αñ╛αñ¬αñ╛αñ░" },  emoji:"≡ƒÜÇ" },
+-  { key:"Insurance",  label:{ en:"Insurance",  hi:"αñ¼αÑÇαñ«αñ╛" },     emoji:"≡ƒ¢í∩╕Å" },
+-  { key:"Investment", label:{ en:"Investment", hi:"αñ¿αñ┐αñ╡αÑçαñ╢" },    emoji:"≡ƒôê" },
+-  { key:"Agriculture",label:{ en:"Farming",    hi:"αñòαÑâαñ╖αñ┐" },     emoji:"≡ƒî╛" },
+-  { key:"Health",     label:{ en:"Health",     hi:"αñ╕αÑìαñ╡αñ╛αñ╕αÑìαñÑαÑìαñ»" },emoji:"≡ƒÆè" },
+-  { key:"Education",  label:{ en:"Education",  hi:"αñ╢αñ┐αñòαÑìαñ╖αñ╛" },   emoji:"≡ƒÄô" },
+-  { key:"Pension",    label:{ en:"Pension",    hi:"αñ¬αÑçαñéαñ╢αñ¿" },    emoji:"≡ƒºô" },
+-  { key:"Welfare",    label:{ en:"Welfare",    hi:"αñòαñ▓αÑìαñ»αñ╛αñú" },   emoji:"≡ƒ¬¬" },
+-  { key:"Housing",    label:{ en:"Housing",    hi:"αñåαñ╡αñ╛αñ╕" },     emoji:"≡ƒÅá" },
+-  { key:"Banking",    label:{ en:"Banking",    hi:"αñ¼αÑêαñéαñòαñ┐αñéαñù" },  emoji:"≡ƒÅº" },
++  { key: "All", label: { en: "All", hi: "αñ╕αñ¡αÑÇ" }, emoji: "Γ£¿" },
++  { key: "Business", label: { en: "Business", hi: "αñ╡αÑìαñ»αñ╛αñ¬αñ╛αñ░" }, emoji: "≡ƒÜÇ" },
++  { key: "Insurance", label: { en: "Insurance", hi: "αñ¼αÑÇαñ«αñ╛" }, emoji: "≡ƒ¢í∩╕Å" },
++  { key: "Investment", label: { en: "Investment", hi: "αñ¿αñ┐αñ╡αÑçαñ╢" }, emoji: "≡ƒôê" },
++  { key: "Agriculture", label: { en: "Farming", hi: "αñòαÑâαñ╖αñ┐" }, emoji: "≡ƒî╛" },
++  { key: "Health", label: { en: "Health", hi: "αñ╕αÑìαñ╡αñ╛αñ╕αÑìαñÑαÑìαñ»" }, emoji: "≡ƒÆè" },
++  { key: "Education", label: { en: "Education", hi: "αñ╢αñ┐αñòαÑìαñ╖αñ╛" }, emoji: "≡ƒÄô" },
++  { key: "Pension", label: { en: "Pension", hi: "αñ¬αÑçαñéαñ╢αñ¿" }, emoji: "≡ƒºô" },
++  { key: "Welfare", label: { en: "Welfare", hi: "αñòαñ▓αÑìαñ»αñ╛αñú" }, emoji: "≡ƒ¬¬" },
++  { key: "Housing", label: { en: "Housing", hi: "αñåαñ╡αñ╛αñ╕" }, emoji: "≡ƒÅá" },
++  { key: "Banking", label: { en: "Banking", hi: "αñ¼αÑêαñéαñòαñ┐αñéαñù" }, emoji: "≡ƒÅº" },
+ ];
+ 
+ // ΓöÇΓöÇ Sub-components ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+@@ -157,8 +206,8 @@ function OptionCard({ emoji, label, desc, selected, onClick }: {
+         ${selected ? "border-green-500 bg-green-50 shadow-md shadow-green-100" : "border-gray-100 bg-white hover:border-green-200 hover:bg-green-50/40"}`}>
+       <span className="text-2xl w-8 text-center flex-shrink-0">{emoji}</span>
+       <div className="flex-1 min-w-0">
+-        <p className={`text-sm font-bold leading-snug ${selected ? "text-green-700" : "text-gray-800"}`}>{label}</p>
+-        {desc && <p className="text-[11px] text-gray-400 mt-0.5">{desc}</p>}
++        <span className={`block text-sm font-bold leading-snug ${selected ? "text-green-700" : "text-gray-800"}`}>{label}</span>
++        {desc && <span className="block text-[11px] text-gray-400 mt-0.5">{desc}</span>}
+       </div>
+       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${selected ? "border-green-500 bg-green-500" : "border-gray-200"}`}>
+         {selected && <span className="w-2.5 h-2.5 bg-white rounded-full block" />}
+@@ -167,6 +216,37 @@ function OptionCard({ emoji, label, desc, selected, onClick }: {
+   );
+ }
+ 
++// Employment card with visual illustration header
++function EmploymentCard({
++  option, selected, onClick, lang,
++}: {
++  option: typeof EMPLOYMENT_OPTIONS[0]; selected: boolean; onClick: () => void; lang: Lang;
++}) {
++  return (
++    <button type="button" onClick={onClick}
++      className={`w-full text-left rounded-2xl border-2 overflow-hidden transition-all duration-150 active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-green-400
++        ${selected ? "border-green-500 shadow-md shadow-green-100" : "border-gray-100 hover:border-green-200"}`}>
++      {/* Illustration header */}
++      <div className={`relative bg-gradient-to-br ${option.gradient} flex items-center gap-3 px-4 py-3 overflow-hidden`}>
++        <div className="absolute -top-3 -right-3 w-16 h-16 bg-white/10 rounded-full" />
++        <div className="absolute -bottom-4 -left-2 w-12 h-12 bg-white/10 rounded-full" />
++        <span className="text-3xl relative z-10" role="img">{option.emoji}</span>
++        <span className="block text-white font-black text-sm relative z-10">{option.label[lang]}</span>
++        {selected && (
++          <span className="ml-auto bg-white/30 rounded-full p-0.5 relative z-10">
++            <CheckCircle2 className="w-4 h-4 text-white" />
++          </span>
++        )}
++      </div>
++      {/* Body */}
++      <div className={`px-4 py-2.5 flex items-center justify-between gap-2 ${selected ? "bg-green-50" : "bg-white"}`}>
++        <span className="block text-[11px] text-gray-500">{option.desc[lang]}</span>
++        <span className="inline-block text-[10px] font-bold text-gray-400 whitespace-nowrap">{option.badge[lang]}</span>
++      </div>
++    </button>
++  );
++}
++
+ function StepBar({ current, total }: { current: number; total: number }) {
+   return (
+     <div className="flex items-center gap-1 mb-5">
+@@ -267,7 +347,7 @@ function SchemeCard({ scheme, profile, isTop, lang }: {
+ 
+         {/* How to apply accordion */}
+         <button type="button" onClick={() => setShowSteps(v => !v)}
+-          style={{ minHeight:"auto", minWidth:"auto" }}
++          style={{ minHeight: "auto", minWidth: "auto" }}
+           className="w-full flex items-center justify-between px-4 py-3 bg-blue-50 border border-blue-100 rounded-xl mb-3 hover:bg-blue-100 transition-colors">
+           <span className="text-xs font-bold text-blue-700">{tx("howApply", lang)}</span>
+           <ChevronDown className={`w-4 h-4 text-blue-500 transition-transform ${showSteps ? "rotate-180" : ""}`} />
+@@ -302,7 +382,7 @@ function SchemeCard({ scheme, profile, isTop, lang }: {
+ function Skeleton({ lang }: { lang: Lang }) {
+   return (
+     <div className="space-y-4 animate-fadeIn">
+-      {[0,1,2].map(i => (
++      {[0, 1, 2].map(i => (
+         <div key={i} className="bg-white rounded-2xl border border-gray-100 overflow-hidden" style={{ opacity: 1 - i * 0.2 }}>
+           <div className="skeleton h-24 w-full" />
+           <div className="p-5 space-y-3">
+@@ -324,7 +404,7 @@ function Skeleton({ lang }: { lang: Lang }) {
+ 
+ function buildShareText(schemes: Scheme[], lang: Lang): string {
+   const lines = schemes.slice(0, 3).map((s, i) =>
+-    `${i+1}. *${lang==="hi"?s.nameHi:s.name}* ΓÇö ${lang==="hi"?s.estimatedBenefitHi:s.estimatedBenefit}`
++    `${i + 1}. *${lang === "hi" ? s.nameHi : s.name}* ΓÇö ${lang === "hi" ? s.estimatedBenefitHi : s.estimatedBenefit}`
+   );
+   if (lang === "hi") {
+     return `≡ƒç«≡ƒç│ *αñ╕αñ░αñòαñ╛αñ░αÑÇ αñ»αÑïαñ£αñ¿αñ╛ αñ«αñ┐αñ▓αñ╛αñ¿*\n\nαñ«αÑüαñ¥αÑç αñ»αÑç αñ»αÑïαñ£αñ¿αñ╛αñÅαñé αñ«αñ┐αñ▓αÑÇαñé:\n\n${lines.join("\n")}\n\nΓ£à αñàαñ¬αñ¿αÑÇ αñ»αÑïαñ£αñ¿αñ╛ αñûαÑïαñ£αÑçαñé: yojana-matcher.vercel.app`;
+@@ -334,15 +414,15 @@ function buildShareText(schemes: Scheme[], lang: Lang): string {
+ 
+ // ΓöÇΓöÇ MAIN COMPONENT ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ export default function YojanaForm({ lang }: { lang: Lang }) {
+-  const [step, setStep]           = useState(0);
+-  const [data, setData]           = useState<WizardData>(DEFAULT);
+-  const [loading, setLoading]     = useState(false);
+-  const [result, setResult]       = useState<ApiResponse | null>(null);
+-  const [apiError, setApiError]   = useState("");
++  const [step, setStep] = useState(0);
++  const [data, setData] = useState<WizardData>(DEFAULT);
++  const [loading, setLoading] = useState(false);
++  const [result, setResult] = useState<ApiResponse | null>(null);
++  const [apiError, setApiError] = useState("");
+   const [activeFilter, setActiveFilter] = useState<SchemeCategory | "All">("All");
+ 
+   const totalSteps = STEPS.length;
+-  const stepName   = STEPS[step] as Step;
++  const stepName = STEPS[step] as Step;
+ 
+   const pick = useCallback((patch: Partial<WizardData>) => {
+     const next = { ...data, ...patch };
+@@ -358,12 +438,12 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
+ 
+     const ageBand = AGE_BANDS.find(b => b.mid === finalData.age);
+     const incBand = INCOME_BANDS.find(b => b.value === finalData.income_lpa);
+-    const empOpt  = EMPLOYMENT_OPTIONS.find(e => e.value === finalData.employment);
++    const empOpt = EMPLOYMENT_OPTIONS.find(e => e.value === finalData.employment);
+     const userText = [
+-      `I am a ${ageBand?.label.en ?? (finalData.age+" yrs old")} ${finalData.gender},`,
++      `I am a ${ageBand?.label.en ?? (finalData.age + " yrs old")} ${finalData.gender},`,
+       `${finalData.category} category,`,
+       `employment: ${empOpt?.label.en ?? (finalData.employment || "not specified")},`,
+-      `income ${incBand?.label.en ?? (finalData.income_lpa+" LPA")},`,
++      `income ${incBand?.label.en ?? (finalData.income_lpa + " LPA")},`,
+       `education: ${finalData.education},`,
+       `from ${finalData.state}.`,
+       `My main goal is ${finalData.purpose}.`,
+@@ -373,10 +453,10 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
+     const tid = setTimeout(() => ctrl.abort(), 28000);
+     try {
+       const res = await fetch("/api/match", {
+-        method:"POST",
+-        headers:{ "Content-Type":"application/json" },
+-        body:JSON.stringify({ userText, purpose:finalData.purpose, employment:finalData.employment }),
+-        signal:ctrl.signal,
++        method: "POST",
++        headers: { "Content-Type": "application/json" },
++        body: JSON.stringify({ userText, purpose: finalData.purpose, employment: finalData.employment }),
++        signal: ctrl.signal,
+       });
+       clearTimeout(tid);
+       const json: ApiResponse = await res.json();
+@@ -384,7 +464,7 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
+       else setResult(json);
+     } catch (e: unknown) {
+       clearTimeout(tid);
+-      setApiError(e instanceof DOMException && e.name==="AbortError" ? tx("timeout",lang) : tx("networkError",lang));
++      setApiError(e instanceof DOMException && e.name === "AbortError" ? tx("timeout", lang) : tx("networkError", lang));
+     } finally {
+       setLoading(false);
+     }
+@@ -402,11 +482,11 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
+     <div role="alert" className="bg-red-50 border border-red-100 rounded-2xl p-5 flex gap-3 animate-fadeIn">
+       <AlertCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
+       <div>
+-        <p className="font-bold text-red-700 text-sm">{tx("errorTitle",lang)}</p>
++        <p className="font-bold text-red-700 text-sm">{tx("errorTitle", lang)}</p>
+         <p className="text-red-400 text-xs mt-0.5">{apiError}</p>
+-        <button onClick={handleReset} style={{ minHeight:"auto", minWidth:"auto" }}
++        <button onClick={handleReset} style={{ minHeight: "auto", minWidth: "auto" }}
+           className="mt-3 text-xs font-bold text-red-600 bg-red-100 px-3 py-1.5 rounded-xl">
+-          {tx("tryAgain",lang)}
++          {tx("tryAgain", lang)}
+         </button>
+       </div>
+     </div>
+@@ -415,9 +495,25 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
+   // ΓöÇΓöÇ Results ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+   if (result?.schemes) {
+     const allSchemes = result.schemes;
+-    const profile    = result.profile!;
+-    const shareText  = buildShareText(allSchemes, lang);
+-    const waUrl      = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
++    const profile = result.profile!;
++    const shareText = buildShareText(allSchemes, lang);
++    const waUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
++    // Instagram stories doesn't have a direct deep link ΓÇö we use navigator.share for native sharing
++    const [copied, setCopied] = useState(false);
++    const handleCopyLink = async () => {
++      try {
++        await navigator.clipboard.writeText("https://yojana-matcher.vercel.app");
++        setCopied(true);
++        setTimeout(() => setCopied(false), 2000);
++      } catch { }
++    };
++    const handleNativeShare = async () => {
++      const text = shareText;
++      if (navigator.share) {
++        try { await navigator.share({ title: "Yojana Matcher", text, url: "https://yojana-matcher.vercel.app" }); }
++        catch { }
++      } else { window.open(waUrl, "_blank"); }
++    };
+ 
+     const filtered = activeFilter === "All"
+       ? allSchemes
+@@ -428,32 +524,43 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
+     return (
+       <div className="animate-fadeIn">
+ 
+-        {/* ΓöÇΓöÇ STORY SHARE BANNER ΓÇö very visible ΓöÇΓöÇ */}
++        {/* ΓöÇΓöÇ ONE-TAP STORY SHARE BANNER ΓÇö very visible ΓöÇΓöÇ */}
+         <div className="relative mb-5 rounded-2xl overflow-hidden">
+-          <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-emerald-500" />
+-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.15),transparent)]" />
+-          <div className="relative px-4 py-4 flex items-center justify-between gap-3">
+-            <div>
+-              <p className="text-white font-black text-sm">
+-                {allSchemes.length} {tx("matched",lang)} ≡ƒÄë
+-              </p>
+-              <p className="text-green-100 text-[11px]">{tx("matchedSub",lang)}</p>
++          <div className="absolute inset-0 bg-gradient-to-br from-green-600 via-emerald-500 to-teal-500" />
++          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.18),transparent)]" />
++          <div className="relative px-4 py-4">
++            <div className="flex items-center justify-between gap-3 mb-3">
++              <div>
++                <span className="block text-white font-black text-base">
++                  {allSchemes.length} {tx("matched", lang)} ≡ƒÄë
++                </span>
++                <span className="block text-green-100 text-[11px]">{tx("matchedSub", lang)}</span>
++              </div>
+             </div>
+-            <div className="flex gap-2 flex-shrink-0">
+-              {/* WhatsApp Story */}
++            {/* Share row ΓÇö 3 big prominent buttons */}
++            <div className="grid grid-cols-3 gap-2">
++              {/* WhatsApp */}
+               <a href={waUrl} target="_blank" rel="noopener noreferrer"
+-                className="flex flex-col items-center gap-1 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-xl px-3 py-2 transition-colors text-white"
+-                style={{ minHeight:"auto", minWidth:"auto" }}>
+-                <Share2 className="w-4 h-4" />
+-                <span className="text-[10px] font-bold">Share</span>
+-              </a>
+-              {/* WhatsApp message */}
+-              <a href={waUrl} target="_blank" rel="noopener noreferrer"
+-                className="flex flex-col items-center gap-1 bg-[#25D366] hover:bg-[#20bc5a] rounded-xl px-3 py-2 transition-colors text-white"
+-                style={{ minHeight:"auto", minWidth:"auto" }}>
+-                <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+-                <span className="text-[10px] font-bold">WhatsApp</span>
++                className="flex flex-col items-center gap-1.5 bg-[#25D366] hover:bg-[#20bc5a] rounded-xl py-2.5 transition-colors text-white"
++                style={{ minHeight: "auto", minWidth: "auto" }}>
++                <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
++                <span className="text-[10px] font-black">WhatsApp</span>
+               </a>
++              {/* Story / Native share */}
++              <button type="button" onClick={handleNativeShare}
++                className="flex flex-col items-center gap-1.5 bg-gradient-to-br from-pink-500 via-rose-500 to-orange-400 hover:opacity-90 rounded-xl py-2.5 transition-all text-white"
++                style={{ minHeight: "auto", minWidth: "auto" }}>
++                <Share2 className="w-5 h-5" />
++                <span className="text-[10px] font-black">{lang === "hi" ? "αñ╕αÑìαñƒαÑïαñ░αÑÇ αñ╢αÑçαñ»αñ░" : "Share Story"}</span>
++              </button>
++              {/* Copy link */}
++              <button type="button" onClick={handleCopyLink}
++                className={`flex flex-col items-center gap-1.5 rounded-xl py-2.5 transition-all text-white ${copied ? "bg-green-400" : "bg-white/20 hover:bg-white/30 backdrop-blur-sm"
++                  }`}
++                style={{ minHeight: "auto", minWidth: "auto" }}>
++                {copied ? <CheckCircle2 className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
++                <span className="text-[10px] font-black">{copied ? (lang === "hi" ? "αñòαÑëαñ¬αÑÇ αñ╣αÑï αñùαñ»αñ╛!" : "Copied!") : (lang === "hi" ? "αñ▓αñ┐αñéαñò αñòαÑëαñ¬αÑÇ" : "Copy Link")}</span>
++              </button>
+             </div>
+           </div>
+         </div>
+@@ -463,14 +570,14 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
+           <div className="bg-white rounded-2xl border border-gray-100 p-4 mb-4 shadow-sm">
+             <div className="flex items-center gap-2 mb-3">
+               <Sparkles className="w-4 h-4 text-green-500" />
+-              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{tx("yourProfile",lang)}</p>
++              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{tx("yourProfile", lang)}</p>
+             </div>
+             <div className="flex flex-wrap gap-1.5">
+-              <SummaryChip icon={User}          value={`${profile.age}y`} />
+-              <SummaryChip icon={Users}         value={profile.gender} />
+-              <SummaryChip icon={Briefcase}     value={data.employment || "ΓÇô"} />
+-              <SummaryChip icon={Users}         value={profile.category} />
+-              <SummaryChip icon={IndianRupee}   value={`${profile.income_lpa}L`} />
++              <SummaryChip icon={User} value={`${profile.age}y`} />
++              <SummaryChip icon={Users} value={profile.gender} />
++              <SummaryChip icon={Briefcase} value={data.employment || "ΓÇô"} />
++              <SummaryChip icon={Users} value={profile.category} />
++              <SummaryChip icon={IndianRupee} value={`${profile.income_lpa}L`} />
+               <SummaryChip icon={GraduationCap} value={profile.education} />
+               {data.state !== "unknown" && <SummaryChip icon={MapPin} value={data.state} />}
+             </div>
+@@ -486,7 +593,7 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
+               ).map(f => (
+                 <button key={f.key} type="button"
+                   onClick={() => setActiveFilter(f.key as SchemeCategory | "All")}
+-                  style={{ minHeight:"auto", minWidth:"auto" }}
++                  style={{ minHeight: "auto", minWidth: "auto" }}
+                   className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-bold whitespace-nowrap border transition-all flex-shrink-0
+                     ${activeFilter === f.key
+                       ? "bg-green-500 text-white border-green-500 shadow-sm"
+@@ -508,8 +615,8 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
+           <div className="flex items-center gap-3 bg-amber-50 border border-amber-100 rounded-2xl px-4 py-3 mb-4">
+             <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0" />
+             <div>
+-              <p className="font-bold text-sm text-amber-800">{tx("noMatch",lang)}</p>
+-              <p className="text-xs text-amber-500">{tx("noMatchSub",lang)}</p>
++              <p className="font-bold text-sm text-amber-800">{tx("noMatch", lang)}</p>
++              <p className="text-xs text-amber-500">{tx("noMatchSub", lang)}</p>
+             </div>
+           </div>
+         )}
+@@ -521,17 +628,30 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
+           ))}
+         </div>
+ 
+-        {/* ΓöÇΓöÇ Action row: CSC + Aadhaar ΓöÇΓöÇ */}
+-        <div className="grid grid-cols-2 gap-3 mb-4">
++        {/* ΓöÇΓöÇ Action row: CSC + Aadhaar ΓÇö prominent cards ΓöÇΓöÇ */}
++        <div className="space-y-2.5 mb-4">
+           <a href="https://locator.csccloud.in/" target="_blank" rel="noopener noreferrer"
+-            className="flex flex-col items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl py-3.5 transition-colors text-center">
+-            <PhoneCall className="w-5 h-5" />
+-            <span className="text-[11px] font-bold leading-tight">{tx("cscLink",lang)}</span>
++            className="flex items-center gap-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl px-4 py-3.5 transition-colors group">
++            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
++              <PhoneCall className="w-5 h-5" />
++            </div>
++            <div className="flex-1">
++              <span className="block text-sm font-black">{tx("cscLink", lang)}</span>
++              <span className="block text-[11px] text-blue-200">{lang === "hi" ? "αñåαñ¬αñòαÑç αñÿαñ░ αñòαÑç αñ¬αñ╛αñ╕ αñ╕αñ░αñòαñ╛αñ░αÑÇ αñ╕αÑçαñ╡αñ╛ αñòαÑçαñéαñªαÑìαñ░" : "Government service center near your home"}</span>
++            </div>
++            <ExternalLink className="w-4 h-4 text-blue-300 group-hover:translate-x-0.5 transition-transform" />
+           </a>
+           <a href="https://appointments.uidai.gov.in/easearch.aspx" target="_blank" rel="noopener noreferrer"
+-            className="flex flex-col items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl py-3.5 transition-colors text-center">
+-            <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+-            <span className="text-[11px] font-bold leading-tight">{tx("aadhaarLink",lang)}</span>
++            className="flex items-center gap-3.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-2xl px-4 py-3.5 transition-colors group">
++            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
++              {/* Aadhaar fingerprint icon */}
++              <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M2 12C2 6.48 6.48 2 12 2s10 4.48 10 10-4.48 10-10 10S2 17.52 2 12zm9-4.5c1.93 0 3.5 1.57 3.5 3.5 0 1.31-.73 2.46-1.8 3.07C12.45 14.49 12 15 12 16v.5h2V16c0-.28.15-.56.42-.74A5.5 5.5 0 0017 11c0-2.76-2.24-5-5-5s-5 2.24-5 5h2c0-1.93 1.57-3.5 3.5-3.5zM11 18h2v2h-2v-2z" /></svg>
++            </div>
++            <div className="flex-1">
++              <span className="block text-sm font-black">{tx("aadhaarLink", lang)}</span>
++              <span className="block text-[11px] text-orange-100">{lang === "hi" ? "αñ¿αñ£αñªαÑÇαñòαÑÇ αñåαñºαñ╛αñ░ αñ¿αñ╛αñ«αñ╛αñéαñòαñ¿/αñàαñ¬αñíαÑçαñƒ αñòαÑçαñéαñªαÑìαñ░ αñûαÑïαñ£αÑçαñé" : "Find nearest Aadhaar enrollment & update center"}</span>
++            </div>
++            <ExternalLink className="w-4 h-4 text-orange-200 group-hover:translate-x-0.5 transition-transform" />
+           </a>
+         </div>
+ 
+@@ -551,7 +671,7 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
+                 </p>
+                 <a href={doorstep.url} target="_blank" rel="noopener noreferrer"
+                   className="inline-flex items-center gap-1 text-[11px] font-bold text-sky-700 bg-sky-100 hover:bg-sky-200 rounded-lg px-3 py-1.5 transition-colors"
+-                  style={{ minHeight:"auto", minWidth:"auto" }}>
++                  style={{ minHeight: "auto", minWidth: "auto" }}>
+                   {lang === "hi" ? "αñ¬αÑïαñ░αÑìαñƒαñ▓ αñûαÑïαñ▓αÑçαñé" : "Open Portal"}
+                   <ExternalLink className="w-3 h-3" />
+                 </a>
+@@ -562,13 +682,13 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
+ 
+         {/* Disclaimer */}
+         <div className="bg-gray-50 border border-gray-100 rounded-2xl p-4 mb-4">
+-          <p className="text-[11px] text-gray-400 leading-relaxed">ΓÜá∩╕Å {tx("disclaimer",lang)}</p>
++          <p className="text-[11px] text-gray-400 leading-relaxed">ΓÜá∩╕Å {tx("disclaimer", lang)}</p>
+         </div>
+ 
+         <button onClick={handleReset}
+           className="w-full flex items-center justify-center gap-2 text-sm font-bold text-white bg-green-500 hover:bg-green-600 rounded-2xl py-3.5 transition-colors shadow-md shadow-green-200">
+           <RefreshCw className="w-4 h-4" />
+-          {tx("checkAgain",lang)}
++          {tx("checkAgain", lang)}
+         </button>
+       </div>
+     );
+@@ -576,14 +696,14 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
+ 
+   // ΓöÇΓöÇ WIZARD ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+   const STEP_Q: Record<Step, { q: string; h: string }> = {
+-    purpose:    { q:tx("purposeQ",lang),    h:tx("purposeHint",lang)    },
+-    age:        { q:tx("ageQ",lang),        h:tx("ageHint",lang)        },
+-    gender:     { q:tx("genderQ",lang),     h:tx("genderHint",lang)     },
+-    employment: { q:tx("employmentQ",lang), h:tx("employmentHint",lang) },
+-    category:   { q:tx("categoryQ",lang),   h:tx("categoryHint",lang)   },
+-    income:     { q:tx("incomeQ",lang),     h:tx("incomeHint",lang)     },
+-    education:  { q:tx("educationQ",lang),  h:tx("educationHint",lang)  },
+-    state:      { q:tx("stateQ",lang),      h:tx("stateHint",lang)      },
++    purpose: { q: tx("purposeQ", lang), h: tx("purposeHint", lang) },
++    age: { q: tx("ageQ", lang), h: tx("ageHint", lang) },
++    gender: { q: tx("genderQ", lang), h: tx("genderHint", lang) },
++    employment: { q: tx("employmentQ", lang), h: tx("employmentHint", lang) },
++    category: { q: tx("categoryQ", lang), h: tx("categoryHint", lang) },
++    income: { q: tx("incomeQ", lang), h: tx("incomeHint", lang) },
++    education: { q: tx("educationQ", lang), h: tx("educationHint", lang) },
++    state: { q: tx("stateQ", lang), h: tx("stateHint", lang) },
+   };
+ 
+   return (
+@@ -592,26 +712,26 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
+ 
+       <div className="flex items-center justify-between mb-2">
+         {step > 0 ? (
+-          <button onClick={() => setStep(s => s - 1)} style={{ minHeight:"auto", minWidth:"auto" }}
++          <button onClick={() => setStep(s => s - 1)} style={{ minHeight: "auto", minWidth: "auto" }}
+             className="flex items-center gap-1 text-xs text-gray-400 hover:text-green-600 transition-colors">
+-            <ChevronLeft className="w-4 h-4" />{tx("back",lang)}
++            <ChevronLeft className="w-4 h-4" />{tx("back", lang)}
+           </button>
+         ) : <span />}
+         <p className="text-[11px] text-gray-300 font-medium">
+-          {tx("stepOf",lang)} {step+1} {tx("of",lang)} {totalSteps}
++          {tx("stepOf", lang)} {step + 1} {tx("of", lang)} {totalSteps}
+         </p>
+       </div>
+ 
+       {/* Running summary */}
+       {step > 0 && (
+         <div className="flex flex-wrap gap-1.5 mb-3 animate-fadeIn">
+-          {data.purpose    && <SummaryChip icon={Sparkles}     value={PURPOSES.find(p=>p.value===data.purpose)?.value ?? data.purpose} />}
+-          {data.age > 0    && <SummaryChip icon={User}         value={AGE_BANDS.find(b=>b.mid===data.age)?.label[lang] ?? ""} />}
+-          {data.gender     && <SummaryChip icon={Users}        value={GENDERS.find(g=>g.value===data.gender)?.label[lang] ?? data.gender} />}
+-          {data.employment && <SummaryChip icon={Briefcase}    value={EMPLOYMENT_OPTIONS.find(e=>e.value===data.employment)?.label[lang] ?? data.employment} />}
+-          {data.category   && <SummaryChip icon={Users}        value={CATEGORIES.find(c=>c.value===data.category)?.label[lang] ?? data.category} />}
+-          {data.income_lpa >= 0 && <SummaryChip icon={IndianRupee} value={INCOME_BANDS.find(b=>b.value===data.income_lpa)?.label[lang] ?? ""} />}
+-          {data.education  && <SummaryChip icon={GraduationCap} value={EDUCATION_LEVELS.find(e=>e.value===data.education)?.label[lang] ?? data.education} />}
++          {data.purpose && <SummaryChip icon={Sparkles} value={PURPOSES.find(p => p.value === data.purpose)?.value ?? data.purpose} />}
++          {data.age > 0 && <SummaryChip icon={User} value={AGE_BANDS.find(b => b.mid === data.age)?.label[lang] ?? ""} />}
++          {data.gender && <SummaryChip icon={Users} value={GENDERS.find(g => g.value === data.gender)?.label[lang] ?? data.gender} />}
++          {data.employment && <SummaryChip icon={Briefcase} value={EMPLOYMENT_OPTIONS.find(e => e.value === data.employment)?.label[lang] ?? data.employment} />}
++          {data.category && <SummaryChip icon={Users} value={CATEGORIES.find(c => c.value === data.category)?.label[lang] ?? data.category} />}
++          {data.income_lpa >= 0 && <SummaryChip icon={IndianRupee} value={INCOME_BANDS.find(b => b.value === data.income_lpa)?.label[lang] ?? ""} />}
++          {data.education && <SummaryChip icon={GraduationCap} value={EDUCATION_LEVELS.find(e => e.value === data.education)?.label[lang] ?? data.education} />}
+         </div>
+       )}
+ 
+@@ -626,56 +746,60 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
+           {/* PURPOSE */}
+           {stepName === "purpose" && PURPOSES.map(p => (
+             <OptionCard key={p.value} emoji={p.emoji} label={tx(p.labelKey, lang)}
+-              selected={data.purpose === p.value} onClick={() => pick({ purpose:p.value })} />
++              selected={data.purpose === p.value} onClick={() => pick({ purpose: p.value })} />
+           ))}
+ 
+           {/* AGE */}
+           {stepName === "age" && AGE_BANDS.map(b => (
+             <OptionCard key={b.mid} emoji={b.emoji} label={b.label[lang]}
+-              selected={data.age === b.mid} onClick={() => pick({ age:b.mid })} />
++              selected={data.age === b.mid} onClick={() => pick({ age: b.mid })} />
+           ))}
+ 
+           {/* GENDER */}
+           {stepName === "gender" && GENDERS.map(g => (
+             <OptionCard key={g.value} emoji={g.emoji} label={g.label[lang]}
+-              selected={data.gender === g.value} onClick={() => pick({ gender:g.value })} />
++              selected={data.gender === g.value} onClick={() => pick({ gender: g.value })} />
+           ))}
+ 
+-          {/* EMPLOYMENT */}
+-          {stepName === "employment" && EMPLOYMENT_OPTIONS.map(e => (
+-            <OptionCard key={e.value} emoji={e.emoji} label={e.label[lang]} desc={e.desc[lang]}
+-              selected={data.employment === e.value} onClick={() => pick({ employment:e.value })} />
+-          ))}
++          {/* EMPLOYMENT ΓÇö with visual illustration cards */}
++          {stepName === "employment" && (
++            <div className="space-y-2">
++              {EMPLOYMENT_OPTIONS.map(e => (
++                <EmploymentCard key={e.value} option={e} lang={lang}
++                  selected={data.employment === e.value} onClick={() => pick({ employment: e.value })} />
++              ))}
++            </div>
++          )}
+ 
+           {/* CATEGORY */}
+           {stepName === "category" && CATEGORIES.map(c => (
+             <OptionCard key={c.value} emoji={c.emoji} label={c.label[lang]} desc={c.desc[lang]}
+-              selected={data.category === c.value} onClick={() => pick({ category:c.value })} />
++              selected={data.category === c.value} onClick={() => pick({ category: c.value })} />
+           ))}
+ 
+           {/* INCOME */}
+           {stepName === "income" && INCOME_BANDS.map(b => (
+             <OptionCard key={String(b.value)} emoji={b.emoji} label={b.label[lang]} desc={b.desc[lang]}
+-              selected={data.income_lpa === b.value} onClick={() => pick({ income_lpa:b.value })} />
++              selected={data.income_lpa === b.value} onClick={() => pick({ income_lpa: b.value })} />
+           ))}
+ 
+           {/* EDUCATION */}
+           {stepName === "education" && EDUCATION_LEVELS.map(e => (
+             <OptionCard key={e.value} emoji={e.emoji} label={e.label[lang]}
+-              selected={data.education === e.value} onClick={() => pick({ education:e.value })} />
++              selected={data.education === e.value} onClick={() => pick({ education: e.value })} />
+           ))}
+ 
+           {/* STATE ΓÇö last step + submit */}
+           {stepName === "state" && (
+             <>
+-              <OptionCard emoji="≡ƒîÉ" label={tx("allIndia",lang)}
+-                selected={data.state==="unknown"} onClick={() => setData(d => ({ ...d, state:"unknown" }))} />
++              <OptionCard emoji="≡ƒîÉ" label={tx("allIndia", lang)}
++                selected={data.state === "unknown"} onClick={() => setData(d => ({ ...d, state: "unknown" }))} />
+               <div className="relative">
+-                <select value={data.state==="unknown"?"":data.state}
+-                  onChange={e => setData(d => ({ ...d, state:e.target.value||"unknown" }))}
++                <select value={data.state === "unknown" ? "" : data.state}
++                  onChange={e => setData(d => ({ ...d, state: e.target.value || "unknown" }))}
+                   className="w-full appearance-none bg-white border-2 border-gray-100 hover:border-green-200 rounded-2xl px-4 py-3.5 text-sm text-gray-700 font-medium focus:outline-none focus:border-green-400 transition-colors pr-10"
+-                  style={{ minHeight:"52px" }}>
+-                  <option value="">{tx("selectState",lang)}</option>
++                  style={{ minHeight: "52px" }}>
++                  <option value="">{tx("selectState", lang)}</option>
+                   {STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                 </select>
+                 <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300 pointer-events-none" />
+@@ -683,7 +807,7 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
+               <button onClick={() => handleSubmit(data)} disabled={loading}
+                 className="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white font-black rounded-2xl py-4 text-sm shadow-lg shadow-green-200/60 transition-all active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 mt-2">
+                 <Search className="w-4 h-4" />
+-                {tx("findBtn",lang)}
++                {tx("findBtn", lang)}
+               </button>
+             </>
+           )}
+@@ -692,7 +816,7 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
+ 
+       {step === 0 && (
+         <p className="text-center text-[11px] text-gray-300 mt-4">
+-          {lang==="hi" ? "8 αñåαñ╕αñ╛αñ¿ αñòαñªαñ« ┬╖ αñòαÑïαñê αñƒαñ╛αñçαñ¬αñ┐αñéαñù αñ¿αñ╣αÑÇαñé ┬╖ αññαÑüαñ░αñéαññ αñ¬αñ░αñ┐αñúαñ╛αñ«" : "8 quick taps ┬╖ No typing ┬╖ Instant results"}
++          {lang === "hi" ? "8 αñåαñ╕αñ╛αñ¿ αñòαñªαñ« ┬╖ αñòαÑïαñê αñƒαñ╛αñçαñ¬αñ┐αñéαñù αñ¿αñ╣αÑÇαñé ┬╖ αññαÑüαñ░αñéαññ αñ¬αñ░αñ┐αñúαñ╛αñ«" : "8 quick taps ┬╖ No typing ┬╖ Instant results"}
+         </p>
+       )}
+     </div>

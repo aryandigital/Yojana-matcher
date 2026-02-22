@@ -29,170 +29,170 @@ interface WizardData {
 }
 
 const DEFAULT: WizardData = {
-  purpose:"", age:0, gender:"", employment:"",
-  state:"unknown", income_lpa:-1, category:"", education:"",
+  purpose: "", age: 0, gender: "", employment: "",
+  state: "unknown", income_lpa: -1, category: "", education: "",
 };
 
-const STEPS = ["purpose","age","gender","employment","category","income","education","state"] as const;
+const STEPS = ["purpose", "age", "gender", "employment", "category", "income", "education", "state"] as const;
 type Step = typeof STEPS[number];
 
 // ── Wizard data ──────────────────────────────────────────────────────
 const PURPOSES = [
-  { value:"business",  emoji:"🚀", labelKey:"purposeBusiness" as const },
-  { value:"farming",   emoji:"🌾", labelKey:"purposeFarming"  as const },
-  { value:"education", emoji:"🎓", labelKey:"purposeEdu"      as const },
-  { value:"health",    emoji:"🏥", labelKey:"purposeHealth"   as const },
-  { value:"housing",   emoji:"🏠", labelKey:"purposeHousing"  as const },
-  { value:"skill",     emoji:"⚙️", labelKey:"purposeSkill"    as const },
-  { value:"invest",    emoji:"📈", labelKey:"purposeInvest"   as const },
-  { value:"all",       emoji:"🌐", labelKey:"purposeAll"      as const },
+  { value: "business", emoji: "🚀", labelKey: "purposeBusiness" as const },
+  { value: "farming", emoji: "🌾", labelKey: "purposeFarming" as const },
+  { value: "education", emoji: "🎓", labelKey: "purposeEdu" as const },
+  { value: "health", emoji: "🏥", labelKey: "purposeHealth" as const },
+  { value: "housing", emoji: "🏠", labelKey: "purposeHousing" as const },
+  { value: "skill", emoji: "⚙️", labelKey: "purposeSkill" as const },
+  { value: "invest", emoji: "📈", labelKey: "purposeInvest" as const },
+  { value: "all", emoji: "🌐", labelKey: "purposeAll" as const },
 ];
 
 const AGE_BANDS = [
-  { label:{ en:"Under 18", hi:"18 से कम" },    emoji:"🧒", mid:14 },
-  { label:{ en:"18 – 25",  hi:"18 – 25" },      emoji:"🎓", mid:21 },
-  { label:{ en:"26 – 35",  hi:"26 – 35" },      emoji:"💼", mid:30 },
-  { label:{ en:"36 – 50",  hi:"36 – 50" },      emoji:"🏠", mid:43 },
-  { label:{ en:"51 – 60",  hi:"51 – 60" },      emoji:"🌿", mid:55 },
-  { label:{ en:"60+",      hi:"60 से ऊपर" },     emoji:"🧓", mid:65 },
+  { label: { en: "Under 18", hi: "18 से कम" }, emoji: "🧒", mid: 14 },
+  { label: { en: "18 – 25", hi: "18 – 25" }, emoji: "🎓", mid: 21 },
+  { label: { en: "26 – 35", hi: "26 – 35" }, emoji: "💼", mid: 30 },
+  { label: { en: "36 – 50", hi: "36 – 50" }, emoji: "🏠", mid: 43 },
+  { label: { en: "51 – 60", hi: "51 – 60" }, emoji: "🌿", mid: 55 },
+  { label: { en: "60+", hi: "60 से ऊपर" }, emoji: "🧓", mid: 65 },
 ];
 
 const GENDERS = [
-  { label:{ en:"Male",   hi:"पुरुष" }, emoji:"👨", value:"male"   },
-  { label:{ en:"Female", hi:"महिला" }, emoji:"👩", value:"female" },
-  { label:{ en:"Other",  hi:"अन्य" },  emoji:"🧑", value:"other"  },
+  { label: { en: "Male", hi: "पुरुष" }, emoji: "👨", value: "male" },
+  { label: { en: "Female", hi: "महिला" }, emoji: "👩", value: "female" },
+  { label: { en: "Other", hi: "अन्य" }, emoji: "🧑", value: "other" },
 ];
 
 // Employment options with visual illustration gradients
 const EMPLOYMENT_OPTIONS = [
   {
-    value:"government", emoji:"🏛️",
-    gradient:"from-blue-600 to-indigo-600",
-    badge:{ en:"⚠️ Some schemes excluded", hi:"⚠️ कुछ योजनाएं लागू नहीं" },
-    label:{ en:"Government Employee",       hi:"सरकारी कर्मचारी" },
-    desc:{ en:"Central/State govt job",      hi:"केंद्र/राज्य सरकार नौकरी" },
+    value: "government", emoji: "🏛️",
+    gradient: "from-blue-600 to-indigo-600",
+    badge: { en: "⚠️ Some schemes excluded", hi: "⚠️ कुछ योजनाएं लागू नहीं" },
+    label: { en: "Government Employee", hi: "सरकारी कर्मचारी" },
+    desc: { en: "Central/State govt job", hi: "केंद्र/राज्य सरकार नौकरी" },
   },
   {
-    value:"private", emoji:"🏢",
-    gradient:"from-slate-600 to-gray-700",
-    badge:{ en:"✅ Most schemes apply", hi:"✅ अधिकांश योजनाएं लागू" },
-    label:{ en:"Private Sector Employee",    hi:"प्राइवेट कर्मचारी" },
-    desc:{ en:"Company / corporate job",     hi:"कंपनी / कॉर्पोरेट नौकरी" },
+    value: "private", emoji: "🏢",
+    gradient: "from-slate-600 to-gray-700",
+    badge: { en: "✅ Most schemes apply", hi: "✅ अधिकांश योजनाएं लागू" },
+    label: { en: "Private Sector Employee", hi: "प्राइवेट कर्मचारी" },
+    desc: { en: "Company / corporate job", hi: "कंपनी / कॉर्पोरेट नौकरी" },
   },
   {
-    value:"self_employed", emoji:"🏪",
-    gradient:"from-orange-500 to-amber-500",
-    badge:{ en:"✅ Business loans & subsidies", hi:"✅ बिज़नेस लोन और सब्सिडी" },
-    label:{ en:"Self-Employed / Business",   hi:"स्व-रोजगार / व्यापार" },
-    desc:{ en:"Own shop/business/profession",hi:"खुद का काम/व्यापार" },
+    value: "self_employed", emoji: "🏪",
+    gradient: "from-orange-500 to-amber-500",
+    badge: { en: "✅ Business loans & subsidies", hi: "✅ बिज़नेस लोन और सब्सिडी" },
+    label: { en: "Self-Employed / Business", hi: "स्व-रोजगार / व्यापार" },
+    desc: { en: "Own shop/business/profession", hi: "खुद का काम/व्यापार" },
   },
   {
-    value:"gig", emoji:"🛵",
-    gradient:"from-teal-500 to-cyan-500",
-    badge:{ en:"✅ e-SHRAM + gig benefits", hi:"✅ e-श्रम + गिग लाभ" },
-    label:{ en:"Gig / Freelance Worker",     hi:"गिग / फ्रीलांस" },
-    desc:{ en:"Ola, Uber, Swiggy, Upwork…", hi:"Ola, Uber, Swiggy, Upwork…" },
+    value: "gig", emoji: "🛵",
+    gradient: "from-teal-500 to-cyan-500",
+    badge: { en: "✅ e-SHRAM + gig benefits", hi: "✅ e-श्रम + गिग लाभ" },
+    label: { en: "Gig / Freelance Worker", hi: "गिग / फ्रीलांस" },
+    desc: { en: "Ola, Uber, Swiggy, Upwork…", hi: "Ola, Uber, Swiggy, Upwork…" },
   },
   {
-    value:"farmer", emoji:"🌾",
-    gradient:"from-green-500 to-lime-500",
-    badge:{ en:"✅ PM-KISAN + crop cover", hi:"✅ PM-किसान + फसल बीमा" },
-    label:{ en:"Farmer / Agricultural Worker",hi:"किसान / कृषि मजदूर" },
-    desc:{ en:"Own or leased farmland",      hi:"खुद की या पट्टे की जमीन" },
+    value: "farmer", emoji: "🌾",
+    gradient: "from-green-500 to-lime-500",
+    badge: { en: "✅ PM-KISAN + crop cover", hi: "✅ PM-किसान + फसल बीमा" },
+    label: { en: "Farmer / Agricultural Worker", hi: "किसान / कृषि मजदूर" },
+    desc: { en: "Own or leased farmland", hi: "खुद की या पट्टे की जमीन" },
   },
   {
-    value:"daily_wage", emoji:"🪚",
-    gradient:"from-yellow-500 to-orange-400",
-    badge:{ en:"✅ e-SHRAM + APY eligible", hi:"✅ e-श्रम + APY पात्र" },
-    label:{ en:"Daily Wage / Construction",  hi:"दिहाड़ी / निर्माण" },
-    desc:{ en:"Labour, helper, mason…",      hi:"मजदूर, सहायक, राजमिस्त्री…" },
+    value: "daily_wage", emoji: "🪚",
+    gradient: "from-yellow-500 to-orange-400",
+    badge: { en: "✅ e-SHRAM + APY eligible", hi: "✅ e-श्रम + APY पात्र" },
+    label: { en: "Daily Wage / Construction", hi: "दिहाड़ी / निर्माण" },
+    desc: { en: "Labour, helper, mason…", hi: "मजदूर, सहायक, राजमिस्त्री…" },
   },
   {
-    value:"student", emoji:"📚",
-    gradient:"from-purple-500 to-violet-500",
-    badge:{ en:"✅ Scholarships & training", hi:"✅ छात्रवृत्ति और प्रशिक्षण" },
-    label:{ en:"Student",                    hi:"छात्र" },
-    desc:{ en:"School / college / university",hi:"स्कूल/कॉलेज/यूनिवर्सिटी" },
+    value: "student", emoji: "📚",
+    gradient: "from-purple-500 to-violet-500",
+    badge: { en: "✅ Scholarships & training", hi: "✅ छात्रवृत्ति और प्रशिक्षण" },
+    label: { en: "Student", hi: "छात्र" },
+    desc: { en: "School / college / university", hi: "स्कूल/कॉलेज/यूनिवर्सिटी" },
   },
   {
-    value:"unemployed", emoji:"🔍",
-    gradient:"from-rose-500 to-pink-500",
-    badge:{ en:"✅ Skill training & loans", hi:"✅ कौशल प्रशिक्षण और लोन" },
-    label:{ en:"Unemployed / Homemaker",     hi:"बेरोजगार / गृहिणी" },
-    desc:{ en:"Looking for work or at home", hi:"काम की तलाश में या घर पर" },
+    value: "unemployed", emoji: "🔍",
+    gradient: "from-rose-500 to-pink-500",
+    badge: { en: "✅ Skill training & loans", hi: "✅ कौशल प्रशिक्षण और लोन" },
+    label: { en: "Unemployed / Homemaker", hi: "बेरोजगार / गृहिणी" },
+    desc: { en: "Looking for work or at home", hi: "काम की तलाश में या घर पर" },
   },
 ];
 
 const CATEGORIES = [
-  { label:{ en:"General", hi:"सामान्य" }, desc:{ en:"No reservation", hi:"कोई आरक्षण नहीं" },       emoji:"🏛️", value:"general" },
-  { label:{ en:"OBC",     hi:"OBC" },     desc:{ en:"Other Backward Classes", hi:"अन्य पिछड़ा वर्ग" }, emoji:"📋", value:"OBC" },
-  { label:{ en:"SC",      hi:"SC" },      desc:{ en:"Scheduled Caste", hi:"अनुसूचित जाति" },          emoji:"⚖️", value:"SC" },
-  { label:{ en:"ST",      hi:"ST" },      desc:{ en:"Scheduled Tribe", hi:"अनुसूचित जनजाति" },        emoji:"🌿", value:"ST" },
+  { label: { en: "General", hi: "सामान्य" }, desc: { en: "No reservation", hi: "कोई आरक्षण नहीं" }, emoji: "🏛️", value: "general" },
+  { label: { en: "OBC", hi: "OBC" }, desc: { en: "Other Backward Classes", hi: "अन्य पिछड़ा वर्ग" }, emoji: "📋", value: "OBC" },
+  { label: { en: "SC", hi: "SC" }, desc: { en: "Scheduled Caste", hi: "अनुसूचित जाति" }, emoji: "⚖️", value: "SC" },
+  { label: { en: "ST", hi: "ST" }, desc: { en: "Scheduled Tribe", hi: "अनुसूचित जनजाति" }, emoji: "🌿", value: "ST" },
 ];
 
 const INCOME_BANDS = [
-  { label:{ en:"No income",     hi:"कोई आमदनी नहीं" },  emoji:"🔍", value:0,   desc:{ en:"Unemployed / Student", hi:"बेरोजगार / छात्र" } },
-  { label:{ en:"Under ₹1 LPA", hi:"₹1 लाख से कम" },   emoji:"💧", value:0.8, desc:{ en:"Below poverty line",   hi:"गरीबी रेखा से नीचे" } },
-  { label:{ en:"₹1 – 2.5 LPA", hi:"₹1 – 2.5 लाख" },   emoji:"🌱", value:1.8, desc:{ en:"Low income",           hi:"कम आमदनी" } },
-  { label:{ en:"₹2.5 – 5 LPA", hi:"₹2.5 – 5 लाख" },   emoji:"🌿", value:3.5, desc:{ en:"Lower-middle",         hi:"निम्न मध्यम वर्ग" } },
-  { label:{ en:"₹5 – 10 LPA",  hi:"₹5 – 10 लाख" },     emoji:"💼", value:7.5, desc:{ en:"Middle income",        hi:"मध्यम आमदनी" } },
-  { label:{ en:"₹10 – 18 LPA", hi:"₹10 – 18 लाख" },    emoji:"🏢", value:14,  desc:{ en:"Upper-middle",         hi:"उच्च मध्यम वर्ग" } },
-  { label:{ en:"Above ₹18 LPA",hi:"₹18 लाख से ऊपर" },  emoji:"🏆", value:25,  desc:{ en:"High income",          hi:"उच्च आमदनी" } },
+  { label: { en: "No income", hi: "कोई आमदनी नहीं" }, emoji: "🔍", value: 0, desc: { en: "Unemployed / Student", hi: "बेरोजगार / छात्र" } },
+  { label: { en: "Under ₹1 LPA", hi: "₹1 लाख से कम" }, emoji: "💧", value: 0.8, desc: { en: "Below poverty line", hi: "गरीबी रेखा से नीचे" } },
+  { label: { en: "₹1 – 2.5 LPA", hi: "₹1 – 2.5 लाख" }, emoji: "🌱", value: 1.8, desc: { en: "Low income", hi: "कम आमदनी" } },
+  { label: { en: "₹2.5 – 5 LPA", hi: "₹2.5 – 5 लाख" }, emoji: "🌿", value: 3.5, desc: { en: "Lower-middle", hi: "निम्न मध्यम वर्ग" } },
+  { label: { en: "₹5 – 10 LPA", hi: "₹5 – 10 लाख" }, emoji: "💼", value: 7.5, desc: { en: "Middle income", hi: "मध्यम आमदनी" } },
+  { label: { en: "₹10 – 18 LPA", hi: "₹10 – 18 लाख" }, emoji: "🏢", value: 14, desc: { en: "Upper-middle", hi: "उच्च मध्यम वर्ग" } },
+  { label: { en: "Above ₹18 LPA", hi: "₹18 लाख से ऊपर" }, emoji: "🏆", value: 25, desc: { en: "High income", hi: "उच्च आमदनी" } },
 ];
 
 const EDUCATION_LEVELS = [
-  { label:{ en:"Below 10th",      hi:"10वीं से कम" },   emoji:"📚", value:"below 10th"   },
-  { label:{ en:"10th Pass",       hi:"10वीं पास" },      emoji:"📗", value:"10th pass"    },
-  { label:{ en:"12th Pass",       hi:"12वीं पास" },      emoji:"📘", value:"12th pass"    },
-  { label:{ en:"Graduation",      hi:"स्नातक" },         emoji:"🎓", value:"graduation"   },
-  { label:{ en:"Post Graduation", hi:"परास्नातक" },      emoji:"🔬", value:"postgraduate" },
+  { label: { en: "Below 10th", hi: "10वीं से कम" }, emoji: "📚", value: "below 10th" },
+  { label: { en: "10th Pass", hi: "10वीं पास" }, emoji: "📗", value: "10th pass" },
+  { label: { en: "12th Pass", hi: "12वीं पास" }, emoji: "📘", value: "12th pass" },
+  { label: { en: "Graduation", hi: "स्नातक" }, emoji: "🎓", value: "graduation" },
+  { label: { en: "Post Graduation", hi: "परास्नातक" }, emoji: "🔬", value: "postgraduate" },
 ];
 
 const STATES = [
-  "Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat",
-  "Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh",
-  "Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab",
-  "Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh",
-  "Uttarakhand","West Bengal","Delhi","Chandigarh","Puducherry","Jammu & Kashmir","Ladakh",
+  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat",
+  "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh",
+  "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
+  "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh",
+  "Uttarakhand", "West Bengal", "Delhi", "Chandigarh", "Puducherry", "Jammu & Kashmir", "Ladakh",
 ];
 
 // State-wise doorstep service portals
 const DOORSTEP_LINKS: Record<string, { name: string; url: string; nameHi: string }> = {
-  "Delhi":           { name:"Delhi Doorstep Services",   nameHi:"दिल्ली डोरस्टेप सेवाएं",   url:"https://edistrict.delhigovt.nic.in" },
-  "Maharashtra":     { name:"Aaple Sarkar",               nameHi:"आपले सरकार",               url:"https://aaplesarkar.mahaonline.gov.in" },
-  "Uttar Pradesh":   { name:"UP e-Seva / Jansewa Kendra", nameHi:"UP e-सेवा / जनसेवा केंद्र",url:"https://edistrict.up.gov.in" },
-  "Bihar":           { name:"RTPS Bihar",                 nameHi:"RTPS बिहार",               url:"https://serviceonline.bihar.gov.in" },
-  "Rajasthan":       { name:"Rajasthan Single Sign On",   nameHi:"राजस्थान SSO पोर्टल",      url:"https://sso.rajasthan.gov.in" },
-  "Madhya Pradesh":  { name:"MP e-Nagar Palika",          nameHi:"MP e-नगर पालिका",          url:"https://mpedistrict.gov.in" },
-  "Tamil Nadu":      { name:"TN e-Sevai",                 nameHi:"TN e-सेवाई",               url:"https://www.tnesevai.tn.gov.in" },
-  "Telangana":       { name:"TS Mee Seva",                nameHi:"TS मी सेवा",               url:"https://ts.meeseva.telangana.gov.in" },
-  "Karnataka":       { name:"Atalji Janasnehi Kendra",    nameHi:"अटलजी जनस्नेही केंद्र",   url:"https://nadakacheri.karnataka.gov.in" },
-  "Gujarat":         { name:"Digital Gujarat",            nameHi:"डिजिटल गुजरात",            url:"https://digitalgujarat.gov.in" },
-  "West Bengal":     { name:"Duare Sarkar",               nameHi:"दुआरे सरकार",              url:"https://wb.gov.in/government-schemes" },
-  "Kerala":          { name:"Kerala Akshaya e-Kendra",    nameHi:"केरल अक्षय e-केंद्र",     url:"https://akshaya.kerala.gov.in" },
-  "Haryana":         { name:"Antyodaya Saral Portal",     nameHi:"अंत्योदय सरल पोर्टल",    url:"https://saralharyana.gov.in" },
-  "Punjab":          { name:"Punjab Sewa Kendra",         nameHi:"पंजाब सेवा केंद्र",       url:"https://connect.punjab.gov.in" },
-  "Assam":           { name:"Assam e-District",           nameHi:"असम e-जिला",               url:"https://edistrict.assam.gov.in" },
-  "Andhra Pradesh":  { name:"AP MeeSeva",                 nameHi:"AP MeeSeva",               url:"https://www.meeseva.gov.in" },
-  "Odisha":          { name:"Odisha e-District",          nameHi:"ओडिशा e-जिला",            url:"https://edistrict.odisha.gov.in" },
-  "Jharkhand":       { name:"Jharkhand e-District",       nameHi:"झारखंड e-जिला",           url:"https://jharkhand.gov.in/eDistrict" },
-  "Chhattisgarh":    { name:"CG e-District",              nameHi:"CG e-जिला",                url:"https://edistrict.cgstate.gov.in" },
-  "Himachal Pradesh":{ name:"HP e-Samadhan",              nameHi:"HP e-समाधान",              url:"https://edistrict.hp.gov.in" },
+  "Delhi": { name: "Delhi Doorstep Services", nameHi: "दिल्ली डोरस्टेप सेवाएं", url: "https://edistrict.delhigovt.nic.in" },
+  "Maharashtra": { name: "Aaple Sarkar", nameHi: "आपले सरकार", url: "https://aaplesarkar.mahaonline.gov.in" },
+  "Uttar Pradesh": { name: "UP e-Seva / Jansewa Kendra", nameHi: "UP e-सेवा / जनसेवा केंद्र", url: "https://edistrict.up.gov.in" },
+  "Bihar": { name: "RTPS Bihar", nameHi: "RTPS बिहार", url: "https://serviceonline.bihar.gov.in" },
+  "Rajasthan": { name: "Rajasthan Single Sign On", nameHi: "राजस्थान SSO पोर्टल", url: "https://sso.rajasthan.gov.in" },
+  "Madhya Pradesh": { name: "MP e-Nagar Palika", nameHi: "MP e-नगर पालिका", url: "https://mpedistrict.gov.in" },
+  "Tamil Nadu": { name: "TN e-Sevai", nameHi: "TN e-सेवाई", url: "https://www.tnesevai.tn.gov.in" },
+  "Telangana": { name: "TS Mee Seva", nameHi: "TS मी सेवा", url: "https://ts.meeseva.telangana.gov.in" },
+  "Karnataka": { name: "Atalji Janasnehi Kendra", nameHi: "अटलजी जनस्नेही केंद्र", url: "https://nadakacheri.karnataka.gov.in" },
+  "Gujarat": { name: "Digital Gujarat", nameHi: "डिजिटल गुजरात", url: "https://digitalgujarat.gov.in" },
+  "West Bengal": { name: "Duare Sarkar", nameHi: "दुआरे सरकार", url: "https://wb.gov.in/government-schemes" },
+  "Kerala": { name: "Kerala Akshaya e-Kendra", nameHi: "केरल अक्षय e-केंद्र", url: "https://akshaya.kerala.gov.in" },
+  "Haryana": { name: "Antyodaya Saral Portal", nameHi: "अंत्योदय सरल पोर्टल", url: "https://saralharyana.gov.in" },
+  "Punjab": { name: "Punjab Sewa Kendra", nameHi: "पंजाब सेवा केंद्र", url: "https://connect.punjab.gov.in" },
+  "Assam": { name: "Assam e-District", nameHi: "असम e-जिला", url: "https://edistrict.assam.gov.in" },
+  "Andhra Pradesh": { name: "AP MeeSeva", nameHi: "AP MeeSeva", url: "https://www.meeseva.gov.in" },
+  "Odisha": { name: "Odisha e-District", nameHi: "ओडिशा e-जिला", url: "https://edistrict.odisha.gov.in" },
+  "Jharkhand": { name: "Jharkhand e-District", nameHi: "झारखंड e-जिला", url: "https://jharkhand.gov.in/eDistrict" },
+  "Chhattisgarh": { name: "CG e-District", nameHi: "CG e-जिला", url: "https://edistrict.cgstate.gov.in" },
+  "Himachal Pradesh": { name: "HP e-Samadhan", nameHi: "HP e-समाधान", url: "https://edistrict.hp.gov.in" },
 };
 
 // Category filter config
 const CATEGORY_FILTERS: { key: SchemeCategory | "All"; label: { en: string; hi: string }; emoji: string }[] = [
-  { key:"All",        label:{ en:"All",        hi:"सभी" },      emoji:"✨" },
-  { key:"Business",   label:{ en:"Business",   hi:"व्यापार" },  emoji:"🚀" },
-  { key:"Insurance",  label:{ en:"Insurance",  hi:"बीमा" },     emoji:"🛡️" },
-  { key:"Investment", label:{ en:"Investment", hi:"निवेश" },    emoji:"📈" },
-  { key:"Agriculture",label:{ en:"Farming",    hi:"कृषि" },     emoji:"🌾" },
-  { key:"Health",     label:{ en:"Health",     hi:"स्वास्थ्य" },emoji:"💊" },
-  { key:"Education",  label:{ en:"Education",  hi:"शिक्षा" },   emoji:"🎓" },
-  { key:"Pension",    label:{ en:"Pension",    hi:"पेंशन" },    emoji:"🧓" },
-  { key:"Welfare",    label:{ en:"Welfare",    hi:"कल्याण" },   emoji:"🪪" },
-  { key:"Housing",    label:{ en:"Housing",    hi:"आवास" },     emoji:"🏠" },
-  { key:"Banking",    label:{ en:"Banking",    hi:"बैंकिंग" },  emoji:"🏧" },
+  { key: "All", label: { en: "All", hi: "सभी" }, emoji: "✨" },
+  { key: "Business", label: { en: "Business", hi: "व्यापार" }, emoji: "🚀" },
+  { key: "Insurance", label: { en: "Insurance", hi: "बीमा" }, emoji: "🛡️" },
+  { key: "Investment", label: { en: "Investment", hi: "निवेश" }, emoji: "📈" },
+  { key: "Agriculture", label: { en: "Farming", hi: "कृषि" }, emoji: "🌾" },
+  { key: "Health", label: { en: "Health", hi: "स्वास्थ्य" }, emoji: "💊" },
+  { key: "Education", label: { en: "Education", hi: "शिक्षा" }, emoji: "🎓" },
+  { key: "Pension", label: { en: "Pension", hi: "पेंशन" }, emoji: "🧓" },
+  { key: "Welfare", label: { en: "Welfare", hi: "कल्याण" }, emoji: "🪪" },
+  { key: "Housing", label: { en: "Housing", hi: "आवास" }, emoji: "🏠" },
+  { key: "Banking", label: { en: "Banking", hi: "बैंकिंग" }, emoji: "🏧" },
 ];
 
 // ── Sub-components ───────────────────────────────────────────────────
@@ -206,8 +206,8 @@ function OptionCard({ emoji, label, desc, selected, onClick }: {
         ${selected ? "border-green-500 bg-green-50 shadow-md shadow-green-100" : "border-gray-100 bg-white hover:border-green-200 hover:bg-green-50/40"}`}>
       <span className="text-2xl w-8 text-center flex-shrink-0">{emoji}</span>
       <div className="flex-1 min-w-0">
-        <p className={`text-sm font-bold leading-snug ${selected ? "text-green-700" : "text-gray-800"}`}>{label}</p>
-        {desc && <p className="text-[11px] text-gray-400 mt-0.5">{desc}</p>}
+        <span className={`block text-sm font-bold leading-snug ${selected ? "text-green-700" : "text-gray-800"}`}>{label}</span>
+        {desc && <span className="block text-[11px] text-gray-400 mt-0.5">{desc}</span>}
       </div>
       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${selected ? "border-green-500 bg-green-500" : "border-gray-200"}`}>
         {selected && <span className="w-2.5 h-2.5 bg-white rounded-full block" />}
@@ -231,7 +231,7 @@ function EmploymentCard({
         <div className="absolute -top-3 -right-3 w-16 h-16 bg-white/10 rounded-full" />
         <div className="absolute -bottom-4 -left-2 w-12 h-12 bg-white/10 rounded-full" />
         <span className="text-3xl relative z-10" role="img">{option.emoji}</span>
-        <p className="text-white font-black text-sm relative z-10">{option.label[lang]}</p>
+        <span className="block text-white font-black text-sm relative z-10">{option.label[lang]}</span>
         {selected && (
           <span className="ml-auto bg-white/30 rounded-full p-0.5 relative z-10">
             <CheckCircle2 className="w-4 h-4 text-white" />
@@ -240,8 +240,8 @@ function EmploymentCard({
       </div>
       {/* Body */}
       <div className={`px-4 py-2.5 flex items-center justify-between gap-2 ${selected ? "bg-green-50" : "bg-white"}`}>
-        <p className="text-[11px] text-gray-500">{option.desc[lang]}</p>
-        <span className="text-[10px] font-bold text-gray-400 whitespace-nowrap">{option.badge[lang]}</span>
+        <span className="block text-[11px] text-gray-500">{option.desc[lang]}</span>
+        <span className="inline-block text-[10px] font-bold text-gray-400 whitespace-nowrap">{option.badge[lang]}</span>
       </div>
     </button>
   );
@@ -347,7 +347,7 @@ function SchemeCard({ scheme, profile, isTop, lang }: {
 
         {/* How to apply accordion */}
         <button type="button" onClick={() => setShowSteps(v => !v)}
-          style={{ minHeight:"auto", minWidth:"auto" }}
+          style={{ minHeight: "auto", minWidth: "auto" }}
           className="w-full flex items-center justify-between px-4 py-3 bg-blue-50 border border-blue-100 rounded-xl mb-3 hover:bg-blue-100 transition-colors">
           <span className="text-xs font-bold text-blue-700">{tx("howApply", lang)}</span>
           <ChevronDown className={`w-4 h-4 text-blue-500 transition-transform ${showSteps ? "rotate-180" : ""}`} />
@@ -382,7 +382,7 @@ function SchemeCard({ scheme, profile, isTop, lang }: {
 function Skeleton({ lang }: { lang: Lang }) {
   return (
     <div className="space-y-4 animate-fadeIn">
-      {[0,1,2].map(i => (
+      {[0, 1, 2].map(i => (
         <div key={i} className="bg-white rounded-2xl border border-gray-100 overflow-hidden" style={{ opacity: 1 - i * 0.2 }}>
           <div className="skeleton h-24 w-full" />
           <div className="p-5 space-y-3">
@@ -404,7 +404,7 @@ function Skeleton({ lang }: { lang: Lang }) {
 
 function buildShareText(schemes: Scheme[], lang: Lang): string {
   const lines = schemes.slice(0, 3).map((s, i) =>
-    `${i+1}. *${lang==="hi"?s.nameHi:s.name}* — ${lang==="hi"?s.estimatedBenefitHi:s.estimatedBenefit}`
+    `${i + 1}. *${lang === "hi" ? s.nameHi : s.name}* — ${lang === "hi" ? s.estimatedBenefitHi : s.estimatedBenefit}`
   );
   if (lang === "hi") {
     return `🇮🇳 *सरकारी योजना मिलान*\n\nमुझे ये योजनाएं मिलीं:\n\n${lines.join("\n")}\n\n✅ अपनी योजना खोजें: yojana-matcher.vercel.app`;
@@ -414,15 +414,15 @@ function buildShareText(schemes: Scheme[], lang: Lang): string {
 
 // ── MAIN COMPONENT ───────────────────────────────────────────────────
 export default function YojanaForm({ lang }: { lang: Lang }) {
-  const [step, setStep]           = useState(0);
-  const [data, setData]           = useState<WizardData>(DEFAULT);
-  const [loading, setLoading]     = useState(false);
-  const [result, setResult]       = useState<ApiResponse | null>(null);
-  const [apiError, setApiError]   = useState("");
+  const [step, setStep] = useState(0);
+  const [data, setData] = useState<WizardData>(DEFAULT);
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<ApiResponse | null>(null);
+  const [apiError, setApiError] = useState("");
   const [activeFilter, setActiveFilter] = useState<SchemeCategory | "All">("All");
 
   const totalSteps = STEPS.length;
-  const stepName   = STEPS[step] as Step;
+  const stepName = STEPS[step] as Step;
 
   const pick = useCallback((patch: Partial<WizardData>) => {
     const next = { ...data, ...patch };
@@ -438,12 +438,12 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
 
     const ageBand = AGE_BANDS.find(b => b.mid === finalData.age);
     const incBand = INCOME_BANDS.find(b => b.value === finalData.income_lpa);
-    const empOpt  = EMPLOYMENT_OPTIONS.find(e => e.value === finalData.employment);
+    const empOpt = EMPLOYMENT_OPTIONS.find(e => e.value === finalData.employment);
     const userText = [
-      `I am a ${ageBand?.label.en ?? (finalData.age+" yrs old")} ${finalData.gender},`,
+      `I am a ${ageBand?.label.en ?? (finalData.age + " yrs old")} ${finalData.gender},`,
       `${finalData.category} category,`,
       `employment: ${empOpt?.label.en ?? (finalData.employment || "not specified")},`,
-      `income ${incBand?.label.en ?? (finalData.income_lpa+" LPA")},`,
+      `income ${incBand?.label.en ?? (finalData.income_lpa + " LPA")},`,
       `education: ${finalData.education},`,
       `from ${finalData.state}.`,
       `My main goal is ${finalData.purpose}.`,
@@ -453,10 +453,10 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
     const tid = setTimeout(() => ctrl.abort(), 28000);
     try {
       const res = await fetch("/api/match", {
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body:JSON.stringify({ userText, purpose:finalData.purpose, employment:finalData.employment }),
-        signal:ctrl.signal,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userText, purpose: finalData.purpose, employment: finalData.employment }),
+        signal: ctrl.signal,
       });
       clearTimeout(tid);
       const json: ApiResponse = await res.json();
@@ -464,7 +464,7 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
       else setResult(json);
     } catch (e: unknown) {
       clearTimeout(tid);
-      setApiError(e instanceof DOMException && e.name==="AbortError" ? tx("timeout",lang) : tx("networkError",lang));
+      setApiError(e instanceof DOMException && e.name === "AbortError" ? tx("timeout", lang) : tx("networkError", lang));
     } finally {
       setLoading(false);
     }
@@ -482,11 +482,11 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
     <div role="alert" className="bg-red-50 border border-red-100 rounded-2xl p-5 flex gap-3 animate-fadeIn">
       <AlertCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
       <div>
-        <p className="font-bold text-red-700 text-sm">{tx("errorTitle",lang)}</p>
+        <p className="font-bold text-red-700 text-sm">{tx("errorTitle", lang)}</p>
         <p className="text-red-400 text-xs mt-0.5">{apiError}</p>
-        <button onClick={handleReset} style={{ minHeight:"auto", minWidth:"auto" }}
+        <button onClick={handleReset} style={{ minHeight: "auto", minWidth: "auto" }}
           className="mt-3 text-xs font-bold text-red-600 bg-red-100 px-3 py-1.5 rounded-xl">
-          {tx("tryAgain",lang)}
+          {tx("tryAgain", lang)}
         </button>
       </div>
     </div>
@@ -495,9 +495,9 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
   // ── Results ────────────────────────────────────────────────────────
   if (result?.schemes) {
     const allSchemes = result.schemes;
-    const profile    = result.profile!;
-    const shareText  = buildShareText(allSchemes, lang);
-    const waUrl      = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+    const profile = result.profile!;
+    const shareText = buildShareText(allSchemes, lang);
+    const waUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
     // Instagram stories doesn't have a direct deep link — we use navigator.share for native sharing
     const [copied, setCopied] = useState(false);
     const handleCopyLink = async () => {
@@ -505,13 +505,13 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
         await navigator.clipboard.writeText("https://yojana-matcher.vercel.app");
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
-      } catch {}
+      } catch { }
     };
     const handleNativeShare = async () => {
       const text = shareText;
       if (navigator.share) {
         try { await navigator.share({ title: "Yojana Matcher", text, url: "https://yojana-matcher.vercel.app" }); }
-        catch {}
+        catch { }
       } else { window.open(waUrl, "_blank"); }
     };
 
@@ -531,10 +531,10 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
           <div className="relative px-4 py-4">
             <div className="flex items-center justify-between gap-3 mb-3">
               <div>
-                <p className="text-white font-black text-base">
-                  {allSchemes.length} {tx("matched",lang)} 🎉
-                </p>
-                <p className="text-green-100 text-[11px]">{tx("matchedSub",lang)}</p>
+                <span className="block text-white font-black text-base">
+                  {allSchemes.length} {tx("matched", lang)} 🎉
+                </span>
+                <span className="block text-green-100 text-[11px]">{tx("matchedSub", lang)}</span>
               </div>
             </div>
             {/* Share row — 3 big prominent buttons */}
@@ -542,25 +542,24 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
               {/* WhatsApp */}
               <a href={waUrl} target="_blank" rel="noopener noreferrer"
                 className="flex flex-col items-center gap-1.5 bg-[#25D366] hover:bg-[#20bc5a] rounded-xl py-2.5 transition-colors text-white"
-                style={{ minHeight:"auto", minWidth:"auto" }}>
-                <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                style={{ minHeight: "auto", minWidth: "auto" }}>
+                <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
                 <span className="text-[10px] font-black">WhatsApp</span>
               </a>
               {/* Story / Native share */}
               <button type="button" onClick={handleNativeShare}
                 className="flex flex-col items-center gap-1.5 bg-gradient-to-br from-pink-500 via-rose-500 to-orange-400 hover:opacity-90 rounded-xl py-2.5 transition-all text-white"
-                style={{ minHeight:"auto", minWidth:"auto" }}>
+                style={{ minHeight: "auto", minWidth: "auto" }}>
                 <Share2 className="w-5 h-5" />
-                <span className="text-[10px] font-black">{lang==="hi"?"स्टोरी शेयर":"Share Story"}</span>
+                <span className="text-[10px] font-black">{lang === "hi" ? "स्टोरी शेयर" : "Share Story"}</span>
               </button>
               {/* Copy link */}
               <button type="button" onClick={handleCopyLink}
-                className={`flex flex-col items-center gap-1.5 rounded-xl py-2.5 transition-all text-white ${
-                  copied ? "bg-green-400" : "bg-white/20 hover:bg-white/30 backdrop-blur-sm"
-                }`}
-                style={{ minHeight:"auto", minWidth:"auto" }}>
+                className={`flex flex-col items-center gap-1.5 rounded-xl py-2.5 transition-all text-white ${copied ? "bg-green-400" : "bg-white/20 hover:bg-white/30 backdrop-blur-sm"
+                  }`}
+                style={{ minHeight: "auto", minWidth: "auto" }}>
                 {copied ? <CheckCircle2 className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
-                <span className="text-[10px] font-black">{copied ? (lang==="hi"?"कॉपी हो गया!":"Copied!") : (lang==="hi"?"लिंक कॉपी":"Copy Link")}</span>
+                <span className="text-[10px] font-black">{copied ? (lang === "hi" ? "कॉपी हो गया!" : "Copied!") : (lang === "hi" ? "लिंक कॉपी" : "Copy Link")}</span>
               </button>
             </div>
           </div>
@@ -571,14 +570,14 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
           <div className="bg-white rounded-2xl border border-gray-100 p-4 mb-4 shadow-sm">
             <div className="flex items-center gap-2 mb-3">
               <Sparkles className="w-4 h-4 text-green-500" />
-              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{tx("yourProfile",lang)}</p>
+              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{tx("yourProfile", lang)}</p>
             </div>
             <div className="flex flex-wrap gap-1.5">
-              <SummaryChip icon={User}          value={`${profile.age}y`} />
-              <SummaryChip icon={Users}         value={profile.gender} />
-              <SummaryChip icon={Briefcase}     value={data.employment || "–"} />
-              <SummaryChip icon={Users}         value={profile.category} />
-              <SummaryChip icon={IndianRupee}   value={`${profile.income_lpa}L`} />
+              <SummaryChip icon={User} value={`${profile.age}y`} />
+              <SummaryChip icon={Users} value={profile.gender} />
+              <SummaryChip icon={Briefcase} value={data.employment || "–"} />
+              <SummaryChip icon={Users} value={profile.category} />
+              <SummaryChip icon={IndianRupee} value={`${profile.income_lpa}L`} />
               <SummaryChip icon={GraduationCap} value={profile.education} />
               {data.state !== "unknown" && <SummaryChip icon={MapPin} value={data.state} />}
             </div>
@@ -594,7 +593,7 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
               ).map(f => (
                 <button key={f.key} type="button"
                   onClick={() => setActiveFilter(f.key as SchemeCategory | "All")}
-                  style={{ minHeight:"auto", minWidth:"auto" }}
+                  style={{ minHeight: "auto", minWidth: "auto" }}
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-bold whitespace-nowrap border transition-all flex-shrink-0
                     ${activeFilter === f.key
                       ? "bg-green-500 text-white border-green-500 shadow-sm"
@@ -616,8 +615,8 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
           <div className="flex items-center gap-3 bg-amber-50 border border-amber-100 rounded-2xl px-4 py-3 mb-4">
             <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0" />
             <div>
-              <p className="font-bold text-sm text-amber-800">{tx("noMatch",lang)}</p>
-              <p className="text-xs text-amber-500">{tx("noMatchSub",lang)}</p>
+              <p className="font-bold text-sm text-amber-800">{tx("noMatch", lang)}</p>
+              <p className="text-xs text-amber-500">{tx("noMatchSub", lang)}</p>
             </div>
           </div>
         )}
@@ -637,8 +636,8 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
               <PhoneCall className="w-5 h-5" />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-black">{tx("cscLink",lang)}</p>
-              <p className="text-[11px] text-blue-200">{lang==="hi"?"आपके घर के पास सरकारी सेवा केंद्र":"Government service center near your home"}</p>
+              <span className="block text-sm font-black">{tx("cscLink", lang)}</span>
+              <span className="block text-[11px] text-blue-200">{lang === "hi" ? "आपके घर के पास सरकारी सेवा केंद्र" : "Government service center near your home"}</span>
             </div>
             <ExternalLink className="w-4 h-4 text-blue-300 group-hover:translate-x-0.5 transition-transform" />
           </a>
@@ -646,11 +645,11 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
             className="flex items-center gap-3.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-2xl px-4 py-3.5 transition-colors group">
             <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
               {/* Aadhaar fingerprint icon */}
-              <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M2 12C2 6.48 6.48 2 12 2s10 4.48 10 10-4.48 10-10 10S2 17.52 2 12zm9-4.5c1.93 0 3.5 1.57 3.5 3.5 0 1.31-.73 2.46-1.8 3.07C12.45 14.49 12 15 12 16v.5h2V16c0-.28.15-.56.42-.74A5.5 5.5 0 0017 11c0-2.76-2.24-5-5-5s-5 2.24-5 5h2c0-1.93 1.57-3.5 3.5-3.5zM11 18h2v2h-2v-2z"/></svg>
+              <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M2 12C2 6.48 6.48 2 12 2s10 4.48 10 10-4.48 10-10 10S2 17.52 2 12zm9-4.5c1.93 0 3.5 1.57 3.5 3.5 0 1.31-.73 2.46-1.8 3.07C12.45 14.49 12 15 12 16v.5h2V16c0-.28.15-.56.42-.74A5.5 5.5 0 0017 11c0-2.76-2.24-5-5-5s-5 2.24-5 5h2c0-1.93 1.57-3.5 3.5-3.5zM11 18h2v2h-2v-2z" /></svg>
             </div>
             <div className="flex-1">
-              <p className="text-sm font-black">{tx("aadhaarLink",lang)}</p>
-              <p className="text-[11px] text-orange-100">{lang==="hi"?"नजदीकी आधार नामांकन/अपडेट केंद्र खोजें":"Find nearest Aadhaar enrollment & update center"}</p>
+              <span className="block text-sm font-black">{tx("aadhaarLink", lang)}</span>
+              <span className="block text-[11px] text-orange-100">{lang === "hi" ? "नजदीकी आधार नामांकन/अपडेट केंद्र खोजें" : "Find nearest Aadhaar enrollment & update center"}</span>
             </div>
             <ExternalLink className="w-4 h-4 text-orange-200 group-hover:translate-x-0.5 transition-transform" />
           </a>
@@ -672,7 +671,7 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
                 </p>
                 <a href={doorstep.url} target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-[11px] font-bold text-sky-700 bg-sky-100 hover:bg-sky-200 rounded-lg px-3 py-1.5 transition-colors"
-                  style={{ minHeight:"auto", minWidth:"auto" }}>
+                  style={{ minHeight: "auto", minWidth: "auto" }}>
                   {lang === "hi" ? "पोर्टल खोलें" : "Open Portal"}
                   <ExternalLink className="w-3 h-3" />
                 </a>
@@ -683,13 +682,13 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
 
         {/* Disclaimer */}
         <div className="bg-gray-50 border border-gray-100 rounded-2xl p-4 mb-4">
-          <p className="text-[11px] text-gray-400 leading-relaxed">⚠️ {tx("disclaimer",lang)}</p>
+          <p className="text-[11px] text-gray-400 leading-relaxed">⚠️ {tx("disclaimer", lang)}</p>
         </div>
 
         <button onClick={handleReset}
           className="w-full flex items-center justify-center gap-2 text-sm font-bold text-white bg-green-500 hover:bg-green-600 rounded-2xl py-3.5 transition-colors shadow-md shadow-green-200">
           <RefreshCw className="w-4 h-4" />
-          {tx("checkAgain",lang)}
+          {tx("checkAgain", lang)}
         </button>
       </div>
     );
@@ -697,14 +696,14 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
 
   // ── WIZARD ────────────────────────────────────────────────────────
   const STEP_Q: Record<Step, { q: string; h: string }> = {
-    purpose:    { q:tx("purposeQ",lang),    h:tx("purposeHint",lang)    },
-    age:        { q:tx("ageQ",lang),        h:tx("ageHint",lang)        },
-    gender:     { q:tx("genderQ",lang),     h:tx("genderHint",lang)     },
-    employment: { q:tx("employmentQ",lang), h:tx("employmentHint",lang) },
-    category:   { q:tx("categoryQ",lang),   h:tx("categoryHint",lang)   },
-    income:     { q:tx("incomeQ",lang),     h:tx("incomeHint",lang)     },
-    education:  { q:tx("educationQ",lang),  h:tx("educationHint",lang)  },
-    state:      { q:tx("stateQ",lang),      h:tx("stateHint",lang)      },
+    purpose: { q: tx("purposeQ", lang), h: tx("purposeHint", lang) },
+    age: { q: tx("ageQ", lang), h: tx("ageHint", lang) },
+    gender: { q: tx("genderQ", lang), h: tx("genderHint", lang) },
+    employment: { q: tx("employmentQ", lang), h: tx("employmentHint", lang) },
+    category: { q: tx("categoryQ", lang), h: tx("categoryHint", lang) },
+    income: { q: tx("incomeQ", lang), h: tx("incomeHint", lang) },
+    education: { q: tx("educationQ", lang), h: tx("educationHint", lang) },
+    state: { q: tx("stateQ", lang), h: tx("stateHint", lang) },
   };
 
   return (
@@ -713,26 +712,26 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
 
       <div className="flex items-center justify-between mb-2">
         {step > 0 ? (
-          <button onClick={() => setStep(s => s - 1)} style={{ minHeight:"auto", minWidth:"auto" }}
+          <button onClick={() => setStep(s => s - 1)} style={{ minHeight: "auto", minWidth: "auto" }}
             className="flex items-center gap-1 text-xs text-gray-400 hover:text-green-600 transition-colors">
-            <ChevronLeft className="w-4 h-4" />{tx("back",lang)}
+            <ChevronLeft className="w-4 h-4" />{tx("back", lang)}
           </button>
         ) : <span />}
         <p className="text-[11px] text-gray-300 font-medium">
-          {tx("stepOf",lang)} {step+1} {tx("of",lang)} {totalSteps}
+          {tx("stepOf", lang)} {step + 1} {tx("of", lang)} {totalSteps}
         </p>
       </div>
 
       {/* Running summary */}
       {step > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-3 animate-fadeIn">
-          {data.purpose    && <SummaryChip icon={Sparkles}     value={PURPOSES.find(p=>p.value===data.purpose)?.value ?? data.purpose} />}
-          {data.age > 0    && <SummaryChip icon={User}         value={AGE_BANDS.find(b=>b.mid===data.age)?.label[lang] ?? ""} />}
-          {data.gender     && <SummaryChip icon={Users}        value={GENDERS.find(g=>g.value===data.gender)?.label[lang] ?? data.gender} />}
-          {data.employment && <SummaryChip icon={Briefcase}    value={EMPLOYMENT_OPTIONS.find(e=>e.value===data.employment)?.label[lang] ?? data.employment} />}
-          {data.category   && <SummaryChip icon={Users}        value={CATEGORIES.find(c=>c.value===data.category)?.label[lang] ?? data.category} />}
-          {data.income_lpa >= 0 && <SummaryChip icon={IndianRupee} value={INCOME_BANDS.find(b=>b.value===data.income_lpa)?.label[lang] ?? ""} />}
-          {data.education  && <SummaryChip icon={GraduationCap} value={EDUCATION_LEVELS.find(e=>e.value===data.education)?.label[lang] ?? data.education} />}
+          {data.purpose && <SummaryChip icon={Sparkles} value={PURPOSES.find(p => p.value === data.purpose)?.value ?? data.purpose} />}
+          {data.age > 0 && <SummaryChip icon={User} value={AGE_BANDS.find(b => b.mid === data.age)?.label[lang] ?? ""} />}
+          {data.gender && <SummaryChip icon={Users} value={GENDERS.find(g => g.value === data.gender)?.label[lang] ?? data.gender} />}
+          {data.employment && <SummaryChip icon={Briefcase} value={EMPLOYMENT_OPTIONS.find(e => e.value === data.employment)?.label[lang] ?? data.employment} />}
+          {data.category && <SummaryChip icon={Users} value={CATEGORIES.find(c => c.value === data.category)?.label[lang] ?? data.category} />}
+          {data.income_lpa >= 0 && <SummaryChip icon={IndianRupee} value={INCOME_BANDS.find(b => b.value === data.income_lpa)?.label[lang] ?? ""} />}
+          {data.education && <SummaryChip icon={GraduationCap} value={EDUCATION_LEVELS.find(e => e.value === data.education)?.label[lang] ?? data.education} />}
         </div>
       )}
 
@@ -747,19 +746,19 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
           {/* PURPOSE */}
           {stepName === "purpose" && PURPOSES.map(p => (
             <OptionCard key={p.value} emoji={p.emoji} label={tx(p.labelKey, lang)}
-              selected={data.purpose === p.value} onClick={() => pick({ purpose:p.value })} />
+              selected={data.purpose === p.value} onClick={() => pick({ purpose: p.value })} />
           ))}
 
           {/* AGE */}
           {stepName === "age" && AGE_BANDS.map(b => (
             <OptionCard key={b.mid} emoji={b.emoji} label={b.label[lang]}
-              selected={data.age === b.mid} onClick={() => pick({ age:b.mid })} />
+              selected={data.age === b.mid} onClick={() => pick({ age: b.mid })} />
           ))}
 
           {/* GENDER */}
           {stepName === "gender" && GENDERS.map(g => (
             <OptionCard key={g.value} emoji={g.emoji} label={g.label[lang]}
-              selected={data.gender === g.value} onClick={() => pick({ gender:g.value })} />
+              selected={data.gender === g.value} onClick={() => pick({ gender: g.value })} />
           ))}
 
           {/* EMPLOYMENT — with visual illustration cards */}
@@ -767,7 +766,7 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
             <div className="space-y-2">
               {EMPLOYMENT_OPTIONS.map(e => (
                 <EmploymentCard key={e.value} option={e} lang={lang}
-                  selected={data.employment === e.value} onClick={() => pick({ employment:e.value })} />
+                  selected={data.employment === e.value} onClick={() => pick({ employment: e.value })} />
               ))}
             </div>
           )}
@@ -775,32 +774,32 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
           {/* CATEGORY */}
           {stepName === "category" && CATEGORIES.map(c => (
             <OptionCard key={c.value} emoji={c.emoji} label={c.label[lang]} desc={c.desc[lang]}
-              selected={data.category === c.value} onClick={() => pick({ category:c.value })} />
+              selected={data.category === c.value} onClick={() => pick({ category: c.value })} />
           ))}
 
           {/* INCOME */}
           {stepName === "income" && INCOME_BANDS.map(b => (
             <OptionCard key={String(b.value)} emoji={b.emoji} label={b.label[lang]} desc={b.desc[lang]}
-              selected={data.income_lpa === b.value} onClick={() => pick({ income_lpa:b.value })} />
+              selected={data.income_lpa === b.value} onClick={() => pick({ income_lpa: b.value })} />
           ))}
 
           {/* EDUCATION */}
           {stepName === "education" && EDUCATION_LEVELS.map(e => (
             <OptionCard key={e.value} emoji={e.emoji} label={e.label[lang]}
-              selected={data.education === e.value} onClick={() => pick({ education:e.value })} />
+              selected={data.education === e.value} onClick={() => pick({ education: e.value })} />
           ))}
 
           {/* STATE — last step + submit */}
           {stepName === "state" && (
             <>
-              <OptionCard emoji="🌐" label={tx("allIndia",lang)}
-                selected={data.state==="unknown"} onClick={() => setData(d => ({ ...d, state:"unknown" }))} />
+              <OptionCard emoji="🌐" label={tx("allIndia", lang)}
+                selected={data.state === "unknown"} onClick={() => setData(d => ({ ...d, state: "unknown" }))} />
               <div className="relative">
-                <select value={data.state==="unknown"?"":data.state}
-                  onChange={e => setData(d => ({ ...d, state:e.target.value||"unknown" }))}
+                <select value={data.state === "unknown" ? "" : data.state}
+                  onChange={e => setData(d => ({ ...d, state: e.target.value || "unknown" }))}
                   className="w-full appearance-none bg-white border-2 border-gray-100 hover:border-green-200 rounded-2xl px-4 py-3.5 text-sm text-gray-700 font-medium focus:outline-none focus:border-green-400 transition-colors pr-10"
-                  style={{ minHeight:"52px" }}>
-                  <option value="">{tx("selectState",lang)}</option>
+                  style={{ minHeight: "52px" }}>
+                  <option value="">{tx("selectState", lang)}</option>
                   {STATES.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
                 <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300 pointer-events-none" />
@@ -808,7 +807,7 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
               <button onClick={() => handleSubmit(data)} disabled={loading}
                 className="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white font-black rounded-2xl py-4 text-sm shadow-lg shadow-green-200/60 transition-all active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 mt-2">
                 <Search className="w-4 h-4" />
-                {tx("findBtn",lang)}
+                {tx("findBtn", lang)}
               </button>
             </>
           )}
@@ -817,7 +816,7 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
 
       {step === 0 && (
         <p className="text-center text-[11px] text-gray-300 mt-4">
-          {lang==="hi" ? "8 आसान कदम · कोई टाइपिंग नहीं · तुरंत परिणाम" : "8 quick taps · No typing · Instant results"}
+          {lang === "hi" ? "8 आसान कदम · कोई टाइपिंग नहीं · तुरंत परिणाम" : "8 quick taps · No typing · Instant results"}
         </p>
       )}
     </div>

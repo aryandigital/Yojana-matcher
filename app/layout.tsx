@@ -134,7 +134,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-IN" className={jakartaSans.variable}>
+    <html lang="en-IN" className={jakartaSans.variable} suppressHydrationWarning>
       <head>
         {/* JSON-LD structured data injected server-side */}
         <script
@@ -145,7 +145,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://generativelanguage.googleapis.com" />
         <link rel="dns-prefetch" href="https://generativelanguage.googleapis.com" />
       </head>
-      <body className="font-sans antialiased bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 min-h-screen">
+      <body suppressHydrationWarning className="font-sans antialiased bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 min-h-screen">
         {children}
       </body>
     </html>

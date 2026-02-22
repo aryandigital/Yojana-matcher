@@ -1,5 +1,5 @@
 // app/page.tsx — Server Component shell (metadata + structured data live here)
-import PageWrapper from "./_components/PageWrapper";
+import NewHomePage from "./_components/NewHomePage";
 
 export const metadata = {
   title: "Yojana Matcher — Find Your Government Scheme | सरकारी योजना खोजें",
@@ -7,5 +7,5 @@ export const metadata = {
 };
 
 export default function HomePage() {
-  return <PageWrapper />;
+  return <NewHomePage />;
 }

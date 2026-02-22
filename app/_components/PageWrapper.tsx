@@ -150,12 +150,12 @@ export default function PageWrapper() {
                   {g.emoji}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-bold text-xs text-gray-900 group-hover:text-green-600 transition-colors mb-0.5">
+                  <span className="block font-bold text-xs text-gray-900 group-hover:text-green-600 transition-colors mb-0.5">
                     {lang === "hi" ? g.nameHi : g.name}
-                  </p>
-                  <p className="text-[11px] text-gray-400 leading-relaxed">
+                  </span>
+                  <span className="block text-[11px] text-gray-400 leading-relaxed">
                     {lang === "hi" ? g.descHi : g.desc}
-                  </p>
+                  </span>
                 </div>
                 <ExternalLink className="w-3 h-3 text-gray-200 group-hover:text-green-400 flex-shrink-0 mt-0.5 transition-colors" />
               </a>
@@ -172,10 +172,10 @@ export default function PageWrapper() {
             {SCHEME_LIST.map(s => (
               <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer"
                 className="block bg-white border border-gray-100 rounded-2xl p-3.5 hover:border-green-200 hover:shadow-md transition-all group min-h-[80px]">
-                <p className="font-bold text-xs text-gray-800 group-hover:text-green-600 transition-colors mb-1 leading-snug">
+                <span className="block font-bold text-xs text-gray-800 group-hover:text-green-600 transition-colors mb-1 leading-snug">
                   {lang === "hi" ? s.nameHi : s.name}
-                </p>
-                <p className="text-[11px] text-gray-400 leading-tight">{s.desc}</p>
+                </span>
+                <span className="block text-[11px] text-gray-400 leading-tight">{s.desc}</span>
                 <ExternalLink className="w-2.5 h-2.5 text-gray-200 group-hover:text-green-300 mt-1.5 transition-colors" />
               </a>
             ))}
