@@ -146,12 +146,11 @@ export default function RootLayout({
         <link rel="preconnect" href="https://generativelanguage.googleapis.com" />
         <link rel="dns-prefetch" href="https://generativelanguage.googleapis.com" />
         {/* Google AdSense */}
-        <Script
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4977432364397519"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        ></script>
       </head>
       <body suppressHydrationWarning className="font-sans antialiased bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 min-h-screen">
         {children}
