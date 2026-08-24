@@ -880,6 +880,38 @@ export default function YojanaForm({ lang }: { lang: Lang }) {
           <p className="text-[11px] text-gray-400 leading-relaxed">⚠️ {tx("disclaimer", lang)}</p>
         </div>
 
+        {/* ── Support / Donate via UPI ── */}
+        <div className="bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 border border-amber-200/60 rounded-2xl overflow-hidden mb-4 shadow-sm">
+          <div className="px-4 pt-4 pb-3">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-amber-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                <span className="text-lg">☕</span>
+              </div>
+              <div className="flex-1">
+                <h3 className="font-black text-sm text-gray-800 leading-tight">
+                  {lang === "hi" ? "इस प्रोजेक्ट को सपोर्ट करें" : "Support This Project"}
+                </h3>
+                <p className="text-[11px] text-gray-500 mt-1 leading-snug">
+                  {lang === "hi"
+                    ? "यह टूल मुफ्त है और हमेशा रहेगा। अगर इसने आपकी मदद की, तो एक छोटा सा सहयोग हमें चालू रखने में मदद करेगा। 🙏"
+                    : "This tool is free & always will be. If it helped you, a small contribution keeps us running. 🙏"}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="px-4 pb-4">
+            <a href="upi://pay?pa=8958538471@upi&pn=Yojana%20Matcher&cu=INR"
+              className="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-black text-sm rounded-xl py-3.5 transition-all active:scale-[0.97] shadow-md shadow-orange-200/50">
+              <IndianRupee className="w-4 h-4" />
+              {lang === "hi" ? "UPI से सपोर्ट करें" : "Support via UPI"}
+            </a>
+            <div className="flex items-center justify-center gap-2 mt-2.5">
+              <span className="text-[10px] text-gray-400 font-medium">UPI ID:</span>
+              <span className="text-[11px] text-gray-600 font-bold bg-white px-2 py-0.5 rounded-md border border-gray-100">8958538471@upi</span>
+            </div>
+          </div>
+        </div>
+
         <button onClick={handleReset}
           className="w-full flex items-center justify-center gap-2 text-sm font-bold text-white bg-green-500 hover:bg-green-600 rounded-2xl py-3.5 transition-colors shadow-md shadow-green-200">
           <RefreshCw className="w-4 h-4" />

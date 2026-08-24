@@ -362,10 +362,34 @@ export default function NewHomePage() {
                         </div>
                     </section>
 
+                    {/* ── Support Banner ── */}
+                    <section className="pt-6 pb-2">
+                        <a href="upi://pay?pa=8958538471@upi&pn=Yojana%20Matcher&cu=INR"
+                            className="flex items-center gap-3 bg-gradient-to-r from-orange-50 to-amber-50 border border-amber-200/60 rounded-2xl px-4 py-3.5 active:bg-amber-100 transition-colors group">
+                            <div className="w-9 h-9 bg-gradient-to-br from-orange-400 to-amber-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <span className="text-base">☕</span>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <span className="block text-xs font-black text-slate-700">
+                                    {lang === "en" ? "Buy us a chai ☕" : "हमें एक चाय पिलाएं ☕"}
+                                </span>
+                                <span className="block text-[10px] text-slate-400 mt-0.5">
+                                    {lang === "en" ? "Support this free tool via UPI" : "UPI से इस मुफ्त टूल को सपोर्ट करें"}
+                                </span>
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-amber-400 group-active:translate-x-0.5 transition-transform flex-shrink-0" />
+                        </a>
+                    </section>
+
                     {/* ── Footer ── */}
                     <footer className="text-center text-[10px] text-slate-400 pt-4 pb-6 space-y-1 border-t border-slate-100">
                         <p>Not affiliated with the Government of India.</p>
                         <p>Data sourced from <a href="https://www.india.gov.in" target="_blank" rel="noopener noreferrer" className="underline">india.gov.in</a> · © 2026 Yojana Matcher</p>
+                        <p className="pt-1">
+                            <a href="upi://pay?pa=8958538471@upi&pn=Yojana%20Matcher&cu=INR" className="text-amber-500 hover:text-amber-600 font-bold underline">
+                                {lang === "en" ? "Support us ☕" : "सपोर्ट करें ☕"}
+                            </a>
+                        </p>
                     </footer>
                 </div>
             </main>
